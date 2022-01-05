@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = 'http://localhost:3000/';
+const API_URL = 'http://localhost:3000/api/';
 
 const API = axios.create({
   baseURL: API_URL
@@ -7,10 +7,10 @@ const API = axios.create({
 
 export default {
   getCommands() {
-    return API.get('api/commands/');
+    return API.get('commands');
   },
   postCommand(command) {
-    return API.post('api/commands', {
+    return API.post('commands', {
       name: command.name,
       alias: command.alias,
       permissionLvl: command.permissionLvl,
@@ -23,7 +23,7 @@ export default {
     })
   },
   updateCommand(id, command) {
-    return API.post(`api/commands/${id}`, {
+    return API.post(`commands/${id}`, {
       name: command.name,
       alias: command.alias,
       permissionLvl: command.permissionLvl,
@@ -36,7 +36,10 @@ export default {
     })
   },
   deleteCommand(id) {
-    return API.post(`api/commands/${id}`)
+    return API.post(`commands/${id}`)
 
+  },
+  getHoraro() {
+    return API.get('horaro')
   }
 }
