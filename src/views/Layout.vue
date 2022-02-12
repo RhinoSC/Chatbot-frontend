@@ -1,20 +1,34 @@
 <template>
   <main>
-    <img class="bg" src="/assets/layout.png" alt="" />
-    <h1 class="comentaristas-title">comentaristas</h1>
+    <div class="bg-container">
+      <img
+        class="bg-container-divisor"
+        src="/assets/divisores-winter.png"
+        alt=""
+      />
+    </div>
+    <div class="comentaristas-container">
+      <h1 class="comentaristas-container-title">comentaristas</h1>
+    </div>
     <div id="logos">
-      <div id="gdq">
-        <img src="/assets/gdqlogo.png" />
+      <div id="esa">
+        <img src="/assets/esa-big-logo-2-winter.png" />
       </div>
       <div id="sre">
         <img src="/assets/logo_plano.png" alt="sre_logo" />
       </div>
     </div>
+    <div class="left-bar">
+      <div class="left-bar-bg"></div>
+    </div>
+    <div class="bot-bar">
+      <div class="bot-bar-bg"></div>
+    </div>
     <div class="bg-bar">
       <div class="bar">
         <div class="bienvenida">
           <h1 class="bienvenida-texto">
-            Retransmisión en español <span>Games Done Quick 2021</span>
+            Retransmisión en español <span>ESA Winter 2022</span>
           </h1>
         </div>
         <div class="redes">
@@ -343,20 +357,19 @@ export default {
     this.$socket.emit("getCounter");
   },
   mounted: async function () {
-    this.alternateLogos();
-    let response = await API.getHoraro();
-    this.items = response.data.items;
-    this.max = this.items.length;
-    this.columns = response.data.columns;
-    this.changeHoraro();
-    this.startAnimation();
-
-    let interval = setInterval(async () => {
-      let response = await API.getHoraro();
-      this.items = response.data.items;
-      this.max = this.items.length;
-      this.columns = response.data.columns;
-    }, 600000);
+    // this.alternateLogos();
+    // let response = await API.getHoraro();
+    // this.items = response.data.items;
+    // this.max = this.items.length;
+    // this.columns = response.data.columns;
+    // this.changeHoraro();
+    // this.startAnimation();
+    // let interval = setInterval(async () => {
+    //   let response = await API.getHoraro();
+    //   this.items = response.data.items;
+    //   this.max = this.items.length;
+    //   this.columns = response.data.columns;
+    // }, 600000);
   },
 };
 </script>
@@ -378,26 +391,38 @@ main {
   color: white;
 }
 
-.bg {
+.bg-container {
   position: absolute;
-  z-index: -1;
+  // z-index: -1;
+  // background: black;
+  filter: drop-shadow(0 0 5px #95e0f7);
+  &-divisor {
+    // box-shadow: 0 0 5px #95e0f7;
+  }
 }
 
-.comentaristas-title {
-  position: absolute;
-  color: white;
-  font-family: "pixel";
-  font-size: 17px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  top: 34px;
-  left: 6px;
+.comentaristas-container {
+  background: linear-gradient(#0a1d61 27%, #1b7480);
+  width: 154px;
+  height: 75px;
+  &-title {
+    position: absolute;
+    color: white;
+    font-family: "pixel";
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    top: 1.5rem;
+    padding-left: 6px; // left: 6px;
+    padding-bottom: 1.5rem;
+    // border-bottom: 10px double #95e0f7;
+  }
 }
 
 #logos {
   position: absolute;
   top: 1005px;
-  left: 16px;
+  left: 0.6rem;
 
   #sre {
     position: absolute;
@@ -407,6 +432,37 @@ main {
       width: 250px;
     }
   }
+  #esa {
+    position: absolute;
+    top: -0.3rem;
+    left: 0.9rem;
+    img {
+      width: 104px;
+    }
+  }
+}
+
+.left-bar {
+  position: absolute;
+  top: 75px;
+  width: 154px;
+  height: 916px;
+  background: linear-gradient(#1b7480 27%, #0a1d61);
+  &-bg {
+    width: inherit;
+    height: inherit;
+    background: center / cover repeat url("/assets/left-bg-v1-winter.png");
+    animation: bg-infinite 1000s linear infinite;
+  }
+}
+
+.bot-bar {
+  position: absolute;
+  top: 996px;
+  width: 1920px;
+  height: 84px;
+  z-index: -1;
+  background: linear-gradient(#0a1a61, #010117);
 }
 
 .bg-bar {
@@ -433,7 +489,7 @@ main {
   justify-content: center;
   box-shadow: inset 5px 5px 0px rgba(0, 0, 0, 0.5),
     inset -1px -1px 0px 0px rgba(255, 255, 255, 0.22);
-  background: linear-gradient(to top, #232b52, #1b3653);
+  background: linear-gradient(to top, #154044, #08139b);
 
   .bienvenida {
     //232b52 to 1b3653
@@ -518,6 +574,15 @@ main {
         padding-right: 10px;
       }
     }
+  }
+}
+
+@keyframes bg-infinite {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
   }
 }
 </style>
