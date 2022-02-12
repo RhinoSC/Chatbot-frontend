@@ -296,7 +296,7 @@ export default {
       });
 
       tl.set("#sre", { opacity: 0 });
-      tl.to("#gdq", {
+      tl.to("#esa", {
         duration: 1,
         opacity: 0,
         delay: 10,
@@ -315,7 +315,7 @@ export default {
           delay: 10,
         })
         .to(
-          "#gdq",
+          "#esa",
           {
             duration: 1,
             opacity: 1,
@@ -357,19 +357,19 @@ export default {
     this.$socket.emit("getCounter");
   },
   mounted: async function () {
-    // this.alternateLogos();
-    // let response = await API.getHoraro();
-    // this.items = response.data.items;
-    // this.max = this.items.length;
-    // this.columns = response.data.columns;
-    // this.changeHoraro();
-    // this.startAnimation();
-    // let interval = setInterval(async () => {
-    //   let response = await API.getHoraro();
-    //   this.items = response.data.items;
-    //   this.max = this.items.length;
-    //   this.columns = response.data.columns;
-    // }, 600000);
+    this.alternateLogos();
+    let response = await API.getHoraro();
+    this.items = response.data.items;
+    this.max = this.items.length;
+    this.columns = response.data.columns;
+    this.changeHoraro();
+    this.startAnimation();
+    let interval = setInterval(async () => {
+      let response = await API.getHoraro();
+      this.items = response.data.items;
+      this.max = this.items.length;
+      this.columns = response.data.columns;
+    }, 600000);
   },
 };
 </script>
@@ -383,6 +383,11 @@ export default {
   font-family: "haboro";
   src: url("/assets/haboro.ttf");
 }
+@font-face {
+  font-family: "source";
+  src: url("/assets/SourceCodePro-Black.ttf");
+}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,600;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,800;1,900&display=swap");
 main {
   margin: 0;
   box-sizing: border-box;
@@ -454,6 +459,7 @@ main {
     background: center / cover repeat url("/assets/left-bg-v1-winter.png");
     animation: bg-infinite 1000s linear infinite;
   }
+  z-index: -1;
 }
 
 .bot-bar {
@@ -491,8 +497,14 @@ main {
     inset -1px -1px 0px 0px rgba(255, 255, 255, 0.22);
   background: linear-gradient(to top, #154044, #08139b);
 
+  font-family: "Poppins";
+  font-size: 15px;
+  // letter-spacing: 2px;
+
   .bienvenida {
     //232b52 to 1b3653
+    display: none; //para animacion
+
     &-texto {
       font-size: 25px;
       span {
@@ -503,6 +515,7 @@ main {
   }
 
   .redes {
+    display: none; //para animacion
     &-texto {
       font-size: 25px;
       display: flex;
@@ -525,8 +538,9 @@ main {
   }
 
   .list {
+    display: none; //para animacion
     height: 80px;
-    display: flex;
+    // display: flex;
     align-items: center;
     justify-items: center;
     overflow: hidden;
