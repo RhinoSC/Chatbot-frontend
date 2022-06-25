@@ -14,7 +14,7 @@
       <div class="bar">
         <div class="bienvenida">
           <h1 class="bienvenida-texto">
-            Retransmisión en español <span>Games Done Quick 2021</span>
+            Retransmisión en español <span>Summer Games Done Quick 2022</span>
           </h1>
         </div>
         <div class="redes">
@@ -227,9 +227,9 @@ export default {
             .set(next, {
               x: "0px",
               opacity: 1,
-              onComplete: () => {
-                this.changeHoraro(this.counter + i);
-              },
+              // onComplete: () => {
+              //   this.changeHoraro(this.counter + i);
+              // },
             })
             .to(next, {
               duration: this.tiempos[3],
