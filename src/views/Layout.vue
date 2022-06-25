@@ -4,7 +4,7 @@
     <h1 class="comentaristas-title">comentaristas</h1>
     <div id="logos">
       <div id="gdq">
-        <img src="/assets/gdqlogo.png" />
+        <img src="/assets/sgdqlogo.png" />
       </div>
       <div id="sre">
         <img src="/assets/logo_plano.png" alt="sre_logo" />
@@ -441,7 +441,8 @@ main {
       font-size: 25px;
       span {
         font-style: italic;
-        color: #00ffff;
+        // color: #00ffff;
+        color: #ff9a00;
       }
     }
   }
@@ -490,7 +491,8 @@ main {
       align-items: center;
 
       .icons {
-        color: #00ffff;
+        // color: #00ffff;
+        color: #ff9a00;
         //   color: #dadd43;
         margin-right: 5px;
       }
