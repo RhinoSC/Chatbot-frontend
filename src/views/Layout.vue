@@ -336,9 +336,9 @@ export default {
       return hours + ":" + minutes + ":" + seconds;
     },
     startAnimation() {
-      // this.initialState();
-      // this.showGreetings();
-      // this.showSocials();
+      this.initialState();
+      this.showGreetings();
+      this.showSocials();
       this.showNextRuns();
     },
   },
