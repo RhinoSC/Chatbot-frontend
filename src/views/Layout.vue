@@ -111,7 +111,7 @@ export default {
       this.startAnimation();
     },
     getCounter(counter) {
-      this.counter = counter + 1;
+      this.counter = counter;
     },
   },
   methods: {
@@ -227,9 +227,9 @@ export default {
             .set(next, {
               x: "0px",
               opacity: 1,
-              // onComplete: () => {
-              //   this.changeHoraro(this.counter + i);
-              // },
+              onComplete: () => {
+                this.changeHoraro(this.counter + i);
+              },
             })
             .to(next, {
               duration: this.tiempos[3],
@@ -250,6 +250,9 @@ export default {
         .set(next, {
           x: "0px",
           opacity: 1,
+          onComplete: () => {
+            this.changeHoraro(this.counter);
+          },
         })
         .to(div, {
           duration: this.tiempos[0],
@@ -333,9 +336,9 @@ export default {
       return hours + ":" + minutes + ":" + seconds;
     },
     startAnimation() {
-      this.initialState();
-      this.showGreetings();
-      this.showSocials();
+      // this.initialState();
+      // this.showGreetings();
+      // this.showSocials();
       this.showNextRuns();
     },
   },
