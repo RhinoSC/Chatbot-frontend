@@ -1,18 +1,14 @@
 <template>
   <main>
     <div class="bg-container">
-      <img
-        class="bg-container-divisor"
-        src="/assets/divisores-winter.png"
-        alt=""
-      />
+      <img class="bg-container-divisor" src="/assets/divisores.png" alt="" />
     </div>
     <div class="comentaristas-container">
       <h1 class="comentaristas-container-title">comentaristas</h1>
     </div>
     <div id="logos">
       <div id="esa">
-        <img src="/assets/esa-big-logo-2-winter.png" />
+        <img src="/assets/logo-esa-solo.png" />
       </div>
       <div id="sre">
         <img src="/assets/logo_plano.png" alt="sre_logo" />
@@ -28,7 +24,7 @@
       <div class="bar">
         <div class="bienvenida">
           <h1 class="bienvenida-texto">
-            Retransmisión en español <span>ESA Winter 2022</span>
+            Retransmisión en español <span>ESA Summer 2022</span>
           </h1>
         </div>
         <div class="redes">
@@ -403,14 +399,14 @@ main {
   position: absolute;
   // z-index: -1;
   // background: black;
-  filter: drop-shadow(0 0 5px #95e0f7);
+  filter: drop-shadow(0 0 5px #f6c200);
   &-divisor {
     // box-shadow: 0 0 5px #95e0f7;
   }
 }
 
 .comentaristas-container {
-  background: linear-gradient(#0a1d61 27%, #1b7480);
+  background: linear-gradient(#23022c 27%, #801b76);
   width: 154px;
   height: 75px;
   &-title {
@@ -443,9 +439,9 @@ main {
   #esa {
     position: absolute;
     top: -0.3rem;
-    left: 0.9rem;
+    left: 1.9rem;
     img {
-      width: 104px;
+      width: 71px;
     }
   }
 }
@@ -455,11 +451,11 @@ main {
   top: 75px;
   width: 154px;
   height: 916px;
-  background: linear-gradient(#1b7480 27%, #0a1d61);
+  background: linear-gradient(#801b76 27%, #4e0a61);
   &-bg {
     width: inherit;
     height: inherit;
-    background: center / cover repeat url("/assets/left-bg-v1-winter.png");
+    background: center / cover repeat url("/assets/left-bg-v3.png");
     animation: bg-infinite 1000s linear infinite;
   }
   z-index: -1;
@@ -471,7 +467,8 @@ main {
   width: 1920px;
   height: 84px;
   z-index: -1;
-  background: linear-gradient(#0a1a61, #010117);
+  background: linear-gradient(#570b6c, #23022c);
+  // background: linear-gradient(#ff9a00, #dadd43);
 }
 
 .bg-bar {
@@ -498,7 +495,7 @@ main {
   justify-content: center;
   box-shadow: inset 5px 5px 0px rgba(0, 0, 0, 0.5),
     inset -1px -1px 0px 0px rgba(255, 255, 255, 0.22);
-  background: linear-gradient(to top, #154044, #08139b);
+  background: linear-gradient(to top, #f6c200, #f99c10);
 
   font-family: "Poppins";
   font-size: 15px;
@@ -513,7 +510,8 @@ main {
       span {
         font-style: italic;
         // color: #00ffff;
-        color: #ff9a00;
+        // color: #ff9a00;
+        // color: #801b76;
       }
     }
   }
@@ -565,8 +563,9 @@ main {
 
       .icons {
         // color: #00ffff;
-        color: #ff9a00;
-        //   color: #dadd43;
+        // color: #ff9a00;
+        // color: #dadd43;
+        color: #801b76;
         margin-right: 5px;
       }
 
@@ -582,7 +581,8 @@ main {
         grid-row: 2 / 3;
         padding-left: 10px;
         font-size: 20px;
-        //   color: #dadd43;
+        // color: #dadd43;
+        color: #801b76;
         // font-family: "pixel";
         // letter-spacing: 2px;
       }
