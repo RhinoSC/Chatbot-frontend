@@ -511,7 +511,7 @@ main {
         font-style: italic;
         // color: #00ffff;
         // color: #ff9a00;
-        // color: #801b76;
+        color: #801b76;
       }
     }
   }
