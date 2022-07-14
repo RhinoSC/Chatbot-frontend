@@ -125,7 +125,7 @@ export default {
       this.startAnimation();
     },
     getCounter(counter) {
-      this.counter = counter + 1;
+      this.counter = counter;
     },
   },
   methods: {
@@ -264,6 +264,9 @@ export default {
         .set(next, {
           x: "0px",
           opacity: 1,
+          onComplete: () => {
+            this.changeHoraro(this.counter);
+          },
         })
         .to(div, {
           duration: this.tiempos[0],
@@ -509,7 +512,8 @@ main {
       font-size: 25px;
       span {
         font-style: italic;
-        color: #00ffff;
+        // color: #00ffff;
+        color: #ff9a00;
       }
     }
   }
@@ -560,7 +564,8 @@ main {
       align-items: center;
 
       .icons {
-        color: #00ffff;
+        // color: #00ffff;
+        color: #ff9a00;
         //   color: #dadd43;
         margin-right: 5px;
       }
