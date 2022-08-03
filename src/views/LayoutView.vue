@@ -6,24 +6,26 @@
 <script>
 import API from "../api/index";
 export default {
-  components: { },
+  components: {},
   data() {
     return {
       commands: [],
       itemsPerPage: 5
     };
   },
-  methods:{
+  methods: {
   },
   mounted: function () {
     API.getCommands().then((response) => {
       this.commands = response.data;
-    //   console.log(this.commands.data);
+      //   console.log(this.commands.data);
     });
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
+.sidebar-expanded {
+  display: none;
+}
 </style>

@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Commands from '../views/CommandsView.vue'
 import Layout from '../views/LayoutView.vue'
+import Schedule from '../views/ScheduleManagerView.vue'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes: Array<RouteConfig> = [
     path: '/layout',
     name: 'Layout',
     component: Layout
+  },
+  {
+    path: '/schedule/manage',
+    name: 'Schedule',
+    component: Schedule
   }
 ]
 
