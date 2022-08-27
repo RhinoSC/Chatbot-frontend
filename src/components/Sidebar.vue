@@ -78,15 +78,15 @@ export default Vue.extend({
   flex-grow: 0;
   margin: 0px 0px;
 
-  color: white;
+  color: var(--light);
   text-decoration: none;
 
   &:visited {
-    color: white;
+    color: var(--light);
   }
 
   &:active {
-    color: white;
+    color: var(--light);
   }
 }
 
@@ -94,6 +94,9 @@ export default Vue.extend({
   width: 30px;
   height: 30px;
   margin-right: 8px;
+  path {
+    fill: var(--light);
+  }
 }
 
 .navbar {
@@ -128,13 +131,14 @@ aside {
   display: flex;
   flex-direction: column;
   width: calc(2rem + 32px);
+  min-width: 32px;
   min-height: 100vh;
   overflow: hidden;
   padding: 1rem;
 
   background-color: var(--dark-alt);
   // background-color: var(--dark);
-  color: var(--light);
+  color: var(--light) !important;
 
   transition: 0.2s ease-out;
 
@@ -148,14 +152,4 @@ aside {
   }
 
 }
-
-// .sidebar-expanded {
-//   // position: fixed;
-//   // width: 168px;
-//   // height: 1024px;
-
-//   // background: linear-gradient(180deg,
-//   //     #000000 72.07%,
-//   //     rgba(255, 255, 255, 0) 100%);
-// }
 </style>

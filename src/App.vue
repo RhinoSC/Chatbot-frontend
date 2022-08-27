@@ -24,6 +24,7 @@ export default {
   --dark: #1e293b;
   --dark-alt: #334155;
   --light: #f1f5f9;
+  --light-alt: #A7A1AE;
   --sidebar-width: 168px;
 }
 
@@ -38,12 +39,15 @@ export default {
   // text-align: center;
   // color: #2c3e50;
   color: var(--light);
+  // color: var(--light-alt);
+  // color: black;
   // display: flex;
 }
 
 body {
   // background: var(--light);
-  background: var(--dark);
+  // background: var(--dark);
+  background: #1F2739;
 }
 
 #app {
