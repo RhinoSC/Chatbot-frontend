@@ -1,32 +1,36 @@
 <template>
-  <div id="app">
+  <v-app>
     <Sidebar></Sidebar>
-    <!-- <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav> -->
-    <router-view />
-  </div>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import Sidebar from "./components/SideBar.vue";
 
-export default {
+export default Vue.extend({
+  name: 'App',
   components: { Sidebar },
-}
+
+  data: () => ({
+    //
+  }),
+});
 </script>
 
 <style lang="scss">
-:root {
-  --primary: #4ade80;
-  --grey: #64748b;
-  --dark: #1e293b;
-  --dark-alt: #334155;
-  --light: #f1f5f9;
-  --light-alt: #A7A1AE;
-  --sidebar-width: 168px;
-}
+// :root {
+//   --primary: #4ade80;
+//   --grey: #64748b;
+//   --dark: #1e293b;
+//   --dark-alt: #334155;
+//   --light: #f1f5f9;
+//   --light-alt: #A7A1AE;
+//   --sidebar-width: 168px;
+// }
 
 * {
   margin: 0;
@@ -38,36 +42,36 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   // text-align: center;
   // color: #2c3e50;
-  color: var(--light);
+  // color: var(--light);
   // color: var(--light-alt);
   // color: black;
   // display: flex;
 }
 
-body {
-  // background: var(--light);
-  // background: var(--dark);
-  background: #1F2739;
-}
+// body {
+//   // background: var(--light);
+//   // background: var(--dark);
+//   background: #1F2739;
+// }
 
-#app {
-  display: flex;
+// #app {
+//   display: flex;
 
-  main {
-    flex: 1 1 0;
-    padding: 2rem;
+//   main {
+//     flex: 1 1 0;
+//     padding: 2rem;
 
-    @media (max-width: 768px) {
-      padding-left: 6rem;
-    }
-  }
-}
+//     @media (max-width: 768px) {
+//       padding-left: 6rem;
+//     }
+//   }
+// }
 
-button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
+// button {
+//   cursor: pointer;
+//   appearance: none;
+//   border: none;
+//   outline: none;
+//   background: none;
+// }
 </style>
