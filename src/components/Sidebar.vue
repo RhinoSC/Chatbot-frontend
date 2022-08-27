@@ -132,7 +132,8 @@ aside {
   overflow: hidden;
   padding: 1rem;
 
-  background-color: var(--dark);
+  background-color: var(--dark-alt);
+  // background-color: var(--dark);
   color: var(--light);
 
   transition: 0.2s ease-out;
