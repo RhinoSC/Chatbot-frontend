@@ -1,41 +1,48 @@
 <template>
-  <aside :class="is_expanded ? 'is-expanded' : ''">
-    <div class="logo">
+  <div class="ma-0 pa-0">
+    <v-card>
+      <v-navigation-drawer permanent expand-on-hover app>
+        <v-list>
+          <v-list-item link to="/home">
+            <v-list-item-content>
+              <v-list-item-title class="text-h6">
+                SRE
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
 
-    </div>
+        <v-divider></v-divider>
 
-    <div class="menu-toggle-wrap">
-      <button class="menu-toggle" @click="ToggleMenu">
-        <font-awesome-icon class="icons" icon="bars" />
-      </button>
-    </div>
-    <ul class="navbar">
-      <li class="navbar-item">
-        <router-link class="link" :to="{ name: 'Home' }">
-          <font-awesome-icon class="icons" icon="home" />
-          <span :class="!is_expanded ? 'item-hidden' : ''">Home</span>
-        </router-link>
-      </li>
-      <li class="navbar-item">
-        <router-link class="link" :to="{ name: 'Schedule' }">
-          <font-awesome-icon class="icons" icon="calendar" />
-          <span :class="!is_expanded ? 'item-hidden' : ''">Schedule</span>
-        </router-link>
-      </li>
-      <li class="navbar-item">
-        <router-link class="link" :to="{ name: 'Commands' }">
-          <font-awesome-icon class="icons" icon="terminal" />
-          <span :class="!is_expanded ? 'item-hidden' : ''">Commands</span>
-        </router-link>
-      </li>
-      <li class="navbar-item">
-        <router-link class="link" :to="{ name: 'Timers' }">
-          <font-awesome-icon class="icons" icon="clock" />
-          <span :class="!is_expanded ? 'item-hidden' : ''">Timers</span>
-        </router-link>
-      </li>
-    </ul>
-  </aside>
+        <v-list nav dense>
+          <v-list-item link :to="items[0].path">
+            <v-list-item-icon>
+              <v-icon>mdi-view-dashboard-edit</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Dashboard</v-list-item-title>
+          </v-list-item>
+          <v-list-item link :to="items[1].path">
+            <v-list-item-icon>
+              <v-icon>mdi-calendar</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Schedule</v-list-item-title>
+          </v-list-item>
+          <v-list-item link :to="items[2].path">
+            <v-list-item-icon>
+              <v-icon>mdi-console</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Commands</v-list-item-title>
+          </v-list-item>
+          <v-list-item link :to="items[3].path">
+            <v-list-item-icon>
+              <v-icon>mdi-clock</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Timers</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,110 +53,113 @@ export default Vue.extend({
   name: "SideBar",
   data() {
     return {
-      is_expanded: false
+      items: [
+        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
+        { icon: 'mdi-calendar', name: 'Schedule', path: '/schedule/manage' },
+        { icon: 'mdi-console', name: 'Commands', path: '/commands' },
+        { icon: 'mdi-clock', name: 'Timers', path: '/timers' }
+      ]
     }
   },
   methods: {
-    ToggleMenu() {
-      this.is_expanded = !this.is_expanded
-    }
   }
 });
 </script>
 
 <style lang="scss" scoped>
-.link {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px;
+// .link {
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   padding: 0px;
 
-  position: static;
-  width: 142px;
-  height: 29px;
-  left: 0px;
-  top: 66.33px;
+//   position: static;
+//   width: 142px;
+//   height: 29px;
+//   left: 0px;
+//   top: 66.33px;
 
-  /* Inside Auto Layout */
+//   /* Inside Auto Layout */
 
-  flex: none;
-  order: 1;
-  align-self: stretch;
-  flex-grow: 0;
-  margin: 0px 0px;
+//   flex: none;
+//   order: 1;
+//   align-self: stretch;
+//   flex-grow: 0;
+//   margin: 0px 0px;
 
-  color: var(--light);
-  text-decoration: none;
+//   color: var(--light);
+//   text-decoration: none;
 
-  &:visited {
-    color: var(--light);
-  }
+//   &:visited {
+//     color: var(--light);
+//   }
 
-  &:active {
-    color: var(--light);
-  }
-}
+//   &:active {
+//     color: var(--light);
+//   }
+// }
 
-.icons {
-  width: 30px;
-  height: 30px;
-  margin-right: 8px;
-  path {
-    fill: var(--light);
-  }
-}
+// .icons {
+//   width: 30px;
+//   height: 30px;
+//   margin-right: 8px;
 
-.navbar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 8px 0px;
+//   path {
+//     fill: var(--light);
+//   }
+// }
 
-  // position: absolute;
-  width: 142px;
-  height: 215px;
-  // left: 21px;
-  // top: 168px;
+// .navbar {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   align-items: flex-start;
+//   padding: 8px 0px;
 
-  list-style-type: none;
-  font-size: 14px;
+//   // position: absolute;
+//   width: 142px;
+//   height: 215px;
+//   // left: 21px;
+//   // top: 168px;
 
-  & span {
-    color: white !important;
+//   list-style-type: none;
+//   font-size: 14px;
 
-    transition: 0.2s ease-out;
+//   & span {
+//     color: white !important;
 
-    &.item-hidden {
-      visibility: hidden;
-    }
-  }
+//     transition: 0.2s ease-out;
 
-}
+//     &.item-hidden {
+//       visibility: hidden;
+//     }
+//   }
 
-aside {
-  display: flex;
-  flex-direction: column;
-  width: calc(2rem + 32px);
-  min-width: 32px;
-  min-height: 100vh;
-  overflow: hidden;
-  padding: 1rem;
+// }
 
-  background-color: var(--dark-alt);
-  // background-color: var(--dark);
-  color: var(--light) !important;
+// aside {
+//   display: flex;
+//   flex-direction: column;
+//   width: calc(2rem + 32px);
+//   min-width: 32px;
+//   min-height: 100vh;
+//   overflow: hidden;
+//   padding: 1rem;
 
-  transition: 0.2s ease-out;
+//   background-color: var(--dark-alt);
+//   // background-color: var(--dark);
+//   color: var(--light) !important;
 
-  &.is-expanded {
-    width: var(--sidebar-width);
-  }
+//   transition: 0.2s ease-out;
 
-  @media (max-width: 768px) {
-    position: fixed;
-    z-index: 99;
-  }
+//   &.is-expanded {
+//     width: var(--sidebar-width);
+//   }
 
-}
+//   @media (max-width: 768px) {
+//     position: fixed;
+//     z-index: 99;
+//   }
+
+// }
 </style>
