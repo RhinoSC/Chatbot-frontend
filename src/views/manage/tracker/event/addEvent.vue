@@ -170,12 +170,16 @@ export default Vue.extend({
         endTime: "",
       },
       newEvent: {
+        _id: "",
         name: "",
         start: 0,
         end: 0,
         TZ: {},
-        allowDonations: true,
+        schedule: undefined,
         isCharity: true,
+        allowDonations: true,
+        donations: undefined,
+        prizes: undefined,
         isCharityData: {
           targetAmount: 0,
           minDonation: 0,

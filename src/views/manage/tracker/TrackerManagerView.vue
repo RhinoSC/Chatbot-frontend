@@ -8,9 +8,9 @@
         <v-btn link color="success" :to="'tracker/add'">Add</v-btn>
       </v-row>
       <v-list>
-        <v-list-item>
+        <v-list-item v-for="event in events" :key="event._id" link :to="`tracker/event/${event._id}`">
           <v-list-item-content>
-            SRE9
+            {{ event.name }}
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -21,6 +21,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
+import Event from '@/utils/types/Event'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -29,13 +30,14 @@ export default Vue.extend({
   },
   data() {
     return {
-
+      events: [] as Event[]
     }
   },
   async created() {
     const res = await trackerEvent.getEvents()
-    console.log('llegue')
-    console.log(res)
+    // console.log('llegue')
+    // console.log(res)
+    this.events = res
   },
   mounted() {
     // console.log('hola')

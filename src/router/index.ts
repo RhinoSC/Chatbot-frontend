@@ -60,6 +60,11 @@ const routes: Array<RouteConfig> = [
     component: TrackerManager,
   },
   {
+    path: '/manage/tracker/event/:id',
+    name: 'manage.tracker.event',
+    component: () => import('../views/manage/tracker/event/editEvent.vue')
+  },
+  {
     path: '/manage/tracker/add',
     component: () => import('../views/manage/tracker/event/addEvent.vue')
   }
