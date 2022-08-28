@@ -8,7 +8,7 @@ export default interface Run {
     estimateS: number;
     setup: number;
     teams: Team[];
-    bids: [bidId: string];
+    bids: string[];
     scheduleId: string;
     category: string;
     platform: string;

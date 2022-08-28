@@ -69,6 +69,16 @@ const routes: Array<RouteConfig> = [
         name: 'manage.tracker.schedule',
         component: () => import('../views/manage/tracker/schedule/schedules.vue')
       },
+      {
+        path: 'runs',
+        name: 'manage.tracker.run',
+        component: () => import('../views/manage/tracker/run/runs.vue')
+      },
+      {
+        path: 'users',
+        name: 'manage.tracker.user',
+        component: () => import('../views/manage/tracker/user/users.vue')
+      },
     ]
   },
   {
@@ -88,6 +98,24 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/schedules/add',
     component: () => import('../views/manage/tracker/schedule/addSchedule.vue')
+  },
+  {
+    path: '/manage/tracker/runs/edit/:id',
+    name: 'manage.tracker.runs',
+    component: () => import('../views/manage/tracker/run/editRun.vue')
+  },
+  {
+    path: '/manage/tracker/runs/add',
+    component: () => import('../views/manage/tracker/run/addRun.vue')
+  },
+  {
+    path: '/manage/tracker/users/edit/:id',
+    name: 'manage.tracker.users',
+    component: () => import('../views/manage/tracker/user/editUser.vue')
+  },
+  {
+    path: '/manage/tracker/users/add',
+    component: () => import('../views/manage/tracker/user/addUser.vue')
   },
 ]
 

@@ -2,14 +2,14 @@
     <div>
         <v-container grid-list-xs>
             <v-row>
-                <h2>Runs</h2>
+                <h2>Users</h2>
                 <v-spacer></v-spacer>
-                <v-btn link color="success" :to="'runs/add'">Add</v-btn>
+                <v-btn link color="success" :to="'users/add'">Add</v-btn>
             </v-row>
             <v-list>
-                <v-list-item v-for="run in runs" :key="run._id" link :to="`runs/edit/${run._id}`">
+                <v-list-item v-for="user in users" :key="user._id" link :to="`users/edit/${user._id}`">
                     <v-list-item-content>
-                        {{ run.name }} - {{ run.scheduleId }}
+                        {{ user.name }}
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -19,8 +19,8 @@
   
   <script lang="ts">
   import Vue from 'vue'
-  import trackerRun from '@/api/marathon/run'
-  import Run from '@/utils/types/Run'
+  import trackerUser from '@/api/marathon/user'
+  import User from '@/utils/types/User'
   
   export default Vue.extend({
       name: 'manage-tracker',
@@ -29,14 +29,14 @@
       },
       data() {
           return {
-              runs: [] as Run[]
+              users: [] as User[]
           }
       },
       async created() {
-          const res = await trackerRun.getRuns()
-          // console.log('llegue')
-          // console.log(res)
-          this.runs = res
+          const res = await trackerUser.getUsers()
+        //   console.log('llegue')
+        //   console.log(res)
+          this.users = res
       },
       mounted() {
           // console.log('hola')
