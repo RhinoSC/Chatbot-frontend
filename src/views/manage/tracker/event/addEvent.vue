@@ -120,7 +120,7 @@
                   v-model="newEvent.isCharityData.paypalData.token"></v-text-field>
               </v-col>
               <v-col>
-                <v-select :items="currencyItems" item-text="name" return-object label="Currency"
+                <v-select :items="currencyItems" item-text="name" item-value="iso" label="Currency"
                   v-model="newEvent.isCharityData.paypalData.currency"></v-select>
               </v-col>
             </v-row>
@@ -156,7 +156,7 @@ export default Vue.extend({
   data() {
     return {
       allowDonations: false,
-      currencyItems: [{ name: "US Dollar" }, { name: "Euro" }],
+      currencyItems: [{ name: "US Dollar", iso: "USD" }, { name: "Euro", iso: "EUR" }],
       tz: [] as any[],
       minDate: "",
       dateStartMenu: false,
@@ -192,15 +192,19 @@ export default Vue.extend({
     this.tz = selectorOptions
   },
   methods: {
-    addEvent() {
+    async addEvent() {
 
       let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
       this.newEvent.start = startDate.getTime()
       let endDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
       this.newEvent.end = endDate.getTime()
 
-      // console.log(this.newEvent.start, this.newEvent.end)
-      console.log(this.newEvent)
+      // console.log(this.newEvent)
+      const res = await trackerEvent.postEvent(this.newEvent)
+      if (res) {
+        console.log(res)
+        this.$router.push('/manage/tracker')
+      }
     },
     getMinDate(end: boolean) {
       console.log(end)
