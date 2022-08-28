@@ -48,15 +48,11 @@
 </template>
 
 <script>
-import Sidebar from "../components/SideBar.vue";
 import draggable from 'vuedraggable'
-
-// eslint-disable-next-line
-import API from "../api/index";
 
 export default {
     // eslint-disable-next-line
-    components: { Sidebar, draggable },
+    components: { draggable },
     data() {
         return {
             tableHeaders: [

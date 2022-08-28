@@ -36,7 +36,7 @@ export default Vue.extend({
   data() {
     return {
       items: [
-        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/manage' },
+        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
         { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
         { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
         { icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker' },

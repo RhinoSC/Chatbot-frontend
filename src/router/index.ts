@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Manage from '../views/ManageView.vue'
-import Dashboard from '../views/DashboardView.vue'
-import Commands from '../views/CommandsView.vue'
-import Layout from '../views/LayoutView.vue'
-import ScheduleManager from '../views/ScheduleManagerView.vue'
 import Tracker from '../views/TrackerView.vue'
-import TrackerManager from '../views/TrackerManagerView.vue'
+import Layout from '../views/LayoutView.vue'
+import Manage from '../views/manage/ManageView.vue'
+import Dashboard from '../views/manage/DashboardView.vue'
+import Commands from '../views/manage/CommandsView.vue'
+import ScheduleManager from '../views/manage/ScheduleManagerView.vue'
+import TrackerManager from '../views/manage/tracker/TrackerManagerView.vue'
 
 Vue.use(VueRouter)
 
@@ -38,29 +38,31 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage',
     component: Manage,
-    children: [
-      {
-        path: 'dashboard',
-        name: 'manage.dashboard',
-        component: Dashboard
-      },
-      {
-        path: 'commands',
-        name: 'manage.commands',
-        component: Commands
-      },
-      {
-        path: 'schedule',
-        name: 'manage.schedule',
-        component: ScheduleManager
-      },
-      {
-        path: 'tracker ',
-        name: 'manage.tracker',
-        component: TrackerManager
-      }
-    ]
   },
+  {
+    path: '/manage/dashboard',
+    name: 'manage.dashboard',
+    component: Dashboard
+  },
+  {
+    path: '/manage/commands',
+    name: 'manage.commands',
+    component: Commands
+  },
+  {
+    path: '/manage/schedule',
+    name: 'manage.schedule',
+    component: ScheduleManager
+  },
+  {
+    path: '/manage/tracker',
+    name: 'manage.tracker',
+    component: TrackerManager,
+  },
+  {
+    path: '/manage/tracker/add',
+    component: () => import('../views/manage/tracker/event/addEvent.vue')
+  }
 ]
 
 const router = new VueRouter({

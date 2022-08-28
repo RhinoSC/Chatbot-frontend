@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import Sidebar from "../components/SideBar.vue";
-import Actions from "../components/Actions.vue";
+import Sidebar from "../../components/SideBar.vue";
+import Actions from "../../components/Actions.vue";
 
 // eslint-disable-next-line
-import API from "../api/index";
+import API from "../../api/index";
 
 export default {
   // eslint-disable-next-line
