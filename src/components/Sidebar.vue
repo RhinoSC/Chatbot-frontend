@@ -21,6 +21,20 @@
             </v-list-item-icon>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
+          <!-- <v-list-group :value="true" v-for="(itemGroup, i) in itemsGroups" :key="i">
+            <template v-slot:activator>
+              <v-list-item-icon>
+                <v-icon>{{ itemGroup.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ itemGroup.name }}</v-list-item-title>
+            </template>
+            <v-list-item v-for="(subItem, subIndex) in itemGroup.childs" :key="subIndex" link :to="subItem.path">
+              <v-list-item-icon>
+                <v-icon>{{ subItem.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ subItem.name }}</v-list-item-title>
+            </v-list-item>
+          </v-list-group> -->
         </v-list>
       </v-navigation-drawer>
     </v-card>
@@ -41,7 +55,13 @@ export default Vue.extend({
         { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
         { icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker' },
         { icon: 'mdi-calendar-clock', name: 'Schedule', path: '/manage/schedule' },
-      ]
+      ],
+      itemsGroups: [
+        {
+          icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker', childs: [
+            { icon: 'mdi-calendar', name: 'Events', path: '/manage/tracker/events' }]
+        },
+      ],
     }
   },
   methods: {

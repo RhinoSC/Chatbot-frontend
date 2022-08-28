@@ -1,21 +1,16 @@
 <template>
-  <div>
+  <v-col align="center">
     <h1>Tracker manager</h1>
-    <v-container grid-list-xs>
-      <v-row>
-        <h2>Events</h2>
-        <v-spacer></v-spacer>
-        <v-btn link color="success" :to="'tracker/add'">Add</v-btn>
-      </v-row>
-      <v-list>
-        <v-list-item v-for="event in events" :key="event._id" link :to="`tracker/event/${event._id}`">
-          <v-list-item-content>
-            {{ event.name }}
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-container>
-  </div>
+    <v-row justify="center" class="mt-5">
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/events'">Events</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/users'">Users</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/schedules'">Schedules</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/runs'">Runs</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/prizes'">Prizes</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/bids'">Bids</v-btn>
+    </v-row>
+    <router-view class="mt-10"></router-view>
+  </v-col>
 </template>
 
 <script lang="ts">

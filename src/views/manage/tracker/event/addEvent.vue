@@ -133,7 +133,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-btn color="warning" class="mr-5" link :to="'/manage/tracker'">Cancel</v-btn>
+            <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/events'">Cancel</v-btn>
             <v-btn color="success" class="mr-5" @click="addEvent">Save</v-btn>
           </v-row>
         </v-form>
@@ -145,8 +145,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
-import moment from 'moment-timezone'
 import selectorOptions from '@/utils/TZ'
+import Schedule from '@/utils/types/Schedule'
+import Donation from '@/utils/types/Donation'
+import Prize from '@/utils/types/Prize'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -170,16 +172,15 @@ export default Vue.extend({
         endTime: "",
       },
       newEvent: {
-        _id: "",
         name: "",
         start: 0,
         end: 0,
         TZ: {},
-        schedule: undefined,
+        schedule: {} as Schedule,
         isCharity: true,
         allowDonations: true,
-        donations: undefined,
-        prizes: undefined,
+        donations: [] as Donation[],
+        prizes: [] as Prize[],
         isCharityData: {
           targetAmount: 0,
           minDonation: 0,
@@ -207,7 +208,7 @@ export default Vue.extend({
       const res = await trackerEvent.postEvent(this.newEvent)
       if (res) {
         console.log(res)
-        this.$router.push('/manage/tracker')
+        this.$router.push('/manage/tracker/events')
       }
     },
     getMinDate(end: boolean) {

@@ -58,16 +58,37 @@ const routes: Array<RouteConfig> = [
     path: '/manage/tracker',
     name: 'manage.tracker',
     component: TrackerManager,
+    children: [
+      {
+        path: 'events',
+        name: 'manage.tracker.event',
+        component: () => import('../views/manage/tracker/event/events.vue')
+      },
+      {
+        path: 'schedules',
+        name: 'manage.tracker.schedule',
+        component: () => import('../views/manage/tracker/schedule/schedules.vue')
+      },
+    ]
   },
   {
-    path: '/manage/tracker/event/:id',
+    path: '/manage/tracker/events/edit/:id',
     name: 'manage.tracker.event',
     component: () => import('../views/manage/tracker/event/editEvent.vue')
   },
   {
-    path: '/manage/tracker/add',
+    path: '/manage/tracker/events/add',
     component: () => import('../views/manage/tracker/event/addEvent.vue')
-  }
+  },
+  {
+    path: '/manage/tracker/schedules/edit/:id',
+    name: 'manage.tracker.schedules',
+    component: () => import('../views/manage/tracker/schedule/editSchedule.vue')
+  },
+  {
+    path: '/manage/tracker/schedules/add',
+    component: () => import('../views/manage/tracker/schedule/addSchedule.vue')
+  },
 ]
 
 const router = new VueRouter({

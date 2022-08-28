@@ -159,7 +159,7 @@
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
-                        <v-btn color="warning" class="mr-5" link :to="'/manage/tracker'">Cancel</v-btn>
+                        <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/events'">Cancel</v-btn>
                         <v-btn color="success" class="mr-5" @click="editEvent">Save</v-btn>
                     </v-row>
                 </v-form>
@@ -171,8 +171,11 @@
   <script lang="ts">
   import Vue from 'vue'
   import trackerEvent from '@/api/marathon/event'
-  import moment from 'moment-timezone'
+  import moment, { tz } from 'moment-timezone'
   import selectorOptions from '@/utils/TZ'
+  import Donation from '@/utils/types/Donation'
+  import Prize from '@/utils/types/Prize'
+  import Schedule from '@/utils/types/Schedule'
   
   export default Vue.extend({
       name: 'manage-tracker',
@@ -201,11 +204,11 @@
                   start: 0,
                   end: 0,
                   TZ: {},
-                  schedule: undefined,
+                  schedule: {} as Schedule,
                   isCharity: true,
                   allowDonations: true,
-                  donations: undefined,
-                  prizes: undefined,
+                  donations: [] as Donation[],
+                  prizes: [] as Prize[],
                   isCharityData: {
                       targetAmount: 0,
                       minDonation: 0,
@@ -222,11 +225,11 @@
                   start: 0,
                   end: 0,
                   TZ: {},
-                  schedule: undefined,
+                  schedule: {} as Schedule,
                   isCharity: true,
                   allowDonations: true,
-                  donations: undefined,
-                  prizes: undefined,
+                  donations: [] as Donation[],
+                  prizes: [] as Prize[],
                   isCharityData: {
                       targetAmount: 0,
                       minDonation: 0,
