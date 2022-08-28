@@ -25,32 +25,74 @@
               <v-col>
                 <v-text-field name="minDonation" label="Minimum donation" id="minDonation"></v-text-field>
               </v-col>
+              <v-col>
+                <v-text-field name="timezone" label="Timezone" id="timezone"></v-text-field>
+              </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <!-- <v-text-field name="date" label="Date" id="date"></v-text-field> -->
-                <v-menu ref="menu" v-model="dateMenu" :close-on-content-click="false" :return-value.sync="newEvent.date"
-                  transition="scale-transition" offset-y min-width="auto">
+                <v-menu ref="menu" v-model="dateStartMenu" :close-on-content-click="false"
+                  :return-value.sync="newEvent.start" transition="scale-transition" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-text-field v-model="newEvent.date" label="Date" prepend-icon="mdi-calendar" readonly
+                    <v-text-field v-model="newEvent.start" label="Date" prepend-icon="mdi-calendar" readonly
                       v-bind="attrs" v-on="on" @click="getMinDate()"></v-text-field>
                   </template>
-                  <v-date-picker v-model="newEvent.date" no-title scrollable :min="minDate">
+                  <v-date-picker v-model="newEvent.start" no-title scrollable :min="minDate">
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="dateMenu = false">
+                    <v-btn text color="primary" @click="dateStartMenu = false">
                       Cancel
                     </v-btn>
-                    <v-btn text color="primary" @click="$refs.menu?.save(newEvent.date)">
+                    <v-btn text color="primary" @click="$refs.menu?.save(newEvent.start)">
                       OK
                     </v-btn>
                   </v-date-picker>
                 </v-menu>
               </v-col>
               <v-col>
-                <v-text-field name="time" label="Time" id="Time"></v-text-field>
+                <!-- <v-text-field name="time" label="Time" id="Time"></v-text-field> -->
+                <v-menu ref="menu" v-model="timeStartMenu" :close-on-content-click="false" :nudge-right="40"
+                  :return-value.sync="newEvent.startTime" transition="scale-transition" offset-y max-width="290px"
+                  min-width="290px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field v-model="newEvent.startTime" label="Picker in menu"
+                      prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
+                  </template>
+                  <v-time-picker v-if="timeStartMenu" v-model="newEvent.startTime" full-width
+                    @click:minute="$refs.menu?.save(newEvent.startTime)">
+                  </v-time-picker>
+                </v-menu>
               </v-col>
               <v-col>
-                <v-text-field name="timezone" label="Timezone" id="timezone"></v-text-field>
+                <v-menu ref="menu" v-model="dateEndMenu" :close-on-content-click="false"
+                  :return-value.sync="newEvent.end" transition="scale-transition" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field v-model="newEvent.end" label="Date" prepend-icon="mdi-calendar" readonly
+                      v-bind="attrs" v-on="on" @click="getMinDate()"></v-text-field>
+                  </template>
+                  <v-date-picker v-model="newEvent.end" no-title scrollable :min="minDate">
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="dateEndMenu = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn text color="primary" @click="$refs.menu?.save(newEvent.end)">
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col>
+                <!-- <v-text-field name="time" label="Time" id="Time"></v-text-field> -->
+                <v-menu ref="menu" v-model="timeEndMenu" :close-on-content-click="false" :nudge-right="40"
+                  :return-value.sync="newEvent.endTime" transition="scale-transition" offset-y max-width="290px"
+                  min-width="290px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field v-model="newEvent.endTime" label="end time" prepend-icon="mdi-clock-time-four-outline"
+                      readonly v-bind="attrs" v-on="on"></v-text-field>
+                  </template>
+                  <v-time-picker v-if="timeEndMenu" v-model="newEvent.endTime" full-width
+                    @click:minute="$refs.menu?.save(newEvent.endTime)">
+                  </v-time-picker>
+                </v-menu>
               </v-col>
             </v-row>
             <v-checkbox label="Allow donations" v-model="allowDonations"></v-checkbox>
@@ -101,13 +143,18 @@ export default Vue.extend({
       allowDonations: false,
       currencyItems: [{ name: "US Dollar" }, { name: "Euro" }],
       minDate: "",
-      dateMenu: false,
+      dateStartMenu: false,
+      dateEndMenu: false,
+      timeStartMenu: false,
+      timeEndMenu: false,
       newEvent: {
         name: "",
         targetAmount: 0,
         minDonation: 0,
-        date: "",
-        time: "",
+        start: "",
+        end: "",
+        startTime: "",
+        endTime: "",
         timezone: "",
         allowDonations: true,
 
