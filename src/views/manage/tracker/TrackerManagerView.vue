@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import trackerEvent from '@/api/marathon/event'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -31,8 +32,13 @@ export default Vue.extend({
 
     }
   },
+  async created() {
+    const res = await trackerEvent.getEvents()
+    console.log('llegue')
+    console.log(res)
+  },
   mounted() {
-    console.log('hola')
+    // console.log('hola')
   }
 })
 </script>

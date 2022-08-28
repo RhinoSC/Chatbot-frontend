@@ -28,7 +28,23 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field name="date" label="Date" id="date"></v-text-field>
+                <!-- <v-text-field name="date" label="Date" id="date"></v-text-field> -->
+                <v-menu ref="menu" v-model="dateMenu" :close-on-content-click="false" :return-value.sync="newEvent.date"
+                  transition="scale-transition" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field v-model="newEvent.date" label="Date" prepend-icon="mdi-calendar" readonly
+                      v-bind="attrs" v-on="on" @click="getMinDate()"></v-text-field>
+                  </template>
+                  <v-date-picker v-model="newEvent.date" no-title scrollable :min="minDate">
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="dateMenu = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn text color="primary" @click="$refs.menu?.save(newEvent.date)">
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
               </v-col>
               <v-col>
                 <v-text-field name="time" label="Time" id="Time"></v-text-field>
@@ -73,6 +89,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import trackerEvent from '@/api/marathon/event'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -82,11 +99,35 @@ export default Vue.extend({
   data() {
     return {
       allowDonations: false,
-      currencyItems: [{ name: "US Dollar" }, { name: "Euro" }]
+      currencyItems: [{ name: "US Dollar" }, { name: "Euro" }],
+      minDate: "",
+      dateMenu: false,
+      newEvent: {
+        name: "",
+        targetAmount: 0,
+        minDonation: 0,
+        date: "",
+        time: "",
+        timezone: "",
+        allowDonations: true,
+
+      }
     }
   },
   mounted() {
     console.log('hola')
-  }
+  },
+  methods: {
+    // addEvent() {
+
+    // },
+    getMinDate() {
+      let today = new Date()
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let yyyy = today.getFullYear();
+      this.minDate = `${yyyy}-${mm}-${dd}`;
+    }
+  },
 })
 </script>
