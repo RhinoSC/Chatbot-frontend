@@ -15,29 +15,11 @@
         <v-divider></v-divider>
 
         <v-list nav dense>
-          <v-list-item link :to="items[0].path">
+          <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
             <v-list-item-icon>
-              <v-icon>mdi-view-dashboard-edit</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
-          <v-list-item link :to="items[1].path">
-            <v-list-item-icon>
-              <v-icon>mdi-calendar</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Schedule</v-list-item-title>
-          </v-list-item>
-          <v-list-item link :to="items[2].path">
-            <v-list-item-icon>
-              <v-icon>mdi-console</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Commands</v-list-item-title>
-          </v-list-item>
-          <v-list-item link :to="items[3].path">
-            <v-list-item-icon>
-              <v-icon>mdi-clock</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Timers</v-list-item-title>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -54,10 +36,11 @@ export default Vue.extend({
   data() {
     return {
       items: [
-        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
-        { icon: 'mdi-calendar', name: 'Schedule', path: '/schedule/manage' },
-        { icon: 'mdi-console', name: 'Commands', path: '/commands' },
-        { icon: 'mdi-clock', name: 'Timers', path: '/timers' }
+        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/manage' },
+        { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
+        { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
+        { icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker' },
+        { icon: 'mdi-calendar-clock', name: 'Schedule', path: '/manage/schedule' },
       ]
     }
   },

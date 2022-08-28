@@ -1,5 +1,6 @@
 <template>
   <main>
+    <h1>LAYOUT</h1>
   </main>
 </template>
 
