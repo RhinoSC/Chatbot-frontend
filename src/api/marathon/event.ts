@@ -33,5 +33,13 @@ export default {
         } catch (error) {
             return error
         }
+    },
+    async deleteEvent(id: string): Promise<any> {
+        try {
+            const res = await api.backend.delete(`api/tracker/event/${id}`)
+            return res
+        } catch (error) {
+            return error
+        }
     }
 }

@@ -140,6 +140,25 @@
                     </v-col>
                     <v-row>
                         <v-spacer></v-spacer>
+                        <v-dialog v-model="deleteDialog" width="500">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5">
+                                    Delete
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title primary-title>
+                                    Delete event {{ oldEvent.name }}
+                                </v-card-title>
+                                <v-card-text>
+                                    Do you really want to delete this event?
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="error" link @click="deleteEvent">Delete</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                         <v-btn color="warning" class="mr-5" link :to="'/manage/tracker'">Cancel</v-btn>
                         <v-btn color="success" class="mr-5" @click="editEvent">Save</v-btn>
                     </v-row>
@@ -162,7 +181,7 @@
       },
       data() {
           return {
-              allowDonations: false,
+              deleteDialog: false,
               currencyItems: [{ name: "US Dollar", iso: "USD" }, { name: "Euro", iso: "EUR" }],
               tz: [] as any[],
               minDate: "",
@@ -228,6 +247,13 @@
           this.tz = selectorOptions
       },
       methods: {
+          async deleteEvent() {
+              const res = await trackerEvent.deleteEvent(this.oldEvent._id)
+              if (res) {
+                  console.log(res)
+                  this.$router.push('/manage/tracker')
+              }
+          },
           async editEvent() {
   
               let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
