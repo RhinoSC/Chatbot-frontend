@@ -1,6 +1,6 @@
 <template>
-    <v-container grid-list-xs>
-        <v-card>
+    <v-container fluid>
+        <v-card >
             <v-card-title primary-title>
                 Add Schedule
             </v-card-title>
@@ -22,6 +22,34 @@
                                 </v-select>
                             </v-col>
                         </v-row>
+                    </v-col>
+                    <v-col>
+                        <v-divider></v-divider>
+                    </v-col>
+                    <v-col>
+                        <v-row>
+                            <h2>Schedule runs manager</h2>
+                        </v-row>
+                    </v-col>
+                    <v-col>
+                        
+                    </v-col>
+                    <!-- <v-col>
+                        <v-sheet >
+                            <v-calendar color="primary" type="day">
+                                <template v-slot:day-header="{ present }">
+                                    Today {{ present }}
+                                </template>
+
+                                <template v-slot:interval="{ hour }">
+                                    <div class="text-center">
+                                        {{ hour }} o'clock
+                                    </div>
+                                </template>
+                            </v-calendar>
+                        </v-sheet>
+                    </v-col> -->
+                    <v-col>
                         <v-row>
                             <v-spacer></v-spacer>
                             <v-dialog v-model="deleteDialog" width="500">
@@ -67,6 +95,8 @@
       },
       data() {
           return {
+              showCalendar: true,
+  
               deleteDialog: false,
               events: [] as Event[],
               selectedEvent: {} as Event | undefined,
@@ -113,7 +143,7 @@
               const res = await trackerSchedule.updateSchedule(this.newSchedule)
               if (res) {
                   console.log(res)
-                  this.$router.push('/manage/tracker/schedules')
+                //   this.$router.push('/manage/tracker/schedules')
               }
           },
       },
