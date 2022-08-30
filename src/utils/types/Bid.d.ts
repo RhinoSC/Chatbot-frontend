@@ -1,4 +1,4 @@
-import { goalType } from '../utils/enums/goal.enum'
+import { goalType } from '../enums/goal.enum'
 
 export default interface Bid {
     _id?: string;

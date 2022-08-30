@@ -79,8 +79,15 @@ const routes: Array<RouteConfig> = [
         name: 'manage.tracker.user',
         component: () => import('../views/manage/tracker/user/users.vue')
       },
+      {
+        path: 'bids',
+        name: 'manage.tracker.bid',
+        component: () => import('../views/manage/tracker/bid/bids.vue')
+      },
     ]
   },
+
+  //events
   {
     path: '/manage/tracker/events/edit/:id',
     name: 'manage.tracker.event',
@@ -90,6 +97,8 @@ const routes: Array<RouteConfig> = [
     path: '/manage/tracker/events/add',
     component: () => import('../views/manage/tracker/event/addEvent.vue')
   },
+
+  // schedules
   {
     path: '/manage/tracker/schedules/edit/:id',
     name: 'manage.tracker.schedules',
@@ -99,6 +108,8 @@ const routes: Array<RouteConfig> = [
     path: '/manage/tracker/schedules/add',
     component: () => import('../views/manage/tracker/schedule/addSchedule.vue')
   },
+
+  // runs
   {
     path: '/manage/tracker/runs/edit/:id',
     name: 'manage.tracker.runs',
@@ -108,6 +119,8 @@ const routes: Array<RouteConfig> = [
     path: '/manage/tracker/runs/add',
     component: () => import('../views/manage/tracker/run/addRun.vue')
   },
+
+  // users
   {
     path: '/manage/tracker/users/edit/:id',
     name: 'manage.tracker.users',
@@ -117,6 +130,19 @@ const routes: Array<RouteConfig> = [
     path: '/manage/tracker/users/add',
     component: () => import('../views/manage/tracker/user/addUser.vue')
   },
+
+  // bids
+  {
+    path: '/manage/tracker/bids/edit/:id',
+    name: 'manage.tracker.bids',
+    component: () => import('../views/manage/tracker/bid/editBid.vue')
+  },
+  {
+    path: '/manage/tracker/bids/add',
+    component: () => import('../views/manage/tracker/bid/addBid.vue')
+  },
+
+
 ]
 
 const router = new VueRouter({
