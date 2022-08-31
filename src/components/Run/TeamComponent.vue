@@ -1,48 +1,55 @@
 <template>
-    <v-container style="width: 80%;">
-        <v-row>
-            <v-col cols="4">
-                <v-row>
-                    <v-text-field name="name" label="Team name" id="name" v-model="teamSelectedInfo.name">
-                    </v-text-field>
-                </v-row>
-                <v-row>
-                    <v-autocomplete :items="users" item-text="name" return-object v-model="userSelected" label="Runner"
-                        @change="addUser">
-                    </v-autocomplete>
-                </v-row>
-                <v-row>
-                    <v-btn color="success" @click="saveTeams">Save teams</v-btn>
-                </v-row>
-            </v-col>
-            <v-col>
-                <v-expansion-panels v-model="teamSelected" v-if="teams.length > 0">
-                    <v-expansion-panel v-for="(team, i) in teams" :key="i">
-                        <v-expansion-panel-header color="accent">
-                            {{ team.name }}
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content color="accent">
-                            <v-list class="rounded-lg" color="primary">
-                                <v-list-item v-for="(player, i) in team.players" :key="i">
-                                    <v-list-item-icon>
-                                        <v-icon>mdi-account</v-icon>
-                                    </v-list-item-icon>
-                                    <v-list-item-content>
-                                        <v-list-item-title> {{ player.name }} </v-list-item-title>
-                                        <v-list-item-subtitle>Twitch: {{ player.social.twitch }}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-item-icon>
-                                        <v-icon @click="removeUser(player)">mdi-close-circle</v-icon>
-                                    </v-list-item-icon>
-                                </v-list-item>
-                            </v-list>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                </v-expansion-panels>
-            </v-col>
-        </v-row>
+    <v-container grid-list-xs>
+        <v-card>
+            <v-card-text>
+                <v-form>
 
+                    <v-row>
+                        <v-col cols="5">
+                            <v-row>
+                                <v-text-field name="name" label="Team name" id="name" v-model="teamSelectedInfo.name">
+                                </v-text-field>
+                            </v-row>
+                            <v-row>
+                                <v-autocomplete :items="users" item-text="name" return-object v-model="userSelected"
+                                    label="Runner" @change="addUser">
+                                </v-autocomplete>
+                            </v-row>
+                            <v-row>
+                                <v-btn color="success" @click="saveTeams">Save teams</v-btn>
+                            </v-row>
+                        </v-col>
+                        <v-col>
+                            <v-expansion-panels v-model="teamSelected" v-if="teams.length > 0">
+                                <v-expansion-panel v-for="(team, i) in teams" :key="i">
+                                    <v-expansion-panel-header color="accent">
+                                        {{ team.name }}
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content color="accent">
+                                        <v-list class="rounded-lg" color="primary">
+                                            <v-list-item v-for="(player, i) in team.players" :key="i">
+                                                <v-list-item-icon>
+                                                    <v-icon>mdi-account</v-icon>
+                                                </v-list-item-icon>
+                                                <v-list-item-content>
+                                                    <v-list-item-title> {{ player.name }} </v-list-item-title>
+                                                    <v-list-item-subtitle>Twitch: {{ player.social.twitch }}
+                                                    </v-list-item-subtitle>
+                                                </v-list-item-content>
+                                                <v-spacer></v-spacer>
+                                                <v-list-item-icon>
+                                                    <v-icon @click="removeUser(player)">mdi-close-circle</v-icon>
+                                                </v-list-item-icon>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card-text>
+        </v-card>
     </v-container>
     <!-- <v-container style="width: 80%;">
     </v-container> -->

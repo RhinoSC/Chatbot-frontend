@@ -28,7 +28,7 @@
               </v-col>
               <v-col>
                 <v-text-field name="setup" label="Setup time" id="setupTime" placeholder="00:00:00"
-                  v-model="newRun.setup">
+                  v-model="setupAsString">
                 </v-text-field>
               </v-col>
             </v-row>
@@ -68,6 +68,13 @@
               <v-divider></v-divider>
             </v-row>
             <v-row>
+              <h2>Bids info</h2>
+            </v-row>
+            <v-row>
+              <BidComponent v-bind="{ gameName: newRun.name }" @populateBids="populateBids($event)"
+                @clearBids="clearBids($event)"></BidComponent>
+            </v-row>
+            <v-row>
               <v-spacer></v-spacer>
               <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/runs'">Cancel</v-btn>
               <v-btn color="success" class="mr-5" @click="addRun">Save</v-btn>
@@ -82,19 +89,23 @@
 <script lang="ts">
 import Vue from 'vue'
 import TeamComponent from '@/components/Run/TeamComponent.vue'
+import BidComponent from '@/components/Run/BidComponent.vue'
 import trackerRun from '@/api/marathon/run'
 import trackerSchedule from '@/api/marathon/schedule'
 import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
 import run from '@/api/marathon/run'
+import { stringTimeToMS } from '@/utils/stringTimeToNumber'
+import Bid from '@/utils/types/Bid'
 
 
 export default Vue.extend({
   name: 'manage-tracker',
 
   components: {
-    TeamComponent
+    TeamComponent,
+    BidComponent
   },
   data() {
     return {
@@ -104,14 +115,15 @@ export default Vue.extend({
       isRace: false,
       schedules: [] as Schedule[],
       selectedSchedule: {} as Schedule,
+      setupAsString: "",
       newRun: {
         name: "",
         start: 0,
         estimate: "",
         estimateS: 0,
-        setup: "",
+        setup: 0,
         teams: [] as Team[],
-        bids: [] as string[],
+        bids: [] as Bid[],
         scheduleId: "",
         category: "",
         platform: "",
@@ -129,7 +141,7 @@ export default Vue.extend({
         alert('Add runners to all teams and save')
         return
       }
-
+      this.newRun.setup = stringTimeToMS(this.setupAsString)
       console.log(this.newRun)
       // if (this.selectedSchedule) {
       //   this.newRun.start = this.selectedSchedule.start
@@ -137,11 +149,11 @@ export default Vue.extend({
       //   if (this.selectedSchedule._id)
       //     this.newRun.scheduleId = this.selectedSchedule._id
       // }
-      // const res = await trackerRun.postRun(this.newRun)
-      // if (res) {
-      //   console.log(res)
-      //   // this.$router.push('/manage/tracker/runs')
-      // }
+      const res = await trackerRun.postRun(this.newRun)
+      if (res) {
+        console.log(res)
+        this.$router.push('/manage/tracker/runs')
+      }
     },
     saveTeams($event: Team[]) {
       this.newRun.teams = $event
@@ -152,6 +164,12 @@ export default Vue.extend({
         this.teamsSaved = false
       else
         this.teamsSaved = true
+    },
+    populateBids($event: Bid[]) {
+      this.newRun.bids = $event
+    },
+    clearBids($event: boolean) {
+      this.newRun.bids = []
     }
   },
 })

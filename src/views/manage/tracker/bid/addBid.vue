@@ -93,9 +93,6 @@ export default Vue.extend({
   name: 'manage-tracker',
   components: {
   },
-  propsData: {
-    popup: Boolean,
-  },
   data() {
     return {
       newBidOption: "",
@@ -122,8 +119,8 @@ export default Vue.extend({
     }
   },
   async created() {
-    const eventRes = await trackerEvent.getEvents()
-    this.events = eventRes
+    // const eventRes = await trackerEvent.getEvents()
+    // this.events = eventRes
   },
   computed: {
     isBidwar() {
@@ -135,8 +132,7 @@ export default Vue.extend({
       const res = await trackerBid.postBid(this.newBid)
       if (res) {
         console.log(res)
-        if (!this.$props.popup)
-          this.$router.push('/manage/tracker/bids')
+        this.$router.push('/manage/tracker/bids')
       }
     },
     getRunArray() {
