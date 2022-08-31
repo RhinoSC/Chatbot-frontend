@@ -1,0 +1,230 @@
+<template>
+  <v-container grid-list-xs>
+    <v-expansion-panels>
+      <v-expansion-panel v-for="(item, i) in 1" :key="i">
+        <v-expansion-panel-header>
+          Add bid
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-form>
+            <v-row>
+              <v-col>
+                <v-row>
+                  <v-col cols="5">
+                    <v-text-field name="name" label="Bid name" id="bidName" v-model="newBid.name">
+                    </v-text-field>
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col cols="5">
+                    <v-text-field name="bidName" label="Bid option" id="bidOption" v-model="newBidOption" outlined
+                      :disabled="isBidwar" @keyup.enter="addBidOption">
+                    </v-text-field>
+                  </v-col>
+                  <v-col class="d-flex justify-center mt-2">
+                    <v-btn color="success" @click="addBidOption">add</v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="5">
+                    <v-textarea outlined name="input-7-4" label="Description" v-model="newBid.description">
+                    </v-textarea>
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col>
+                    <v-list class="rounded-lg white--text" color="accent">
+                      <v-list-item v-for="(item, i) in newBid.bids" :key="i" style="border-bottom: 1px solid black;">
+                        <v-list-item-icon>
+                          <v-icon>mdi-arrow-right</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content color="grey darken-2">
+                          <v-list-item-title> {{ item.name }}</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="3">
+                    <v-select :items="goalTypes" label="Goal type" item-text="key" item-value="value"
+                      v-model="newBid.type" @change="modifyAllowNewBids">
+                    </v-select>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-checkbox label="Accept new bids" v-model="newBid.newBids" :disabled="isBidwar"></v-checkbox>
+                  </v-col>
+                  <v-divider vertical></v-divider>
+                  <v-col>
+                    <v-row class="mr-0 mt-2">
+                      <v-spacer></v-spacer>
+                      <v-btn color="success" @click="addBidToList">Add bid to run</v-btn>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                </v-row>
+                <v-row>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+    <v-card>
+      <v-card-title primary-title>
+        Bid resume
+      </v-card-title>
+      <v-card-subtitle>Total added: {{ addedBids.length }}</v-card-subtitle>
+      <v-card-subtitle>
+        <v-btn color="error" @click="clearAddedBids">Clear all bids</v-btn>
+      </v-card-subtitle>
+      <v-card-text>
+        <v-list class="rounded-lg" color="accent">
+          <v-list-item v-for="(addedBid, i) in addedBids" :key="i" style="border-bottom: 1px solid black;">
+            <v-list-item-icon>
+              <v-icon>mdi-poker-chip</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-col>
+                <v-list-item-title> {{ addedBid.name }} </v-list-item-title>
+                <v-list-item-subtitle> {{ addedBid.description }}
+                </v-list-item-subtitle>
+              </v-col>
+              <v-col v-if="addedBid.bids.length > 0">
+                <v-list-item-title>Options: </v-list-item-title>
+                <v-col v-for="(optionBid, ind) in addedBid.bids" :key="ind">
+                  <v-row>
+                    <v-list-item-subtitle>
+                      <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}
+                    </v-list-item-subtitle>
+                  </v-row>
+                </v-col>
+              </v-col>
+            </v-list-item-content>
+            <v-spacer></v-spacer>
+            <v-list-item-icon>
+              <v-icon @click="removeBid(addedBid)">mdi-close-circle</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+    </v-card>
+  </v-container>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import trackerBid from '@/api/marathon/bid'
+import trackerSchedule from '@/api/marathon/schedule'
+import trackerEvent from '@/api/marathon/event'
+import Bid from '@/utils/types/Bid'
+import { goalType } from '@/utils/enums/goal.enum'
+import Run from '@/utils/types/Run'
+import Event from '@/utils/types/Event'
+
+export default Vue.extend({
+  name: 'manage-tracker',
+  props: {
+    gameName: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+  },
+  data() {
+    return {
+      newBidOption: "",
+      events: [] as Event[],
+      selectedEvent: {} as Event,
+      runs: [] as Run[],
+      selectedRun: {} as Run,
+      goalTypes: [
+        { key: "bidwar", value: 0 },
+        { key: "goal", value: 1 },
+        { key: "total", value: 2 },
+      ],
+      addedBids: [] as Bid[],
+      newBid: {
+        name: "",
+        game: "",
+        goal: 0,
+        current: 0,
+        description: "",
+        type: goalType.goal,
+        newBids: false,
+        bids: [] as any,
+        runId: "",
+      }
+    }
+  },
+  async created() {
+    this.newBid.game = this.$props.gameName
+  },
+  computed: {
+    isBidwar() {
+      return this.newBid.type != 0 ? true : false
+    }
+  },
+  methods: {
+    async addBid() {
+      // const res = await trackerBid.postBid(this.newBid)
+      // if (res) {
+      //   console.log(res)
+      // }
+    },
+    getRunArray() {
+      if (this.selectedEvent.schedule && this.selectedEvent.schedule.rows.length > 0)
+        this.runs = this.selectedEvent.schedule.rows
+    },
+    modifyAllowNewBids() {
+      if (this.newBid.type != 0) {
+        this.newBid.newBids = false
+        this.newBid.bids = []
+      }
+    },
+    addBidOption() {
+      let index = this.newBid.bids.findIndex((bid: any) => bid.name == this.newBidOption)
+      if (index == -1) {
+        this.newBid.bids.push({ name: this.newBidOption, current: 0 })
+      }
+      this.newBidOption = ""
+    },
+    removeBid(addedBid: Bid) {
+      let index = this.addedBids.findIndex((bid) => bid.name == addedBid.name)
+      this.addedBids.splice(index, 1)
+    },
+    addBidToList() {
+      this.addedBids.push(this.newBid)
+      this.newBid = {
+        name: "",
+        game: "",
+        goal: 0,
+        current: 0,
+        description: "",
+        type: goalType.goal,
+        newBids: false,
+        bids: [] as any,
+        runId: "",
+      }
+      this.$emit('populateBids', this.addedBids)
+    },
+    clearAddedBids() {
+      this.addedBids = []
+      this.$emit('clearBids', true)
+    }
+  },
+  watch: {
+    gameName() {
+      this.newBid.game = this.$props.gameName
+    }
+  }
+})
+</script>
+
+<style lang="scss" scoped>
+v-col.list-container {
+  border: 1px solid black;
+  border-radius: 10px;
+}
+</style>
