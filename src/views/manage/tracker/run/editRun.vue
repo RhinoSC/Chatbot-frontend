@@ -80,6 +80,25 @@
             </v-row>
             <v-row>
               <v-spacer></v-spacer>
+              <v-dialog v-model="deleteDialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5">
+                    Delete
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title primary-title>
+                    Delete schedule {{ oldRun.name }}
+                  </v-card-title>
+                  <v-card-text>
+                    Do you really want to delete this schedule?
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" link @click="deleteRun">Delete</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
               <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/runs'">Cancel</v-btn>
               <v-btn color="success" class="mr-5" @click="editRun">Save</v-btn>
             </v-row>
@@ -113,6 +132,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      deleteDialog: false,
       isReady: false,
       numOfTeams: 1,
       teamSizeOpts: [1, 2, 3, 4],
@@ -172,6 +192,13 @@ export default Vue.extend({
 
   },
   methods: {
+    async deleteRun() {
+      const res = await trackerRun.deleteRun(this.oldRun._id)
+      if (res) {
+        console.log(res)
+        this.$router.push('/manage/tracker/runs')
+      }
+    },
     async editRun() {
       if (!this.teamsSaved) {
         alert('Add runners to all teams and save')
@@ -182,13 +209,10 @@ export default Vue.extend({
       this.newRun.estimateS = stringTimeToMS(this.newRun.estimate)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
-
-      // console.log(this.newRun)
-
       const res = await trackerRun.updateRun(this.newRun)
       if (res) {
         console.log(res)
-        //   this.$router.push('/manage/tracker/schedules')
+        this.$router.push('/manage/tracker/runs')
       }
     },
     saveTeams($event: Team[]) {
