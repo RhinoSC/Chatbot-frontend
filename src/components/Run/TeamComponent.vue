@@ -77,9 +77,6 @@ export default Vue.extend({
             required: true,
             default: 1
         },
-        runId: {
-            type: String,
-        }
     },
     data() {
         return {

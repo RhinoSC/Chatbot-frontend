@@ -16,11 +16,15 @@
                 </v-text-field>
               </v-col>
               <v-col>
-                <v-select :items="schedules" item-text="name" return-object label="Schedule" v-model="selectedSchedule">
-                </v-select>
+                <v-text-field name="gameTwitch" label="Twitch category" id="gameName" v-model="newRun.gameTwitch">
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row>
+              <v-col>
+                <v-select :items="schedules" item-text="name" return-object label="Schedule" v-model="selectedSchedule">
+                </v-select>
+              </v-col>
               <v-col>
                 <v-text-field name="estimate" label="Estimate" id="estimate" placeholder="00:00:00"
                   v-model="newRun.estimate">
@@ -118,6 +122,7 @@ export default Vue.extend({
       setupAsString: "",
       newRun: {
         name: "",
+        gameTwitch: "",
         start: 0,
         estimate: "",
         estimateS: 0,
@@ -145,13 +150,12 @@ export default Vue.extend({
       this.newRun.estimateS = stringTimeToMS(this.newRun.estimate)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
-      console.log(this.newRun)
-      // const res = await trackerRun.postRun(this.newRun)
-      // const res = await trackerRun.postRunWithEmptyFields(this.newRun)
-      // if (res) {
-      //   console.log(res)
-      //   this.$router.push('/manage/tracker/runs')
-      // }
+      // console.log(this.newRun)
+      const res = await trackerRun.postRunWithEmptyFields(this.newRun)
+      if (res) {
+        console.log(res)
+        this.$router.push('/manage/tracker/runs')
+      }
     },
     saveTeams($event: Team[]) {
       this.newRun.teams = $event

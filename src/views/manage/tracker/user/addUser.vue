@@ -47,7 +47,6 @@ export default Vue.extend({
     return {
       newUser: {
         name: "",
-        teamId: "",
         social: { twitch: "" }
       }
     }

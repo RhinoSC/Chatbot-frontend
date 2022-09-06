@@ -21,7 +21,7 @@
                     </v-text-field>
                   </v-col>
                   <v-col class="d-flex justify-center mt-2">
-                    <v-btn color="success" @click="addBidOption">add</v-btn>
+                    <v-btn color="success" @click="addBidOption" :disabled="isBidwar">add</v-btn>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -49,7 +49,11 @@
                       v-model="newBid.type" @change="modifyAllowNewBids">
                     </v-select>
                   </v-col>
-                  <v-col cols="2">
+                  <v-col cols="2" v-if="isBidwar">
+                    <v-text-field name="bidGoal" label="Goal amount" id="bidGoal" type="number" v-model.number="newBid.goal" outlined>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="2" v-else>
                     <v-checkbox label="Accept new bids" v-model="newBid.newBids" :disabled="isBidwar"></v-checkbox>
                   </v-col>
                   <v-divider vertical></v-divider>
@@ -154,7 +158,6 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        runId: "",
       }
     }
   },
@@ -205,8 +208,8 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        runId: "",
       }
+      this.newBid.game = this.$props.gameName
       this.$emit('populateBids', this.addedBids)
     },
     clearAddedBids() {

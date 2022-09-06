@@ -70,13 +70,11 @@ export default Vue.extend({
       oldUser: {
         _id: "",
         name: "",
-        teamId: "",
         social: { twitch: "" }
       },
       newUser: {
         _id: "",
         name: "",
-        teamId: "",
         social: { twitch: "" }
       }
     }

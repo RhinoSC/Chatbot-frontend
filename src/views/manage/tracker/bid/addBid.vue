@@ -39,7 +39,11 @@
                   @change="modifyAllowNewBids">
                 </v-select>
               </v-col>
-              <v-col>
+              <v-col v-if="isBidwar">
+                <v-text-field name="bidGoal" label="Goal amount" id="bidGoal" v-model="newBid.goal" outlined>
+                </v-text-field>
+              </v-col>
+              <v-col v-else>
                 <v-checkbox label="Accept new bids" v-model="newBid.newBids" :disabled="isBidwar"></v-checkbox>
               </v-col>
             </v-row>
@@ -48,7 +52,7 @@
                 <v-text-field name="bidName" label="Bid option" id="bidOption" v-model="newBidOption" outlined
                   :disabled="isBidwar" @keyup.enter="addBidOption">
                 </v-text-field>
-                <v-btn color="success" @click="addBidOption">add</v-btn>
+                <v-btn color="success" @click="addBidOption" :disabled="isBidwar">add</v-btn>
               </v-col>
               <v-col>
                 <v-card elevation="4">
@@ -114,7 +118,6 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        runId: "",
       }
     }
   },

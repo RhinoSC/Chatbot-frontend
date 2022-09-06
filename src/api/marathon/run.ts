@@ -28,7 +28,7 @@ export default {
     },
     async postRunWithEmptyFields(run: Run): Promise<any> {
         try {
-            const res = await api.backend.post('api/tracker/run/', { run })
+            const res = await api.backend.post('api/tracker/run/advanced', { run })
             return res
         } catch (error) {
             return error

@@ -16,8 +16,8 @@
                 </v-text-field>
               </v-col>
               <v-col>
-                <v-text-field name="twitch" label="Twitch bidname" id="twitch" v-model="oldBid.social.twitch">
-                </v-text-field>
+                <!-- <v-text-field name="twitch" label="Twitch bidname" id="twitch" v-model="oldBid.social.twitch">
+                </v-text-field> -->
               </v-col>
             </v-row>
           </v-col>
@@ -69,6 +69,7 @@ export default Vue.extend({
     return {
       deleteDialog: false,
       oldBid: {
+        _id: "",
         name: "",
         game: "",
         goal: 0,
@@ -77,7 +78,6 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        runId: "",
       },
       newBid: {
         name: "",
@@ -88,7 +88,6 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        runId: "",
       }
     }
   },
