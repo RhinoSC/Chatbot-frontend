@@ -75,8 +75,11 @@ export default Vue.extend({
         numOfTeams: {
             type: Number,
             required: true,
-            default: 1
         },
+        editTeams: {
+            type: Array,
+            required: true,
+        }
     },
     data() {
         return {
@@ -110,8 +113,16 @@ export default Vue.extend({
             this.verifyOneRunnerPerTeam()
         },
         createArrayOfTeams() {
-            for (let i = 1; i <= this.numOfTeams; i++) {
-                this.teams.push({ name: `Team ${i}`, players: [], })
+            if (this.$props.editTeams.length > 0) {
+                for (let i = 1; i <= this.$props.editTeams.length; i++) {
+                    const team = this.$props.editTeams[i - 1]
+                    this.teams.push({ name: team.name, players: team.players, _id: team._id })
+                }
+                this.verifyOneRunnerPerTeam()
+            } else {
+                for (let i = 1; i <= this.numOfTeams; i++) {
+                    this.teams.push({ name: `Team ${i}`, players: [], })
+                }
             }
             this.teamSelectedInfo = this.teams[0]
         },
@@ -120,6 +131,7 @@ export default Vue.extend({
                 if (this.teams[i].players.length < 1)
                     this.$emit('populateTeams', false)
             }
+            // this.$emit('populateTeams', true)
         }
     },
     watch: {
@@ -131,9 +143,11 @@ export default Vue.extend({
             let dif = Math.abs(newValue - oldValue)
             if (oldValue < newValue) {
                 let i = 0
-                while (i < dif) {
-                    this.teams.push({ name: `Team ${oldValue + i + 1}`, players: [], })
-                    i++
+                if (this.teams.length != newValue) {
+                    while (i < dif) {
+                        this.teams.push({ name: `Team ${oldValue + i + 1}`, players: [], })
+                        i++
+                    }
                 }
             } else {
                 while (this.teams.length != newValue) {

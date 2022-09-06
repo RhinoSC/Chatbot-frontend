@@ -64,8 +64,8 @@
             <v-row>
               <h2>Runners info</h2>
             </v-row>
-            <v-row>
-              <TeamComponent v-bind="{ numOfTeams: numOfTeams }" @saveTeams="saveTeams($event)"
+            <v-row v-if="isReady">
+              <TeamComponent v-bind="{ numOfTeams: numOfTeams, editTeams: newRun.teams }" @saveTeams="saveTeams($event)"
                 @populateTeams="verifyTeams($event)"></TeamComponent>
             </v-row>
             <v-row class="my-8">
@@ -74,9 +74,9 @@
             <v-row>
               <h2>Bids info</h2>
             </v-row>
-            <v-row>
-              <BidComponent v-bind="{ gameName: newRun.name }" @populateBids="populateBids($event)"
-                @clearBids="clearBids($event)"></BidComponent>
+            <v-row v-if="isReady">
+              <BidComponent v-bind="{ gameName: newRun.name, editBids: newRun.bids }"
+                @populateBids="populateBids($event)" @clearBids="clearBids($event)"></BidComponent>
             </v-row>
             <v-row>
               <v-spacer></v-spacer>
@@ -100,7 +100,7 @@ import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
 import run from '@/api/marathon/run'
-import { stringTimeToMS } from '@/utils/stringTimeToNumber'
+import { stringTimeToMS } from '@/utils/parsers'
 import Bid from '@/utils/types/Bid'
 
 
@@ -113,6 +113,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isReady: false,
       numOfTeams: 1,
       teamSizeOpts: [1, 2, 3, 4],
       teamsSaved: false,
@@ -139,6 +140,8 @@ export default Vue.extend({
   async created() {
     const res = await trackerSchedule.getSchedules()
     this.schedules = res
+
+    this.isReady = true
   },
   methods: {
     async addRun() {

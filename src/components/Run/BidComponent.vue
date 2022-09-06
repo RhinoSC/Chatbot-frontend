@@ -50,7 +50,8 @@
                     </v-select>
                   </v-col>
                   <v-col cols="2" v-if="isBidwar">
-                    <v-text-field name="bidGoal" label="Goal amount" id="bidGoal" type="number" v-model.number="newBid.goal" outlined>
+                    <v-text-field name="bidGoal" label="Goal amount" id="bidGoal" type="number"
+                      v-model.number="newBid.goal" outlined>
                     </v-text-field>
                   </v-col>
                   <v-col cols="2" v-else>
@@ -132,6 +133,10 @@ export default Vue.extend({
     gameName: {
       type: String,
       required: true
+    },
+    editBids: {
+      type: Array,
+      required: true
     }
   },
   components: {
@@ -163,6 +168,9 @@ export default Vue.extend({
   },
   async created() {
     this.newBid.game = this.$props.gameName
+    if (this.$props.editBids) {
+      this.addedBids = this.$props.editBids
+    }
   },
   computed: {
     isBidwar() {
@@ -170,16 +178,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    async addBid() {
-      // const res = await trackerBid.postBid(this.newBid)
-      // if (res) {
-      //   console.log(res)
-      // }
-    },
-    getRunArray() {
-      if (this.selectedEvent.schedule && this.selectedEvent.schedule.rows.length > 0)
-        this.runs = this.selectedEvent.schedule.rows
-    },
     modifyAllowNewBids() {
       if (this.newBid.type != 0) {
         this.newBid.newBids = false
@@ -196,8 +194,11 @@ export default Vue.extend({
     removeBid(addedBid: Bid) {
       let index = this.addedBids.findIndex((bid) => bid.name == addedBid.name)
       this.addedBids.splice(index, 1)
+      this.$emit('populateBids', this.addedBids)
     },
     addBidToList() {
+      if (this.newBid.game == "")
+        this.newBid.game = this.$props.gameName
       this.addedBids.push(this.newBid)
       this.newBid = {
         name: "",
