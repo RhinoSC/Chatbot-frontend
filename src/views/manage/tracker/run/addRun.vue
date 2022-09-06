@@ -142,18 +142,16 @@ export default Vue.extend({
         return
       }
       this.newRun.setup = stringTimeToMS(this.setupAsString)
+      this.newRun.estimateS = stringTimeToMS(this.newRun.estimate)
+      if (this.selectedSchedule._id)
+        this.newRun.scheduleId = this.selectedSchedule._id
       console.log(this.newRun)
-      // if (this.selectedSchedule) {
-      //   this.newRun.start = this.selectedSchedule.start
-      //   this.newRun.end = this.selectedSchedule.end
-      //   if (this.selectedSchedule._id)
-      //     this.newRun.scheduleId = this.selectedSchedule._id
+      // const res = await trackerRun.postRun(this.newRun)
+      // const res = await trackerRun.postRunWithEmptyFields(this.newRun)
+      // if (res) {
+      //   console.log(res)
+      //   this.$router.push('/manage/tracker/runs')
       // }
-      const res = await trackerRun.postRun(this.newRun)
-      if (res) {
-        console.log(res)
-        this.$router.push('/manage/tracker/runs')
-      }
     },
     saveTeams($event: Team[]) {
       this.newRun.teams = $event

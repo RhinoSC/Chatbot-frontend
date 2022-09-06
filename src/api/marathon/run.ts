@@ -26,6 +26,14 @@ export default {
             return error
         }
     },
+    async postRunWithEmptyFields(run: Run): Promise<any> {
+        try {
+            const res = await api.backend.post('api/tracker/run/', { run })
+            return res
+        } catch (error) {
+            return error
+        }
+    },
     async updateRun(run: Run): Promise<any> {
         try {
             const res = await api.backend.put(`api/tracker/run/${run._id}`, { run })

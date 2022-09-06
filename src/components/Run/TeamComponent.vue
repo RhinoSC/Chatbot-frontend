@@ -110,6 +110,7 @@ export default Vue.extend({
         },
         saveTeams() {
             this.$emit('saveTeams', this.teams)
+            this.verifyOneRunnerPerTeam()
         },
         createArrayOfTeams() {
             for (let i = 1; i <= this.numOfTeams; i++) {
