@@ -7,4 +7,5 @@ export default interface Schedule {
     end: number;
     rows: Run[];
     eventId: string;
+    defaultSetup: number;
 }

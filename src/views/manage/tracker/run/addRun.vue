@@ -100,7 +100,7 @@ import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
 import run from '@/api/marathon/run'
-import { stringTimeToMS } from '@/utils/parsers'
+import { stringTimeToMS, MStoStringTime } from '@/utils/parsers'
 import Bid from '@/utils/types/Bid'
 
 
@@ -177,5 +177,10 @@ export default Vue.extend({
       this.newRun.bids = []
     }
   },
+  watch: {
+    selectedSchedule() {
+      this.setupAsString = MStoStringTime(this.selectedSchedule.defaultSetup)
+    }
+  }
 })
 </script>

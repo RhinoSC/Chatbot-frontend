@@ -12,12 +12,17 @@
             </v-row>
             <v-row>
               <v-col>
+                <v-select :items="events" item-text="name" return-object label="Event" v-model="selectedEvent">
+                </v-select>
+              </v-col>
+              <v-col>
                 <v-text-field name="name" label="Schedule name" id="scheduleName" v-model="newSchedule.name">
                 </v-text-field>
               </v-col>
               <v-col>
-                <v-select :items="events" item-text="name" return-object label="Event" v-model="selectedEvent">
-                </v-select>
+                <v-text-field name="defaultSetup" label="Default setup time" id="defaultSetup"
+                  v-model="defaultSetupAsString">
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -38,6 +43,7 @@ import trackerSchedule from '@/api/marathon/schedule'
 import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
+import { stringTimeToMS } from '@/utils/parsers'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -46,6 +52,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      defaultSetupAsString: "",
       events: [] as Event[],
       selectedEvent: {} as Event,
       newSchedule: {
@@ -53,7 +60,8 @@ export default Vue.extend({
         start: 0,
         end: 0,
         rows: [] as Run[],
-        eventId: ""
+        eventId: "",
+        defaultSetup: 0
       }
     }
   },
@@ -69,6 +77,8 @@ export default Vue.extend({
         if (this.selectedEvent._id)
           this.newSchedule.eventId = this.selectedEvent._id
       }
+
+      this.newSchedule.defaultSetup = stringTimeToMS(this.defaultSetupAsString)
       // console.log(this.newSchedule)
       const res = await trackerSchedule.postSchedule(this.newSchedule)
       if (res) {
