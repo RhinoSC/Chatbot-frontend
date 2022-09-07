@@ -1,8 +1,8 @@
 <template>
     <v-container fluid>
-        <v-card >
+        <v-card>
             <v-card-title primary-title>
-                Add Schedule
+                Edit Schedule
             </v-card-title>
             <v-card-text>
                 <v-form class="mb-5">
@@ -30,9 +30,12 @@
                         <v-row>
                             <h2>Schedule runs manager</h2>
                         </v-row>
+                        <v-row>
+
+                        </v-row>
                     </v-col>
                     <v-col>
-                        
+                        <RunManagerComponent></RunManagerComponent>
                     </v-col>
                     <!-- <v-col>
                         <v-sheet >
@@ -81,72 +84,76 @@
     </v-container>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerSchedule from '@/api/marathon/schedule'
-  import trackerEvent from '@/api/marathon/event'
-  import Run from '@/utils/types/Run'
-  import Event from '@/utils/types/Event'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              showCalendar: true,
-  
-              deleteDialog: false,
-              events: [] as Event[],
-              selectedEvent: {} as Event | undefined,
-              oldSchedule: {
-                  _id: "",
-                  name: "",
-                  start: 0,
-                  end: 0,
-                  rows: [] as Run[],
-                  eventId: ""
-              },
-              newSchedule: {
-                  _id: "",
-                  name: "",
-                  start: 0,
-                  end: 0,
-                  rows: [] as Run[],
-                  eventId: ""
-              }
-          }
-      },
-      async created() {
-          const res = await trackerSchedule.getOneSchedule(this.$route.params.id)
-          this.oldSchedule = res[0]
-          const eventRes = await trackerEvent.getEvents()
-          this.events = eventRes
-          let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
-          this.selectedEvent = selectedEvent
-      },
-      //   mounted() {
-      //   },
-      methods: {
-          async deleteSchedule() {
-              const res = await trackerSchedule.deleteSchedule(this.oldSchedule._id)
-              if (res) {
-                  console.log(res)
-                  this.$router.push('/manage/tracker/schedules')
-              }
-          },
-          async editSchedule() {
-  
-              this.newSchedule = this.oldSchedule
-  
-              const res = await trackerSchedule.updateSchedule(this.newSchedule)
-              if (res) {
-                  console.log(res)
+<script lang="ts">
+import Vue from 'vue'
+import trackerSchedule from '@/api/marathon/schedule'
+import trackerEvent from '@/api/marathon/event'
+import Run from '@/utils/types/Run'
+import Event from '@/utils/types/Event'
+import RunManagerComponent from '@/components/schedule/RunsManager.vue'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+        RunManagerComponent,
+    },
+    data() {
+        return {
+            showCalendar: true,
+
+            deleteDialog: false,
+            events: [] as Event[],
+            selectedEvent: {} as Event | undefined,
+            oldSchedule: {
+                _id: "",
+                name: "",
+                start: 0,
+                end: 0,
+                rows: [] as Run[],
+                eventId: "",
+                defaultSetup: 0
+            },
+            newSchedule: {
+                _id: "",
+                name: "",
+                start: 0,
+                end: 0,
+                rows: [] as Run[],
+                eventId: "",
+                defaultSetup: 0
+            }
+        }
+    },
+    async created() {
+        const res = await trackerSchedule.getOneSchedule(this.$route.params.id)
+        this.oldSchedule = res[0]
+        const eventRes = await trackerEvent.getEvents()
+        this.events = eventRes
+        let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
+        this.selectedEvent = selectedEvent
+    },
+    //   mounted() {
+    //   },
+    methods: {
+        async deleteSchedule() {
+            const res = await trackerSchedule.deleteSchedule(this.oldSchedule._id)
+            if (res) {
+                console.log(res)
+                this.$router.push('/manage/tracker/schedules')
+            }
+        },
+        async editSchedule() {
+
+            this.newSchedule = this.oldSchedule
+
+            const res = await trackerSchedule.updateSchedule(this.newSchedule)
+            if (res) {
+                console.log(res)
                 //   this.$router.push('/manage/tracker/schedules')
-              }
-          },
-      },
-  })
-  </script>
+            }
+        },
+    },
+})
+</script>
   

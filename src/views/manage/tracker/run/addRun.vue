@@ -27,7 +27,7 @@
               </v-col>
               <v-col>
                 <v-text-field name="estimate" label="Estimate" id="estimate" placeholder="00:00:00"
-                  v-model="newRun.estimate">
+                  v-model="newRun.estimateS">
                 </v-text-field>
               </v-col>
               <v-col>
@@ -125,8 +125,8 @@ export default Vue.extend({
         name: "",
         gameTwitch: "",
         start: 0,
-        estimate: "",
-        estimateS: 0,
+        estimate: 0,
+        estimateS: "",
         setup: 0,
         teams: [] as Team[],
         bids: [] as Bid[],
@@ -150,7 +150,7 @@ export default Vue.extend({
         return
       }
       this.newRun.setup = stringTimeToMS(this.setupAsString)
-      this.newRun.estimateS = stringTimeToMS(this.newRun.estimate)
+      this.newRun.estimate = stringTimeToMS(this.newRun.estimateS)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
       // console.log(this.newRun)
