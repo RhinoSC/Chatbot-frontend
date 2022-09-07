@@ -80,6 +80,11 @@ const routes: Array<RouteConfig> = [
         component: () => import('../views/manage/tracker/user/users.vue')
       },
       {
+        path: 'prizes',
+        name: 'manage.tracker.prize',
+        component: () => import('../views/manage/tracker/prize/prizes.vue')
+      },
+      {
         path: 'bids',
         name: 'manage.tracker.bid',
         component: () => import('../views/manage/tracker/bid/bids.vue')
@@ -129,6 +134,18 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/users/add',
     component: () => import('../views/manage/tracker/user/addUser.vue')
+  },
+
+
+  // prizes
+  {
+    path: '/manage/tracker/prizes/edit/:id',
+    name: 'manage.tracker.prizes',
+    component: () => import('../views/manage/tracker/prize/editPrize.vue')
+  },
+  {
+    path: '/manage/tracker/prizes/add',
+    component: () => import('../views/manage/tracker/prize/addPrize.vue')
   },
 
   // bids
