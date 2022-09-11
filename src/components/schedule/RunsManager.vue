@@ -201,7 +201,7 @@ export default Vue.extend({
         sortRows(event: any) {
             let titleCount = 0
             const testArr = this.scheduleRows.filter((row: any) => { if (row.dayRow) { titleCount++ } return row.dayRow === false })
-            testArr.splice(0, 0, { index: 0, dayRow: true, start: testArr[0].row.start, dayText: testArr[0].dayText })
+            testArr.splice(0, 0, { index: 0, dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
 
             if (event.moved.newIndex < event.moved.oldIndex) {
                 let i = 1
@@ -227,9 +227,7 @@ export default Vue.extend({
 
                             if (oldStartDate.getDate() != oldEndDate.getDate()) {
                                 item.newDay = true
-                                item.dayText = this.getDay(item, false)
                             }
-
                             item.dayText = this.getDay(item, false)
                         }
                     } else {
@@ -255,84 +253,52 @@ export default Vue.extend({
                 }
             }
             // case when going forward on schedule
-            // else {
-            //     for (let i = event.moved.oldIndex; i < this.scheduleRows.length; i++) {
+            else {
+                // console.log(testArr)
+                let i = 1
+                event.moved.oldIndex === 1 ? i = event.moved.oldIndex : i = event.moved.oldIndex - titleCount
+                for (i; i < testArr.length; i++) {
+                    const item = testArr[i]
+                    if (event.moved.oldIndex == 1) {
+                        if (i == 1) {
+                            this.setFirstRow(item, false)
+                        } else {
+                            this.setNextFirstRows(testArr[i - 1], item)
+                        }
+                    } else {
+                        if (i > 1) {
+                            const oldRow = testArr[i - 1]
+                            const oldStartDate = new Date(oldRow.row.start)
+                            const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
 
-            //         const item = this.scheduleRows[i]
+                            item.row.start = oldEndDate.getTime()
+                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+                            item.newDay = false
 
-            //         if (this.isRowDay(item)) {
-            //             this.scheduleRows.splice(i, 1)
-            //             i--
-            //             continue
-            //         }
-
-            //         // case when we move to the start of the schedule
-            //         if (event.moved.oldIndex == 1) {
-            //             if (i == 1) {
-            //                 const runEstimateMS = stringTimeToMS(item.row.estimate)
-            //                 this.actualTimeMS = this.startTimeMS + runEstimateMS
-
-            //                 item.row.start = this.startDate.getTime()
-            //                 item.row.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
-
-            //                 item.row.newDay = true
-            //                 item.row.dayText = this.getDay(item, true)
-
-            //             }
-            //             else {
-            //                 const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(this.scheduleRows[this.scheduleRows.length - 1].row.estimate))
-            //                 const oldEndDate = new Date(this.actualTimeMS)
-
-            //                 const timeInMS = stringTimeToMS(item.row.estimate)
-            //                 this.actualTimeMS += timeInMS
-
-            //                 item.row.start = oldEndDate.getTime()
-            //                 item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
-
-            //                 if (oldStartDate.getDate() != oldEndDate.getDate()) {
-            //                     item.newDay = true
-            //                     item.dayText = this.getDay(item, false)
-            //                     this.scheduleRows.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
-            //                 }
-
-            //                 item.dayText = this.getDay(item, false)
-            //             }
-            //             continue
-            //         }
-
-            //         const oldRow = this.scheduleRows[i - 1]
-            //         const oldStartDate = new Date(oldRow.row.start)
-            //         const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
-
-            //         // console.log(i, oldEndDate)
-
-            //         item.row.start = oldEndDate.getTime()
-            //         item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
-
-            //         if (oldStartDate.getDate() != oldEndDate.getDate()) {
-            //             item.newDay = true
-            //             item.dayText = this.getDay(item, false)
-            //             this.scheduleRows.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
-            //         }
-
-            //         item.dayText = this.getDay(item, false)
-            //     }
-            // }
-
+                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
+                                item.newDay = true
+                                item.dayText = this.getDay(item, false)
+                            }
+                            item.dayText = this.getDay(item, false)
+                        }
+                    }
+                }
+            }
 
             let firstDate = new Date(testArr[1].row.start)
-            for (let i = 2; i < testArr.length; i++) {
-                const item = testArr[i]
+            for (let j = 2; j < testArr.length; j++) {
+                const item = testArr[j]
                 const newDate = new Date(item.row.start)
 
                 if (firstDate.getDate() != newDate.getDate()) {
                     firstDate = newDate
                     item.newDay = true
-                    testArr.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
-                    i++
+                    testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
+                    j++
                 }
             }
             this.scheduleRows = testArr
+            console.log(this.scheduleRows)
         },
         setFirstRow(item: any, firstTime: boolean) {
             const runEstimateMS = stringTimeToMS(item.row.estimate)
@@ -343,13 +309,29 @@ export default Vue.extend({
 
             if (!firstTime) {
                 item.newDay = true
-                item.row.dayText = this.getDay(item, true)
+                item.dayText = this.getDay(item, true)
             } else {
                 item.newDay = true
                 item.dayText = this.getDay(item, true)
                 this.scheduleRows.push({ index: 0, dayRow: true, start: item.row.start, dayText: item.dayText })
                 this.scheduleRows.push(item)
             }
+        },
+        setNextFirstRows(itemBefore: any, item: any) {
+            const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(itemBefore.row.estimate))
+            const oldEndDate = new Date(this.actualTimeMS)
+
+            const timeInMS = stringTimeToMS(item.row.estimate)
+            this.actualTimeMS += timeInMS
+
+            item.row.start = oldEndDate.getTime()
+            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+            item.newDay = false
+
+            if (oldStartDate.getDate() != oldEndDate.getDate()) {
+                item.newDay = true
+            }
+            item.dayText = this.getDay(item, false)
         }
     },
 })
