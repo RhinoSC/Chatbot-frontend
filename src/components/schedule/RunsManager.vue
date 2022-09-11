@@ -69,16 +69,11 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- <tr v-for="(item, i) in scheduleRows" :key="i">
-                                        <td>{{ item.runner }}</td>
-                                        <td>{{ item.runner }}</td>
-                                        <td>{{ item.game }}</td>
-                                        <td>Acciones</td>
-                                    </tr> -->
+                                <draggable :list="scheduleRows" tag="tbody" @change="sortRows" :disabled="disableDrag"
+                                    draggable=".item-draggable">
                                     <template v-for="(item, i) in scheduleRows">
-                                        <template v-if="item.newDay">
-                                            <tr :key="item.row.start" style="background-color: #2196f3;">
+                                        <template v-if="isRowDay(item)">
+                                            <tr :key="i" style="background-color: #2196f3;" class="item-day-tr">
                                                 <td></td>
                                                 <td></td>
                                                 <td class="d-flex justify-center align-center" style="color: white;">
@@ -88,16 +83,17 @@
                                                 <td></td>
                                             </tr>
                                         </template>
-                                        <!-- eslint-disable-next-line -->
-                                        <tr :key="i">
-                                            <td>{{ item.row.time }}</td>
-                                            <td>{{ item.row.runner }}</td>
-                                            <td>{{ item.row.game }}</td>
-                                            <td>{{ item.row.estimate }}</td>
-                                            <td>Acciones</td>
-                                        </tr>
+                                        <template v-else>
+                                            <tr :key="i" class="item-draggable">
+                                                <td>{{ item.row.time }}</td>
+                                                <td>{{ item.row.runner }}</td>
+                                                <td>{{ item.row.game }}</td>
+                                                <td>{{ item.row.estimate }}</td>
+                                                <td>Acciones</td>
+                                            </tr>
+                                        </template>
                                     </template>
-                                </tbody>
+                                </draggable>
                             </template>
                         </v-simple-table>
                         <v-btn color="info" @click="addRun">text</v-btn>
@@ -115,15 +111,17 @@ import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
 import { MStoStringTime, stringTimeToMS } from '@/utils/parsers'
+import draggable from 'vuedraggable'
 
 export default Vue.extend({
     name: 'run-manager-component',
 
-    components: {
-    },
+    components: { draggable },
     data() {
         return {
-            show: false,
+            adding: 1,
+            titlePositions: [] as any[],
+            disableDrag: false,
             startDate: {} as Date,
             startTime: "",
             startTimeMS: 0,
@@ -139,6 +137,12 @@ export default Vue.extend({
         this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
     },
     methods: {
+        isRowDay(item: any) {
+            if (item.dayRow) {
+                return true
+            }
+            return false
+        },
         getDay(item: any, firstDay: boolean) {
             let newDate;
             if (firstDay) {
@@ -150,18 +154,29 @@ export default Vue.extend({
             return newDate.toLocaleDateString('en-US', { dateStyle: 'medium' })
         },
         addRun() {
-            const run = { newDay: false, dayText: "", row: { time: "", runner: 'runer', game: 'game', estimate: '08:10:10', start: 0 } }
+            const run = { dayRow: false, newDay: false, dayText: "", row: { time: "", runner: `runer ${this.adding}`, game: 'game', estimate: '08:10:10', start: 0 } }
+            this.adding++
+
+            // const random = Math.floor(Math.random() * 5)
+            // switch (random) {
+            //     case 0:
+            //         run.row.runner = "runner 1"
+            //         break;
+            //     case 1:
+            //         run.row.runner = "runner 2"
+            //         break;
+            //     case 2:
+            //         run.row.runner = "runner 3"
+            //         break;
+            //     case 3:
+            //         run.row.runner = "runner 4"
+            //         break;
+            //     case 4:
+            //         run.row.runner = "runner 5"
+            //         break;
+            // }
             if (this.scheduleRows.length == 0) {
-                const runEstimateMS = stringTimeToMS(run.row.estimate)
-                this.actualTimeMS = this.startTimeMS + runEstimateMS
-
-                run.row.start = this.startDate.getTime()
-                run.row.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
-
-                run.newDay = true
-                run.dayText = this.getDay(run, true)
-
-                this.scheduleRows.push(run)
+                this.setFirstRow(run, true)
             } else {
                 const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(this.scheduleRows[this.scheduleRows.length - 1].row.estimate))
                 const oldEndDate = new Date(this.actualTimeMS)
@@ -174,13 +189,179 @@ export default Vue.extend({
 
                 if (oldStartDate.getDate() != oldEndDate.getDate()) {
                     run.newDay = true
+                    run.dayText = this.getDay(run, false)
+                    this.scheduleRows.push({ index: this.scheduleRows.length, dayRow: true, start: run.row.start, dayText: run.dayText })
                 }
 
                 run.dayText = this.getDay(run, false)
                 this.scheduleRows.push(run)
             }
+            // console.log(this.scheduleRows)
+        },
+        sortRows(event: any) {
+            let titleCount = 0
+            const testArr = this.scheduleRows.filter((row: any) => { if (row.dayRow) { titleCount++ } return row.dayRow === false })
+            testArr.splice(0, 0, { index: 0, dayRow: true, start: testArr[0].row.start, dayText: testArr[0].dayText })
+
+            if (event.moved.newIndex < event.moved.oldIndex) {
+                let i = 1
+                event.moved.newIndex === 1 ? i = event.moved.newIndex : i = event.moved.newIndex - titleCount
+                for (i; i < testArr.length; i++) {
+                    const item = testArr[i]
+
+                    // case when we move to the start of the schedule
+                    if (event.moved.newIndex == 1) {
+                        if (i == 1) {
+                            this.setFirstRow(item, false)
+                        }
+                        else {
+                            const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(testArr[i - 1].row.estimate))
+                            const oldEndDate = new Date(this.actualTimeMS)
+
+                            const timeInMS = stringTimeToMS(item.row.estimate)
+                            this.actualTimeMS += timeInMS
+
+                            item.row.start = oldEndDate.getTime()
+                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+                            item.newDay = false
+
+                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
+                                item.newDay = true
+                                item.dayText = this.getDay(item, false)
+                            }
+
+                            item.dayText = this.getDay(item, false)
+                        }
+                    } else {
+                        // case when moving backwards in schedule
+                        if (i > 1) {
+
+                            const oldRow = testArr[i - 1]
+                            const oldStartDate = new Date(oldRow.row.start)
+                            const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
+
+                            item.row.start = oldEndDate.getTime()
+                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+                            item.newDay = false
+
+                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
+                                item.newDay = true
+                                item.dayText = this.getDay(item, false)
+                                // this.titlePositions.push({ index: i, dayRow: true, start: item.row.start, dayText: item.dayText })
+                            }
+                            item.dayText = this.getDay(item, false)
+                        }
+                    }
+                }
+            }
+            // case when going forward on schedule
+            // else {
+            //     for (let i = event.moved.oldIndex; i < this.scheduleRows.length; i++) {
+
+            //         const item = this.scheduleRows[i]
+
+            //         if (this.isRowDay(item)) {
+            //             this.scheduleRows.splice(i, 1)
+            //             i--
+            //             continue
+            //         }
+
+            //         // case when we move to the start of the schedule
+            //         if (event.moved.oldIndex == 1) {
+            //             if (i == 1) {
+            //                 const runEstimateMS = stringTimeToMS(item.row.estimate)
+            //                 this.actualTimeMS = this.startTimeMS + runEstimateMS
+
+            //                 item.row.start = this.startDate.getTime()
+            //                 item.row.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
+
+            //                 item.row.newDay = true
+            //                 item.row.dayText = this.getDay(item, true)
+
+            //             }
+            //             else {
+            //                 const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(this.scheduleRows[this.scheduleRows.length - 1].row.estimate))
+            //                 const oldEndDate = new Date(this.actualTimeMS)
+
+            //                 const timeInMS = stringTimeToMS(item.row.estimate)
+            //                 this.actualTimeMS += timeInMS
+
+            //                 item.row.start = oldEndDate.getTime()
+            //                 item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+
+            //                 if (oldStartDate.getDate() != oldEndDate.getDate()) {
+            //                     item.newDay = true
+            //                     item.dayText = this.getDay(item, false)
+            //                     this.scheduleRows.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
+            //                 }
+
+            //                 item.dayText = this.getDay(item, false)
+            //             }
+            //             continue
+            //         }
+
+            //         const oldRow = this.scheduleRows[i - 1]
+            //         const oldStartDate = new Date(oldRow.row.start)
+            //         const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
+
+            //         // console.log(i, oldEndDate)
+
+            //         item.row.start = oldEndDate.getTime()
+            //         item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+
+            //         if (oldStartDate.getDate() != oldEndDate.getDate()) {
+            //             item.newDay = true
+            //             item.dayText = this.getDay(item, false)
+            //             this.scheduleRows.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
+            //         }
+
+            //         item.dayText = this.getDay(item, false)
+            //     }
+            // }
+
+
+            let firstDate = new Date(testArr[1].row.start)
+            for (let i = 2; i < testArr.length; i++) {
+                const item = testArr[i]
+                const newDate = new Date(item.row.start)
+
+                if (firstDate.getDate() != newDate.getDate()) {
+                    firstDate = newDate
+                    item.newDay = true
+                    testArr.splice(i, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
+                    i++
+                }
+            }
+            this.scheduleRows = testArr
+        },
+        setFirstRow(item: any, firstTime: boolean) {
+            const runEstimateMS = stringTimeToMS(item.row.estimate)
+            this.actualTimeMS = this.startTimeMS + runEstimateMS
+
+            item.row.start = this.startDate.getTime()
+            item.row.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
+
+            if (!firstTime) {
+                item.newDay = true
+                item.row.dayText = this.getDay(item, true)
+            } else {
+                item.newDay = true
+                item.dayText = this.getDay(item, true)
+                this.scheduleRows.push({ index: 0, dayRow: true, start: item.row.start, dayText: item.dayText })
+                this.scheduleRows.push(item)
+            }
         }
     },
 })
 </script>
-  
+
+<!-- <style lang="scss" scoped>
+.item-draggable {
+    &-new-day {
+        background-color: red;
+        ::before(){
+
+        }
+    }
+}
+</style> -->
