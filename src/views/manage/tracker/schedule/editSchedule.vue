@@ -34,24 +34,11 @@
 
                         </v-row>
                     </v-col>
-                    <v-col>
-                        <RunManagerComponent></RunManagerComponent>
+                    <v-col v-if="isReady">
+                        <RunManagerComponent :schedule="oldSchedule" @updateScheduleRows="updateScheduleRows($event)"
+                            @updateAvailableRuns="updateAvailableRuns($event)">
+                        </RunManagerComponent>
                     </v-col>
-                    <!-- <v-col>
-                        <v-sheet >
-                            <v-calendar color="primary" type="day">
-                                <template v-slot:day-header="{ present }">
-                                    Today {{ present }}
-                                </template>
-
-                                <template v-slot:interval="{ hour }">
-                                    <div class="text-center">
-                                        {{ hour }} o'clock
-                                    </div>
-                                </template>
-                            </v-calendar>
-                        </v-sheet>
-                    </v-col> -->
                     <v-col>
                         <v-row>
                             <v-spacer></v-spacer>
@@ -91,6 +78,7 @@ import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
 import RunManagerComponent from '@/components/schedule/RunsManager.vue'
+import ScheduleRow from '@/utils/types/ScheduleRow'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -100,8 +88,8 @@ export default Vue.extend({
     },
     data() {
         return {
+            isReady: false,
             showCalendar: true,
-
             deleteDialog: false,
             events: [] as Event[],
             selectedEvent: {} as Event | undefined,
@@ -110,7 +98,8 @@ export default Vue.extend({
                 name: "",
                 start: 0,
                 end: 0,
-                rows: [] as Run[],
+                rows: [] as ScheduleRow[],
+                availableRuns: [] as Run[],
                 eventId: "",
                 defaultSetup: 0
             },
@@ -119,10 +108,11 @@ export default Vue.extend({
                 name: "",
                 start: 0,
                 end: 0,
-                rows: [] as Run[],
+                rows: [] as ScheduleRow[],
+                availableRuns: [] as Run[],
                 eventId: "",
                 defaultSetup: 0
-            }
+            },
         }
     },
     async created() {
@@ -132,10 +122,13 @@ export default Vue.extend({
         this.events = eventRes
         let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
         this.selectedEvent = selectedEvent
+
+        this.isReady = true
     },
-    //   mounted() {
-    //   },
     methods: {
+        getSchedule() {
+            return structuredClone(this.oldSchedule)
+        },
         async deleteSchedule() {
             const res = await trackerSchedule.deleteSchedule(this.oldSchedule._id)
             if (res) {
@@ -147,12 +140,20 @@ export default Vue.extend({
 
             this.newSchedule = this.oldSchedule
 
-            const res = await trackerSchedule.updateSchedule(this.newSchedule)
-            if (res) {
-                console.log(res)
-                //   this.$router.push('/manage/tracker/schedules')
-            }
+            console.log(this.newSchedule)
+
+            // const res = await trackerSchedule.updateSchedule(this.newSchedule)
+            // if (res) {
+            //     console.log(res)
+            //     //   this.$router.push('/manage/tracker/schedules')
+            // }
         },
+        updateScheduleRows($event: any) {
+            this.oldSchedule.rows = $event
+        },
+        updateAvailableRuns($event: any) {
+            this.oldSchedule.availableRuns = $event
+        }
     },
 })
 </script>

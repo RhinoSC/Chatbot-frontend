@@ -44,6 +44,7 @@ import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
 import { stringTimeToMS } from '@/utils/parsers'
+import ScheduleRow from '@/utils/types/ScheduleRow'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -59,7 +60,8 @@ export default Vue.extend({
         name: "",
         start: 0,
         end: 0,
-        rows: [] as Run[],
+        rows: [] as ScheduleRow[],
+        availableRuns: [] as Run[],
         eventId: "",
         defaultSetup: 0
       }

@@ -26,16 +26,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>runner</td>
+                                    <tr v-for="(run, i) in availableRows" :key="i">
+                                        <td>{{getRunnerString(run)}}</td>
+                                        <td>{{run.name}}</td>
+                                        <td>{{run.estimateS}}</td>
+                                        <td class="d-flex justify-center align-center">
+                                            <v-btn small icon color="info" @click="addRun(run)">
+                                                <v-icon>
+                                                    mdi-greater-than
+                                                </v-icon>
+                                            </v-btn>
+                                            <!-- <v-app-bar-nav-icon small icon></v-app-bar-nav-icon> -->
+                                        </td>
+                                        <!-- <td>runner</td>
                                         <td>juego</td>
                                         <td>10:10:10</td>
-                                        <td>Accion</td>
+                                        <td>Accion</td> -->
                                     </tr>
-                                    <!-- <tr v-for="item in desserts" :key="item.name">
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.calories }}</td>
-                                    </tr> -->
                                 </tbody>
                             </template>
                         </v-simple-table>
@@ -84,19 +91,42 @@
                                             </tr>
                                         </template>
                                         <template v-else>
-                                            <tr :key="i" class="item-draggable">
-                                                <td>{{ item.row.time }}</td>
-                                                <td>{{ item.row.runner }}</td>
-                                                <td>{{ item.row.game }}</td>
-                                                <td>{{ item.row.estimate }}</td>
-                                                <td>Acciones</td>
+                                            <tr :key="i" class="item-draggable" style="cursor: grab;">
+                                                <td>
+                                                    <span class="default-row">
+                                                        {{ item.time }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="default-row">
+                                                        {{getRunnerString(item.row)}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="default-row">
+                                                        {{ item.row.name }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="default-row">
+                                                        {{ item.row.estimateS }}
+                                                    </span>
+                                                </td>
+                                                <td class="d-flex justify-center align-center">
+                                                    <v-btn small icon color="info" @click="removeRun(item)">
+                                                        <v-icon>
+                                                            mdi-less-than
+                                                        </v-icon>
+                                                    </v-btn>
+                                                    <v-app-bar-nav-icon small icon style="cursor: grab;">
+                                                    </v-app-bar-nav-icon>
+                                                </td>
                                             </tr>
                                         </template>
                                     </template>
                                 </draggable>
                             </template>
                         </v-simple-table>
-                        <v-btn color="info" @click="addRun">text</v-btn>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -106,17 +136,21 @@
   
 <script lang="ts">
 import Vue from 'vue'
-import trackerSchedule from '@/api/marathon/schedule'
-import trackerEvent from '@/api/marathon/event'
+import trackerRun from '@/api/marathon/run'
 import Run from '@/utils/types/Run'
-import Event from '@/utils/types/Event'
-import { MStoStringTime, stringTimeToMS } from '@/utils/parsers'
 import draggable from 'vuedraggable'
+import ScheduleRow from '@/utils/types/ScheduleRow'
 
 export default Vue.extend({
     name: 'run-manager-component',
 
     components: { draggable },
+    props: {
+        schedule: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             adding: 1,
@@ -126,15 +160,22 @@ export default Vue.extend({
             startTime: "",
             startTimeMS: 0,
             actualTimeMS: 0,
-            scheduleRows: [] as any
-            // scheduleRows: [{ time: "", runner: 'runer', game: 'game', estimate: '24:10:10', }, { time: "", runner: 'runer', game: 'game', estimate: '24:10:10', }]
+            scheduleRows: [] as any[],
+            availableRows: [] as Run[],
+            tempSchedule: this.schedule
         }
     },
-    async created() {
-        const date = new Date('October 30, 2022 00:00:00')
+    created() {
+        // const date = new Date('October 30, 2022 00:00:00')
+        const date = new Date(this.schedule.start)
         this.startDate = date
         this.startTimeMS = date.getTime()
         this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+
+        this.availableRows = this.tempSchedule.availableRuns
+        this.scheduleRows = this.setTitles(this.tempSchedule.rows, true)
+
+        this.actualTimeMS = this.scheduleRows[this.scheduleRows.length - 1].row.start + this.scheduleRows[this.scheduleRows.length - 1].row.estimate
     },
     methods: {
         isRowDay(item: any) {
@@ -153,39 +194,39 @@ export default Vue.extend({
             }
             return newDate.toLocaleDateString('en-US', { dateStyle: 'medium' })
         },
-        addRun() {
-            const run = { dayRow: false, newDay: false, dayText: "", row: { time: "", runner: `runer ${this.adding}`, game: 'game', estimate: '08:10:10', start: 0 } }
-            this.adding++
+        getRunnerString(item: any) {
+            const runnerArr = item.teams.map((team: any) => {
+                let teamString = team.players.map((player: any) => { return player.name })
+                teamString = teamString.join(', ')
+                return teamString
+            })
+            return runnerArr.join(', ')
+        },
+        removeRun(item: ScheduleRow) {
+            const index = this.scheduleRows.findIndex((row: ScheduleRow) => row === item)
+            const removedRow = this.scheduleRows.splice(index, 1)
 
-            // const random = Math.floor(Math.random() * 5)
-            // switch (random) {
-            //     case 0:
-            //         run.row.runner = "runner 1"
-            //         break;
-            //     case 1:
-            //         run.row.runner = "runner 2"
-            //         break;
-            //     case 2:
-            //         run.row.runner = "runner 3"
-            //         break;
-            //     case 3:
-            //         run.row.runner = "runner 4"
-            //         break;
-            //     case 4:
-            //         run.row.runner = "runner 5"
-            //         break;
-            // }
-            if (this.scheduleRows.length == 0) {
+            this.availableRows.push(removedRow[0].row)
+            this.sortRows({ moved: { newIndex: this.scheduleRows.length - 1, oldIndex: index } })
+        },
+        addRun(item: Run) {
+            // only necessary when testing and not deleting on runs list
+            const copy = structuredClone(item)
+            const run: ScheduleRow = { dayRow: false, newDay: false, dayText: "", time: "", row: copy }
+
+            const indexAvailable = this.availableRows.findIndex((row: Run) => row === item)
+            this.availableRows.splice(indexAvailable, 1)
+
+            if (this.scheduleRows.length === 0) {
                 this.setFirstRow(run, true)
             } else {
-                const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(this.scheduleRows[this.scheduleRows.length - 1].row.estimate))
+                const oldStartDate = new Date(this.actualTimeMS - this.scheduleRows[this.scheduleRows.length - 1].row.estimate)
                 const oldEndDate = new Date(this.actualTimeMS)
 
-                const timeInMS = stringTimeToMS(run.row.estimate)
-                this.actualTimeMS += timeInMS
+                this.actualTimeMS += run.row.estimate
 
                 run.row.start = oldEndDate.getTime()
-                run.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+                run.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
 
                 if (oldStartDate.getDate() != oldEndDate.getDate()) {
                     run.newDay = true
@@ -194,13 +235,18 @@ export default Vue.extend({
                 }
 
                 run.dayText = this.getDay(run, false)
+
                 this.scheduleRows.push(run)
             }
-            // console.log(this.scheduleRows)
         },
         sortRows(event: any) {
             let titleCount = 0
-            const testArr = this.scheduleRows.filter((row: any) => { if (row.dayRow) { titleCount++ } return row.dayRow === false })
+            let testArr = this.scheduleRows.filter((row: any) => { if (row.dayRow) { titleCount++ } return row.dayRow === false })
+
+            if (testArr.length === 0) {
+                this.scheduleRows = testArr
+                return
+            }
             testArr.splice(0, 0, { index: 0, dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
 
             if (event.moved.newIndex < event.moved.oldIndex) {
@@ -215,46 +261,18 @@ export default Vue.extend({
                             this.setFirstRow(item, false)
                         }
                         else {
-                            const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(testArr[i - 1].row.estimate))
-                            const oldEndDate = new Date(this.actualTimeMS)
-
-                            const timeInMS = stringTimeToMS(item.row.estimate)
-                            this.actualTimeMS += timeInMS
-
-                            item.row.start = oldEndDate.getTime()
-                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
-                            item.newDay = false
-
-                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
-                                item.newDay = true
-                            }
-                            item.dayText = this.getDay(item, false)
+                            this.setNextFirstRows(testArr[i - 1], item)
                         }
                     } else {
                         // case when moving backwards in schedule
                         if (i > 1) {
-
-                            const oldRow = testArr[i - 1]
-                            const oldStartDate = new Date(oldRow.row.start)
-                            const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
-
-                            item.row.start = oldEndDate.getTime()
-                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
-                            item.newDay = false
-
-                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
-                                item.newDay = true
-                                item.dayText = this.getDay(item, false)
-                                // this.titlePositions.push({ index: i, dayRow: true, start: item.row.start, dayText: item.dayText })
-                            }
-                            item.dayText = this.getDay(item, false)
+                            this.setNextRows(testArr[i - 1], item)
                         }
                     }
                 }
             }
             // case when going forward on schedule
             else {
-                // console.log(testArr)
                 let i = 1
                 event.moved.oldIndex === 1 ? i = event.moved.oldIndex : i = event.moved.oldIndex - titleCount
                 for (i; i < testArr.length; i++) {
@@ -267,45 +285,20 @@ export default Vue.extend({
                         }
                     } else {
                         if (i > 1) {
-                            const oldRow = testArr[i - 1]
-                            const oldStartDate = new Date(oldRow.row.start)
-                            const oldEndDate = new Date(oldRow.row.start + stringTimeToMS(oldRow.row.estimate))
-
-                            item.row.start = oldEndDate.getTime()
-                            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
-                            item.newDay = false
-
-                            if (oldStartDate.getDate() != oldEndDate.getDate()) {
-                                item.newDay = true
-                                item.dayText = this.getDay(item, false)
-                            }
-                            item.dayText = this.getDay(item, false)
+                            this.setNextRows(testArr[i - 1], item)
                         }
                     }
                 }
             }
 
-            let firstDate = new Date(testArr[1].row.start)
-            for (let j = 2; j < testArr.length; j++) {
-                const item = testArr[j]
-                const newDate = new Date(item.row.start)
-
-                if (firstDate.getDate() != newDate.getDate()) {
-                    firstDate = newDate
-                    item.newDay = true
-                    testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
-                    j++
-                }
-            }
+            testArr = this.setTitles(testArr, false)
             this.scheduleRows = testArr
-            console.log(this.scheduleRows)
         },
         setFirstRow(item: any, firstTime: boolean) {
-            const runEstimateMS = stringTimeToMS(item.row.estimate)
-            this.actualTimeMS = this.startTimeMS + runEstimateMS
+            this.actualTimeMS = this.startTimeMS + item.row.estimate
 
             item.row.start = this.startDate.getTime()
-            item.row.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
+            item.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
 
             if (!firstTime) {
                 item.newDay = true
@@ -318,32 +311,66 @@ export default Vue.extend({
             }
         },
         setNextFirstRows(itemBefore: any, item: any) {
-            const oldStartDate = new Date(this.actualTimeMS - stringTimeToMS(itemBefore.row.estimate))
+            const oldStartDate = new Date(this.actualTimeMS - itemBefore.row.estimate)
             const oldEndDate = new Date(this.actualTimeMS)
 
-            const timeInMS = stringTimeToMS(item.row.estimate)
-            this.actualTimeMS += timeInMS
+            this.actualTimeMS += item.row.estimate
 
             item.row.start = oldEndDate.getTime()
-            item.row.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+            item.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
             item.newDay = false
 
             if (oldStartDate.getDate() != oldEndDate.getDate()) {
                 item.newDay = true
             }
             item.dayText = this.getDay(item, false)
+        },
+        setNextRows(itemBefore: any, item: any) {
+            const oldStartDate = new Date(itemBefore.row.start)
+            const oldEndDate = new Date(itemBefore.row.start + itemBefore.row.estimate)
+
+            item.row.start = oldEndDate.getTime()
+            item.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
+            item.newDay = false
+
+            if (oldStartDate.getDate() != oldEndDate.getDate()) {
+                item.newDay = true
+                item.dayText = this.getDay(item, false)
+            }
+            item.dayText = this.getDay(item, false)
+        },
+        setTitles(testArr: any, creating: boolean) {
+            if (creating) {
+                testArr.splice(0, 0, { index: 0, dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
+            }
+            let firstDate = new Date(testArr[1].row.start)
+            for (let j = 2; j < testArr.length; j++) {
+                const item = testArr[j]
+                const newDate = new Date(item.row.start)
+
+                if (firstDate.getDate() != newDate.getDate()) {
+                    firstDate = newDate
+                    item.newDay = true
+                    testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
+                    j++
+                }
+            }
+            return testArr
         }
     },
+    watch: {
+        scheduleRows() {
+            this.$emit('updateScheduleRows', this.scheduleRows.filter((row: any) => { return row.dayRow === false }))
+        },
+        availableRows() {
+            this.$emit('updateAvailableRuns', this.availableRows)
+        },
+    }
 })
 </script>
 
-<!-- <style lang="scss" scoped>
-.item-draggable {
-    &-new-day {
-        background-color: red;
-        ::before(){
-
-        }
-    }
+<style lang="scss" scoped>
+.default-row {
+    cursor: auto;
 }
-</style> -->
+</style>
