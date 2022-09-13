@@ -77,7 +77,7 @@
                                     </tr>
                                 </thead>
                                 <draggable :list="scheduleRows" tag="tbody" @change="sortRows" :disabled="disableDrag"
-                                    draggable=".item-draggable">
+                                    draggable=".item-draggable" handle=".drag-btn">
                                     <template v-for="(item, i) in scheduleRows">
                                         <template v-if="isRowDay(item)">
                                             <tr :key="i" style="background-color: #2196f3;" class="item-day-tr">
@@ -91,24 +91,24 @@
                                             </tr>
                                         </template>
                                         <template v-else>
-                                            <tr :key="i" class="item-draggable" style="cursor: grab;">
+                                            <tr :key="i" class="item-draggable">
                                                 <td>
-                                                    <span class="default-row">
+                                                    <span>
                                                         {{ item.time }}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span class="default-row">
+                                                    <span>
                                                         {{getRunnerString(item.row)}}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span class="default-row">
+                                                    <span>
                                                         {{ item.row.name }}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span class="default-row">
+                                                    <span>
                                                         {{ item.row.estimateS }}
                                                     </span>
                                                 </td>
@@ -118,7 +118,7 @@
                                                             mdi-less-than
                                                         </v-icon>
                                                     </v-btn>
-                                                    <v-app-bar-nav-icon small icon style="cursor: grab;">
+                                                    <v-app-bar-nav-icon small icon style="cursor: grab;" class="drag-btn">
                                                     </v-app-bar-nav-icon>
                                                 </td>
                                             </tr>
