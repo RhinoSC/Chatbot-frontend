@@ -35,8 +35,7 @@
                         </v-row>
                     </v-col>
                     <v-col v-if="isReady">
-                        <RunManagerComponent :schedule="oldSchedule" @updateScheduleRows="updateScheduleRows($event)"
-                            @updateAvailableRuns="updateAvailableRuns($event)">
+                        <RunManagerComponent :schedule="oldSchedule" @saveRuns="saveRuns($event)">
                         </RunManagerComponent>
                     </v-col>
                     <v-col>
@@ -62,7 +61,7 @@
                                 </v-card>
                             </v-dialog>
                             <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/schedules'">Cancel</v-btn>
-                            <v-btn color="success" class="mr-5" @click="editSchedule">Save</v-btn>
+                            <v-btn color="success" class="mr-5" @click="editSchedule">Save schedule</v-btn>
                         </v-row>
                     </v-col>
                 </v-form>
@@ -73,6 +72,7 @@
   
 <script lang="ts">
 import Vue from 'vue'
+import trackerRun from '@/api/marathon/run'
 import trackerSchedule from '@/api/marathon/schedule'
 import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
@@ -88,11 +88,13 @@ export default Vue.extend({
     },
     data() {
         return {
+            savedRuns: false,
             isReady: false,
             showCalendar: true,
             deleteDialog: false,
             events: [] as Event[],
             selectedEvent: {} as Event | undefined,
+            scheduleId: "",
             oldSchedule: {
                 _id: "",
                 name: "",
@@ -123,6 +125,8 @@ export default Vue.extend({
         let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
         this.selectedEvent = selectedEvent
 
+        // this.scheduleId = this.oldSchedule._id
+
         this.isReady = true
     },
     methods: {
@@ -130,6 +134,18 @@ export default Vue.extend({
             return structuredClone(this.oldSchedule)
         },
         async deleteSchedule() {
+
+            this.oldSchedule.availableRuns.forEach(async (row) => {
+                if (row._id)
+                    await trackerRun.deleteRun(row._id)
+
+            })
+
+            this.oldSchedule.rows.forEach(async (scheduleRow) => {
+                if (scheduleRow.row._id)
+                    await trackerRun.deleteRun(scheduleRow.row._id)
+            })
+
             const res = await trackerSchedule.deleteSchedule(this.oldSchedule._id)
             if (res) {
                 console.log(res)
@@ -137,22 +153,26 @@ export default Vue.extend({
             }
         },
         async editSchedule() {
+            if (!this.savedRuns) {
+                alert('Save first runs before saving schedule')
+                return
+            }
 
             this.newSchedule = this.oldSchedule
 
             console.log(this.newSchedule)
 
-            // const res = await trackerSchedule.updateSchedule(this.newSchedule)
-            // if (res) {
-            //     console.log(res)
-            //     //   this.$router.push('/manage/tracker/schedules')
-            // }
+            const res = await trackerSchedule.updateSchedule(this.newSchedule)
+            if (res) {
+                console.log(res)
+                //   this.$router.push('/manage/tracker/schedules')
+            }
         },
-        updateScheduleRows($event: any) {
-            this.oldSchedule.rows = $event
-        },
-        updateAvailableRuns($event: any) {
-            this.oldSchedule.availableRuns = $event
+        saveRuns($event: any) {
+            this.oldSchedule.rows = $event[0]
+            this.oldSchedule.availableRuns = $event[1]
+
+            this.savedRuns = true
         }
     },
 })

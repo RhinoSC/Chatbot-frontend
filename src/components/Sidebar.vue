@@ -53,8 +53,8 @@ export default Vue.extend({
         { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
         { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
         { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
-        { icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker' },
-        { icon: 'mdi-calendar-clock', name: 'Schedule', path: '/manage/schedule' },
+        { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
+        { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
       ],
       itemsGroups: [
         {

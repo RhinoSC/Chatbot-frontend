@@ -1,6 +1,10 @@
 <template>
     <v-col>
         <v-row>
+            <v-spacer></v-spacer>
+            <v-btn color="success" class="mr-3" @click="saveStatus">save runs</v-btn>
+        </v-row>
+        <v-row>
             <v-col>
                 <v-card>
                     <v-card-title primary-title>
@@ -31,7 +35,7 @@
                                         <td>{{run.name}}</td>
                                         <td>{{run.estimateS}}</td>
                                         <td class="d-flex justify-center align-center">
-                                            <v-btn small icon color="info" @click="addRun(run)">
+                                            <v-btn small icon color="info" @click="addRun(run, false)">
                                                 <v-icon>
                                                     mdi-greater-than
                                                 </v-icon>
@@ -118,7 +122,8 @@
                                                             mdi-less-than
                                                         </v-icon>
                                                     </v-btn>
-                                                    <v-app-bar-nav-icon small icon style="cursor: grab;" class="drag-btn">
+                                                    <v-app-bar-nav-icon small icon style="cursor: grab;"
+                                                        class="drag-btn">
                                                     </v-app-bar-nav-icon>
                                                 </td>
                                             </tr>
@@ -136,10 +141,11 @@
   
 <script lang="ts">
 import Vue from 'vue'
-import trackerRun from '@/api/marathon/run'
+import trackerSchedule from '@/api/marathon/schedule'
 import Run from '@/utils/types/Run'
 import draggable from 'vuedraggable'
 import ScheduleRow from '@/utils/types/ScheduleRow'
+import Schedule from '@/utils/types/Schedule'
 
 export default Vue.extend({
     name: 'run-manager-component',
@@ -150,6 +156,10 @@ export default Vue.extend({
             type: Object,
             required: true
         }
+        // scheduleId: {
+        //     type: String,
+        //     required: true
+        // }
     },
     data() {
         return {
@@ -162,20 +172,28 @@ export default Vue.extend({
             actualTimeMS: 0,
             scheduleRows: [] as any[],
             availableRows: [] as Run[],
+            // tempSchedule: {} as Schedule
             tempSchedule: this.schedule
         }
     },
     created() {
+        // console.log(this.scheduleId
+        // const res = await trackerSchedule.getOneSchedule(this.scheduleId)
+        // this.tempSchedule = res[0]
         // const date = new Date('October 30, 2022 00:00:00')
-        const date = new Date(this.schedule.start)
+        const date = new Date(this.tempSchedule.start)
         this.startDate = date
         this.startTimeMS = date.getTime()
         this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
 
+        console.log('child', this.tempSchedule)
         this.availableRows = this.tempSchedule.availableRuns
-        this.scheduleRows = this.setTitles(this.tempSchedule.rows, true)
+        if (this.tempSchedule.rows.length > 0) {
+            this.tempSchedule.rows.forEach((row: ScheduleRow) => {
+                this.addRun(row.row, true)
+            });
+        }
 
-        this.actualTimeMS = this.scheduleRows[this.scheduleRows.length - 1].row.start + this.scheduleRows[this.scheduleRows.length - 1].row.estimate
     },
     methods: {
         isRowDay(item: any) {
@@ -209,13 +227,15 @@ export default Vue.extend({
             this.availableRows.push(removedRow[0].row)
             this.sortRows({ moved: { newIndex: this.scheduleRows.length - 1, oldIndex: index } })
         },
-        addRun(item: Run) {
+        addRun(item: Run, fetching: boolean) {
             // only necessary when testing and not deleting on runs list
             const copy = structuredClone(item)
             const run: ScheduleRow = { dayRow: false, newDay: false, dayText: "", time: "", row: copy }
 
-            const indexAvailable = this.availableRows.findIndex((row: Run) => row === item)
-            this.availableRows.splice(indexAvailable, 1)
+            if (!fetching) {
+                const indexAvailable = this.availableRows.findIndex((row: Run) => row === item)
+                this.availableRows.splice(indexAvailable, 1)
+            }
 
             if (this.scheduleRows.length === 0) {
                 this.setFirstRow(run, true)
@@ -224,6 +244,7 @@ export default Vue.extend({
                 const oldEndDate = new Date(this.actualTimeMS)
 
                 this.actualTimeMS += run.row.estimate
+
 
                 run.row.start = oldEndDate.getTime()
                 run.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
@@ -235,6 +256,7 @@ export default Vue.extend({
                 }
 
                 run.dayText = this.getDay(run, false)
+
 
                 this.scheduleRows.push(run)
             }
@@ -356,16 +378,19 @@ export default Vue.extend({
                 }
             }
             return testArr
+        },
+        saveStatus() {
+            this.$emit('saveRuns', [this.scheduleRows.filter((row: any) => { return row.dayRow === false }), this.availableRows])
         }
     },
-    watch: {
-        scheduleRows() {
-            this.$emit('updateScheduleRows', this.scheduleRows.filter((row: any) => { return row.dayRow === false }))
-        },
-        availableRows() {
-            this.$emit('updateAvailableRuns', this.availableRows)
-        },
-    }
+    // watch: {
+    //     scheduleRows() {
+    //         this.$emit('updateScheduleRows', this.scheduleRows.filter((row: any) => { return row.dayRow === false }))
+    //     },
+    //     availableRows() {
+    //         this.$emit('updateAvailableRuns', this.availableRows)
+    //     },
+    // }
 })
 </script>
 
