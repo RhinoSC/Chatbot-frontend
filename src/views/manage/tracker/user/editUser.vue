@@ -26,7 +26,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="deleteDialog" width="500">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5">
+                  <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5" :disabled="true">
                     Delete
                   </v-btn>
                 </template>
@@ -57,7 +57,8 @@
 import Vue from 'vue'
 import trackerUser from '@/api/marathon/user'
 import User from '@/utils/types/User'
-import user from '@/api/marathon/user'
+import trackerRun from '@/api/marathon/run'
+import Run from '@/utils/types/Run'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -93,7 +94,27 @@ export default Vue.extend({
     },
     async editUser() {
 
+      const runs: Run[] = await trackerRun.getRuns()
+
       this.newUser = this.oldUser
+
+      runs.forEach(async (run) => {
+        let update = false
+        run.teams = run.teams.map((team) => {
+          team.players = team.players.map((player) => {
+            if (player._id == this.newUser._id) {
+              player = this.newUser
+              update = true
+            }
+            return player
+          })
+          return team
+        })
+        if (update) {
+          console.log(run, update)
+          await trackerRun.updateRun(run)
+        }
+      })
 
       const res = await trackerUser.updateUser(this.newUser)
       if (res) {

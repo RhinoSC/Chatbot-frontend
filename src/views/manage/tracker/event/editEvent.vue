@@ -168,119 +168,122 @@
     </v-container>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerEvent from '@/api/marathon/event'
-  import moment, { tz } from 'moment-timezone'
-  import selectorOptions from '@/utils/TZ'
-  import Donation from '@/utils/types/Donation'
-  import Prize from '@/utils/types/Prize'
-  import Schedule from '@/utils/types/Schedule'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              deleteDialog: false,
-              currencyItems: [{ name: "US Dollar", iso: "USD" }, { name: "Euro", iso: "EUR" }],
-              tz: [] as any[],
-              minDate: "",
-              dateStartMenu: false,
-              dateEndMenu: false,
-              timeStartMenu: false,
-              timeEndMenu: false,
-              dates: {
-                  start: "",
-                  end: "",
-                  startTime: "",
-                  endTime: "",
-              },
-              oldEvent: {
-                  _id: "",
-                  name: "",
-                  start: 0,
-                  end: 0,
-                  TZ: {},
-                  schedule: {} as Schedule,
-                  isCharity: true,
-                  allowDonations: true,
-                  donations: [] as Donation[],
-                  prizes: [] as Prize[],
-                  isCharityData: {
-                      targetAmount: 0,
-                      minDonation: 0,
-                      paypalData: {
-                          token: "",
-                          currency: "",
-                          logoUrl: ""
-                      }
-                  }
-              },
-              newEvent: {
-                  _id: "",
-                  name: "",
-                  start: 0,
-                  end: 0,
-                  TZ: {},
-                  schedule: {} as Schedule,
-                  isCharity: true,
-                  allowDonations: true,
-                  donations: [] as Donation[],
-                  prizes: [] as Prize[],
-                  isCharityData: {
-                      targetAmount: 0,
-                      minDonation: 0,
-                      paypalData: {
-                          token: "",
-                          currency: "",
-                          logoUrl: ""
-                      }
-                  }
-              }
-          }
-      },
-      async created() {
-          const res = await trackerEvent.getOneEvent(this.$route.params.id)
-          this.oldEvent = res[0]
-      },
-      mounted() {
-          this.tz = selectorOptions
-      },
-      methods: {
-          async deleteEvent() {
-              const res = await trackerEvent.deleteEvent(this.oldEvent._id)
-              if (res) {
-                  console.log(res)
-                  this.$router.push('/manage/tracker')
-              }
-          },
-          async editEvent() {
-  
-              let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
-              this.oldEvent.start = startDate.getTime()
-              let endDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
-              this.oldEvent.end = endDate.getTime()
-  
-              this.newEvent = this.oldEvent
-  
-              const res = await trackerEvent.updateEvent(this.newEvent)
-              if (res) {
-                  console.log(res)
-                  this.$router.push('/manage/tracker')
-              }
-          },
-          getMinDate(end: boolean) {
-              console.log(end)
-              let today = new Date()
-              let dd = String(today.getDate()).padStart(2, '0');
-              let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-              let yyyy = today.getFullYear();
-              this.minDate = `${yyyy}-${mm}-${dd}`;
-          }
-      },
-  })
-  </script>
+<script lang="ts">
+import Vue from 'vue'
+import trackerEvent from '@/api/marathon/event'
+import moment, { tz } from 'moment-timezone'
+import selectorOptions from '@/utils/TZ'
+import Donation from '@/utils/types/Donation'
+import Prize from '@/utils/types/Prize'
+import Schedule from '@/utils/types/Schedule'
+import ExternalSchedule from '@/utils/types/ExternalSchedule'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            deleteDialog: false,
+            currencyItems: [{ name: "US Dollar", iso: "USD" }, { name: "Euro", iso: "EUR" }],
+            tz: [] as any[],
+            minDate: "",
+            dateStartMenu: false,
+            dateEndMenu: false,
+            timeStartMenu: false,
+            timeEndMenu: false,
+            dates: {
+                start: "",
+                end: "",
+                startTime: "",
+                endTime: "",
+            },
+            oldEvent: {
+                _id: "",
+                name: "",
+                start: 0,
+                end: 0,
+                TZ: {},
+                schedule: {} as Schedule,
+                ExtSchedule: {} as ExternalSchedule,
+                isCharity: true,
+                allowDonations: true,
+                donations: [] as Donation[],
+                prizes: [] as Prize[],
+                isCharityData: {
+                    targetAmount: 0,
+                    minDonation: 0,
+                    paypalData: {
+                        token: "",
+                        currency: "",
+                        logoUrl: ""
+                    }
+                }
+            },
+            newEvent: {
+                _id: "",
+                name: "",
+                start: 0,
+                end: 0,
+                TZ: {},
+                schedule: {} as Schedule,
+                ExtSchedule: {} as ExternalSchedule,
+                isCharity: true,
+                allowDonations: true,
+                donations: [] as Donation[],
+                prizes: [] as Prize[],
+                isCharityData: {
+                    targetAmount: 0,
+                    minDonation: 0,
+                    paypalData: {
+                        token: "",
+                        currency: "",
+                        logoUrl: ""
+                    }
+                }
+            }
+        }
+    },
+    async created() {
+        const res = await trackerEvent.getOneEvent(this.$route.params.id)
+        this.oldEvent = res[0]
+    },
+    mounted() {
+        this.tz = selectorOptions
+    },
+    methods: {
+        async deleteEvent() {
+            const res = await trackerEvent.deleteEvent(this.oldEvent._id)
+            if (res) {
+                console.log(res)
+                this.$router.push('/manage/tracker')
+            }
+        },
+        async editEvent() {
+
+            let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
+            this.oldEvent.start = startDate.getTime()
+            let endDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
+            this.oldEvent.end = endDate.getTime()
+
+            this.newEvent = this.oldEvent
+
+            const res = await trackerEvent.updateEvent(this.newEvent)
+            if (res) {
+                console.log(res)
+                this.$router.push('/manage/tracker')
+            }
+        },
+        getMinDate(end: boolean) {
+            console.log(end)
+            let today = new Date()
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = today.getFullYear();
+            this.minDate = `${yyyy}-${mm}-${dd}`;
+        }
+    },
+})
+</script>
   
