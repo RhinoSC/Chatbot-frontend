@@ -26,6 +26,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/donate',
+    name: 'Donate',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DonateView.vue')
+  },
+  {
     path: '/layout',
     name: 'Layout',
     component: Layout
