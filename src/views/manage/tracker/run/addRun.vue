@@ -100,7 +100,7 @@ import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
 import run from '@/api/marathon/run'
-import { stringTimeToMS, MStoStringTime } from '@/utils/parsers'
+import { stringTimeToMS, MStoStringTime } from '@/utils/stringFuncs'
 import Bid from '@/utils/types/Bid'
 
 

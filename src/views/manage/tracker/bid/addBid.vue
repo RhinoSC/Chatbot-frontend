@@ -118,6 +118,7 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
+        openBid: false
       }
     }
   },
@@ -139,8 +140,10 @@ export default Vue.extend({
       }
     },
     getRunArray() {
-      if (this.selectedEvent.schedule && this.selectedEvent.schedule.rows.length > 0)
-        this.runs = this.selectedEvent.schedule.rows
+      if (this.selectedEvent.schedule && this.selectedEvent.schedule.rows.length > 0) {
+        this.runs = this.selectedEvent.schedule.rows.map(scheduleRow => scheduleRow.row)
+        this.runs = [...this.selectedEvent.schedule.availableRuns]
+      }
     },
     modifyAllowNewBids() {
       if (this.newBid.type != 0) {

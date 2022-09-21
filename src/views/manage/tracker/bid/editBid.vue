@@ -78,6 +78,7 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
+        openBid: false
       },
       newBid: {
         name: "",
@@ -88,6 +89,7 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
+        openBid: false
       }
     }
   },

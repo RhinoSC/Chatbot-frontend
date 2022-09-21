@@ -146,6 +146,7 @@ import Run from '@/utils/types/Run'
 import draggable from 'vuedraggable'
 import ScheduleRow from '@/utils/types/ScheduleRow'
 import Schedule from '@/utils/types/Schedule'
+import { getRunnerString } from '@/utils/stringFuncs'
 
 export default Vue.extend({
     name: 'run-manager-component',
@@ -212,13 +213,8 @@ export default Vue.extend({
             }
             return newDate.toLocaleDateString('en-US', { dateStyle: 'medium' })
         },
-        getRunnerString(item: any) {
-            const runnerArr = item.teams.map((team: any) => {
-                let teamString = team.players.map((player: any) => { return player.name })
-                teamString = teamString.join(', ')
-                return teamString
-            })
-            return runnerArr.join(', ')
+        getRunnerString(item: Run) {
+            return getRunnerString(item)
         },
         removeRun(item: ScheduleRow) {
             const index = this.scheduleRows.findIndex((row: ScheduleRow) => row === item)

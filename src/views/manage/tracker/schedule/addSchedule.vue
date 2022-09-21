@@ -43,7 +43,7 @@ import trackerSchedule from '@/api/marathon/schedule'
 import trackerEvent from '@/api/marathon/event'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
-import { stringTimeToMS } from '@/utils/parsers'
+import { stringTimeToMS } from '@/utils/stringFuncs'
 import ScheduleRow from '@/utils/types/ScheduleRow'
 
 export default Vue.extend({

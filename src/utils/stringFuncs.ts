@@ -1,3 +1,4 @@
+import Run from "./types/Run";
 
 export const padTo2Digits = (num: number): string => {
     return num.toString().padStart(2, '0');
@@ -25,4 +26,22 @@ export const MStoStringTime = (time: number): string => {
 
     const result = `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
     return result
+}
+
+export const getRunnerString = (item: Run) => {
+    const runnerArr = item.teams.map((team: any) => {
+        let teamString = team.players.map((player: any) => { return player.name })
+        teamString = teamString.join(', ')
+        return teamString
+    })
+    return runnerArr.join(', ')
+}
+
+export const currencyFormat = (amount: number) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    })
+
+    return formatter.format(amount)
 }
