@@ -13,6 +13,10 @@
                 <v-stepper-step step="3">
                     Donate
                 </v-stepper-step>
+                <v-divider></v-divider>
+                <v-stepper-step step="4">
+                    Finish
+                </v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -65,10 +69,11 @@
                                         </v-row>
                                         <v-row class="mt-n15">
                                             <v-col>
-                                                <v-checkbox label="Donation goes to a bidwar?" v-model="isToBid">
+                                                <v-checkbox label="Donation goes to a bidwar?"
+                                                    v-model="newDonation.toBid">
                                                 </v-checkbox>
                                             </v-col>
-                                            <v-col v-if="isToBid">
+                                            <v-col v-if="newDonation.toBid">
                                                 <v-row class="mt-8" v-if="savedBid">
                                                     <v-card>
                                                         <v-card-title class="text-h5">
@@ -98,7 +103,7 @@
                                             </v-col>
                                         </v-row>
                                     </v-col>
-                                    <v-col v-if="isToBid">
+                                    <v-col v-if="newDonation.toBid">
                                         <v-row v-if="isReady && !savedBid">
                                             <BidComponent :event="event" @saveBid="saveBid($event)"></BidComponent>
                                         </v-row>
@@ -144,6 +149,16 @@
                         Cancel
                     </v-btn>
                 </v-stepper-content>
+
+                <v-stepper-content step="4">
+                    <v-col class="d-flex align-center justify-center">
+                        <v-card>
+                            <v-card-title primary-title>
+                                Thanks for supporting this event!
+                            </v-card-title>
+                        </v-card>
+                    </v-col>
+                </v-stepper-content>
             </v-stepper-items>
         </v-stepper>
     </v-container>
@@ -166,7 +181,6 @@ export default Vue.extend({
     data() {
         return {
             e1: 1,
-            isToBid: false,
             savedBid: false,
             isReady: false,
             loaded: false,
@@ -202,15 +216,8 @@ export default Vue.extend({
             this.newDonation.eventId = this.event._id
             this.isReady = true
         }
-        // console.log(this.event.isCharityData.paypalData.currency)
     },
     async mounted() {
-        // let donationScript = document.createElement('script')
-        // donationScript.src = 'https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&components=buttons"'
-        // // donationScript.src = 'https://www.paypalobjects.com/donate/sdk/donate-sdk.js'
-        // donationScript.addEventListener('load', this.setDonationScriptLoaded)
-        // document.head.appendChild(donationScript)
-
         try {
             await loadCustomScript({
                 url: "https://www.paypalobjects.com/donate/sdk/donate-sdk.js",
@@ -219,77 +226,8 @@ export default Vue.extend({
         } catch (error) {
             console.error("failed to load the custom script", error);
         }
-
-
-        // console.log(window.PayPal)
-
-        // window.PayPal.Donation.Button({
-        //     // currency_code: 'EUR',
-        //     currency_code: this.event.isCharityData.paypalData.currency,
-        //     amount: this.newDonation.amount,
-        //     env: 'sandbox',
-        //     business: 'csolanoc@unal.edu.co',
-        //     image: {
-        //         src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
-        //         title: 'PayPal - The safer, easier way to pay online!',
-        //         alt: 'Donate with PayPal button'
-        //     },
-        //     // onComplete: function (params) {
-        //     //     // this.addDonation(params)
-        //     //     console.log('completado')
-        //     //     this.paymentCompleted = true
-        //     // },
-        //     onComplete: this.test,
-        // }).render('#paypal-donate-button-container');
-
-        // console.log(window.PayPal)
-
-        // let paypal;
-
-        // try {
-        //     paypal = await loadScript({
-        //         "client-id": "AdPc9VYmyunK64_Dq4nq6NzdTCkzsn8XUyhhCiUAb0ATiiGCCaGgfwEpDufFi2wHNPOJE8orf_dbPEMY",
-        //         "currency": 'EUR',
-
-        //     });
-        // } catch (error) {
-        //     console.error("failed to load the PayPal JS SDK script", error);
-        // }
-
-        // console.log(paypal)
-
-        // if (paypal) {
-        //     try {
-        //         await paypal.Buttons().render("#paypal-donate-button-container");
-        //     } catch (error) {
-        //         console.error("failed to render the PayPal Buttons", error);
-        //     }
-        // }
     },
     methods: {
-        // setDonationScriptLoaded() {
-        // this.loaded = true
-        // window.PayPal.Donation.Button({
-        //     // currency_code: 'EUR',
-        //     currency_code: this.event.isCharityData.paypalData.currency,
-        //     amount: this.newDonation.amount,
-        //     env: 'sandbox',
-        //     // hosted_button_id: 'GD652TWFGE6HN',
-        //     // hosted_button_id: 'UZVWPCPJSCELE',
-        //     business: 'csolanoc@unal.edu.co',
-        //     image: {
-        //         src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
-        //         title: 'PayPal - The safer, easier way to pay online!',
-        //         alt: 'Donate with PayPal button'
-        //     },
-        //     // onComplete: function (params) {
-        //     //     // this.addDonation(params)
-        //     //     console.log('completado')
-        //     //     this.paymentCompleted = true
-        //     // },
-        //     onComplete: this.test,
-        // }).render('#paypal-donate-button-container');
-        // },
         renderPaypalBtn() {
             this.e1 = 3
             let btn = document.querySelector('#donate-button')
@@ -297,7 +235,6 @@ export default Vue.extend({
                 btn.remove()
             }
             window.PayPal.Donation.Button({
-                // currency_code: 'EUR',
                 currency_code: this.event.isCharityData.paypalData.currency,
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
@@ -313,24 +250,34 @@ export default Vue.extend({
         nextStep(params) {
             this.paymentCompleted = true
         },
-        test() {
-            this.addDonation()
-        },
-        addDonation() {
-            // Your onComplete handler
-            let bid = this.updatedRun.row.bids[this.selectedBidIdx]
 
-            if (this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
-                bid.bids[this.selectedBidOption].current += Number(this.newDonation.amount)
-                bid.bids.forEach(element => bid.current += Number(element.current))
-            } else {
-                bid.current += Number(this.newDonation.amount)
+        async addDonation() {
+
+            if (this.newDonation.toBid) {
+                let bid = this.updatedRun.row.bids[this.selectedBidIdx]
+
+                if (this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
+                    bid.bids[this.selectedBidOption].current += Number(this.newDonation.amount)
+                    bid.bids.forEach(element => bid.current += Number(element.current))
+                } else {
+                    bid.current += Number(this.newDonation.amount)
+                }
+
+                this.updatedRun.row.bids[this.selectedBidIdx] = bid
+                // console.log(this.updatedRun.row)
+                await trackerRun.updateRun(this.updatedRun.row)
             }
 
-            this.updatedRun.row.bids[this.selectedBidIdx] = bid
-            // console.log(this.updatedRun.row)
-            // this.trackerDonation.postDonation()
-            // this.trackerRun.updateRun()
+            this.newDonation.time = new Date().getTime()
+            // console.log(this.newDonation)
+            try {
+                let response = await trackerDonation.postDonation(this.newDonation)
+                if (response) {
+                    this.e1 = 4
+                }
+            } catch (e) {
+                console.error(e)
+            }
         },
         removeSelectedBid() {
             this.savedBid = false
@@ -354,7 +301,6 @@ export default Vue.extend({
     },
     watch: {
         paymentCompleted() {
-            console.log('cambiado a: ', this.paymentCompleted)
             if (this.paymentCompleted === true) {
                 this.addDonation()
             }
