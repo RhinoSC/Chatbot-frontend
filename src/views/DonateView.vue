@@ -256,6 +256,7 @@ export default Vue.extend({
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
                 business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
+                item_name: "Fundacion",
                 image: {
                     src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
                     title: 'PayPal - The safer, easier way to pay online!',
@@ -316,7 +317,7 @@ export default Vue.extend({
             this.updatedRun = this.event.schedule.rows.find(element => element.row._id === $event.runId)
         },
         validateSecondBtn() {
-            return !this.valid2 && !(!this.newDonation.toBid && this.savedBid)
+            return !this.valid2 || (this.newDonation.toBid && this.selectedBidOption === undefined)
         }
     },
     watch: {

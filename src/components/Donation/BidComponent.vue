@@ -9,24 +9,26 @@
                                 <h3>Runs</h3>
                                 <v-expansion-panels v-model="selectedRunIdx">
                                     <v-expansion-panel v-for="(run, i) in filteredRows" :key="i">
-                                        <v-expansion-panel-header>
-                                            {{run.row.name}}
-                                        </v-expansion-panel-header>
-                                        <v-expansion-panel-content>
-                                            <v-row>
-                                                <v-col>
-                                                    <span>Runners: </span>{{getRunnerString(run.row)}}
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col>
-                                                    <span>Category: </span>{{run.row.category}}
-                                                </v-col>
-                                                <v-col>
-                                                    <span>Estimate: {{run.row.estimateS}}</span>
-                                                </v-col>
-                                            </v-row>
-                                        </v-expansion-panel-content>
+                                        <template v-if="verifyRunWithActiveBids(run)">
+                                            <v-expansion-panel-header>
+                                                {{run.row.name}}
+                                            </v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                <v-row>
+                                                    <v-col>
+                                                        <span>Runners: </span>{{getRunnerString(run.row)}}
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col>
+                                                        <span>Category: </span>{{run.row.category}}
+                                                    </v-col>
+                                                    <v-col>
+                                                        <span>Estimate: {{run.row.estimateS}}</span>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-expansion-panel-content>
+                                        </template>
                                     </v-expansion-panel>
                                 </v-expansion-panels>
                             </v-col>
@@ -152,21 +154,14 @@ export default Vue.extend({
         }
     },
     mounted() {
-        this.filteredRows = JSON.parse(JSON.stringify(this.event.schedule.rows))
-        this.filteredRows = this.filteredRows.filter((element: { row: Run }) => {
-            const copy = element
-            if (element.row.bids.length > 0) {
-                const test = copy.row.bids.filter(bid => {
-                    if (bid.openBid) return bid
-                    // return bid
-                })
-                if (test.length !== 0) return element
-            }
-        })
-        // console.log(this.event.schedule.rows)
-        console.log(this.filteredRows)
+        this.filteredRows = this.event.schedule.rows
     },
     methods: {
+        verifyRunWithActiveBids(run: any) {
+            let idx = run.row.bids.findIndex((bid: { openBid: boolean }) => bid.openBid === true)
+            if (idx === -1) return false
+            return true
+        },
         getRunnerString(item: Run) {
             return getRunnerString(item)
         },
@@ -179,6 +174,8 @@ export default Vue.extend({
                 this.createdNewBidOption = true
                 this.selectedBidOption = this.selectedRun.bids[this.selectedBidIdx].bids.length - 1
                 this.bidOptionName = ""
+
+                console.log(this.selectedRun.bids[this.selectedBidIdx].bids)
             }
         },
         deleteNewBidOption() {
