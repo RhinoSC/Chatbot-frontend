@@ -22,7 +22,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field name="minAmount" label="Min amount" id="minAmount" v-model="newPrize.minAmount">
+                <v-text-field name="minAmount" :label="minAmountLabel" id="minAmount" v-model="newPrize.minAmount">
                 </v-text-field>
               </v-col>
               <v-col>
@@ -56,6 +56,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isReady: false,
       events: [] as Event[],
       selectedEvent: {} as Event,
       newPrize: {
@@ -69,6 +70,15 @@ export default Vue.extend({
   async created() {
     const resEvents = await trackerEvent.getEvents()
     this.events = resEvents
+    this.isReady = true
+  },
+  computed: {
+    minAmountLabel() {
+      if (this.isReady && this.selectedEvent.isCharityData) {
+        return `Min amount (${this.selectedEvent.isCharityData.paypalData.currency})`
+      }
+      return 'Min amount'
+    }
   },
   methods: {
     async addPrize() {

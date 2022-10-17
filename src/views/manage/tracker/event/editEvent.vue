@@ -263,7 +263,7 @@ export default Vue.extend({
             const res = await trackerEvent.deleteEvent(this.oldEvent._id)
             if (res) {
                 console.log(res)
-                this.$router.push('/manage/tracker')
+                this.$router.push('/manage/tracker/events')
             }
         },
         async editEvent() {

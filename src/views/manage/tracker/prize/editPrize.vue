@@ -22,7 +22,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field name="minAmount" label="Min amount" id="minAmount" v-model="oldPrize.minAmount">
+                <v-text-field name="minAmount" :label="minAmountLabel" id="minAmount" v-model="oldPrize.minAmount">
                 </v-text-field>
               </v-col>
               <v-col>
@@ -76,6 +76,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isReady: false,
       deleteDialog: false,
       events: [] as Event[],
       selectedEvent: {} as Event,
@@ -103,8 +104,19 @@ export default Vue.extend({
     this.oldPrize = res[0]
 
     const event = this.events.find(event => this.oldPrize.eventId == event._id)
-    if (event)
+    if (event) {
       this.selectedEvent = event
+    }
+
+    this.isReady = true
+  },
+  computed: {
+    minAmountLabel() {
+      if (this.isReady && this.selectedEvent.isCharityData) {
+        return `Min amount (${this.selectedEvent.isCharityData.paypalData.currency})`
+      }
+      return 'Min amount'
+    }
   },
   methods: {
     async deletePrize() {
