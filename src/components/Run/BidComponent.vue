@@ -100,12 +100,16 @@
                 <v-col v-for="(optionBid, ind) in addedBid.bids" :key="ind">
                   <v-row>
                     <v-list-item-subtitle>
-                      <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}
+                      <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}: {{currencyFormat(optionBid.current)}}
                     </v-list-item-subtitle>
                   </v-row>
                 </v-col>
               </v-col>
+              <v-col v-else>
+                Current: {{currencyFormat(addedBid.current)}} / {{currencyFormat(addedBid.goal)}}
+              </v-col>
             </v-list-item-content>
+            <v-btn color="info" @click="modifyBidState(addedBid)">{{computeBidState(addedBid)}}</v-btn>
             <v-spacer></v-spacer>
             <v-list-item-icon>
               <v-icon @click="removeBid(addedBid)">mdi-close-circle</v-icon>
@@ -126,6 +130,7 @@ import Bid from '@/utils/types/Bid'
 import { goalType } from '@/utils/enums/goal.enum'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'
+import { currencyFormat } from '@/utils/stringFuncs'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -163,6 +168,7 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
+        openBid: true
       }
     }
   },
@@ -178,6 +184,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    currencyFormat(amount: number) {
+      return currencyFormat(amount)
+    },
     modifyAllowNewBids() {
       if (this.newBid.type != 0) {
         this.newBid.newBids = false
@@ -209,6 +218,7 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
+        openBid: true
       }
       this.newBid.game = this.$props.gameName
       this.$emit('populateBids', this.addedBids)
@@ -216,6 +226,15 @@ export default Vue.extend({
     clearAddedBids() {
       this.addedBids = []
       this.$emit('clearBids', true)
+    },
+    computeBidState(addedBid: Bid) {
+      if (addedBid.openBid) return 'Disable'
+      return 'Enable'
+    },
+    modifyBidState(addedBid: Bid) {
+      addedBid.openBid = !addedBid.openBid
+      // console.log(this.addedBids)
+      this.$emit('populateBids', this.addedBids)
     }
   },
   watch: {

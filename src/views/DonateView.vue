@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container v-if="isReady">
         <v-stepper v-model="e1">
             <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1">
@@ -22,29 +22,25 @@
             <v-stepper-items>
                 <v-stepper-content step="1">
                     <v-card class="mb-5">
-                        <v-card-text>
+                        <v-form v-model="valid1">
                             <v-col>
-                                <v-form>
+                                <v-row>
                                     <v-col>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field name="name" label="Full name" id="name"
-                                                    v-model="newDonation.name">
-                                                </v-text-field>
-                                            </v-col>
-                                            <v-col>
-                                                <v-text-field name="email" label="Your email" id="email"
-                                                    v-model="newDonation.email">
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        <v-text-field name="name" :rules="nameRules" label="Full name" id="name"
+                                            v-model="newDonation.name" required>
+                                        </v-text-field>
                                     </v-col>
-                                </v-form>
+                                    <v-col>
+                                        <v-text-field name="email" :rules="emailRules" label="Your email" id="email"
+                                            v-model="newDonation.email" required>
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
                             </v-col>
-                        </v-card-text>
+                        </v-form>
                     </v-card>
 
-                    <v-btn color="primary" @click="e1 = 2">
+                    <v-btn color="primary" @click="e1 = 2" :disabled="!valid1">
                         Continue
                     </v-btn>
                 </v-stepper-content>
@@ -53,67 +49,70 @@
                     <v-card class="mb-5">
                         <v-card-text>
                             <v-col>
-                                <v-form>
+                                <v-form v-model="valid2">
                                     <v-col>
                                         <v-row>
                                             <v-col cols="4">
-                                                <v-text-field name="amount" label="Amount to donate (in USD)"
-                                                    id="amount" v-model="newDonation.amount" type="number">
+                                                <v-text-field name="amount"
+                                                    :label="'Amount to donate '+`in (${event.isCharityData.paypalData.currency})`"
+                                                    id="amount" v-model="newDonation.amount" type="number"
+                                                    :rules="amountRules">
                                                 </v-text-field>
                                             </v-col>
                                             <v-col>
-                                                <v-textarea outlined name="input-7-4" label="Leave a message"
-                                                    placeholder="(optional)" v-model="newDonation.description">
+                                                <v-textarea outlined name="input-7-4" label="Leave a message (optional)"
+                                                    placeholder="You are amazing!" v-model="newDonation.description">
                                                 </v-textarea>
                                             </v-col>
-                                        </v-row>
-                                        <v-row class="mt-n15">
-                                            <v-col>
-                                                <v-checkbox label="Donation goes to a bidwar?"
-                                                    v-model="newDonation.toBid">
-                                                </v-checkbox>
-                                            </v-col>
-                                            <v-col v-if="newDonation.toBid">
-                                                <v-row class="mt-8" v-if="savedBid">
-                                                    <v-card>
-                                                        <v-card-title class="text-h5">
-                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].game}}
-                                                        </v-card-title>
-
-                                                        <v-card-subtitle>
-                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].name}}
-                                                        </v-card-subtitle>
-                                                        <v-card-subtitle class="mt-n5">
-                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].description}}
-                                                        </v-card-subtitle>
-                                                        <v-card-text>
-                                                            <template
-                                                                v-if="this.updatedRun.row.bids[this.selectedBidIdx].type === 0">
-                                                                Option selected:
-                                                                {{this.updatedRun.row.bids[this.selectedBidIdx].bids[this.selectedBidOption].name}}
-                                                            </template>
-                                                        </v-card-text>
-                                                        <v-card-actions>
-                                                            <v-btn text color="error" @click="removeSelectedBid">
-                                                                Remove
-                                                            </v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                </v-row>
-                                            </v-col>
-                                        </v-row>
-                                    </v-col>
-                                    <v-col v-if="newDonation.toBid">
-                                        <v-row v-if="isReady && !savedBid">
-                                            <BidComponent :event="event" @saveBid="saveBid($event)"></BidComponent>
                                         </v-row>
                                     </v-col>
                                 </v-form>
                             </v-col>
+                            <v-col>
+                                <v-row class="mt-n15">
+                                    <v-col>
+                                        <v-checkbox label="Donation goes to a bidwar?" v-model="newDonation.toBid">
+                                        </v-checkbox>
+                                    </v-col>
+                                    <v-col v-if="newDonation.toBid">
+                                        <v-row class="mt-8" v-if="savedBid">
+                                            <v-card>
+                                                <v-card-title class="text-h5">
+                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].game}}
+                                                </v-card-title>
+
+                                                <v-card-subtitle>
+                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].name}}
+                                                </v-card-subtitle>
+                                                <v-card-subtitle class="mt-n5">
+                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].description}}
+                                                </v-card-subtitle>
+                                                <v-card-text>
+                                                    <template
+                                                        v-if="this.updatedRun.row.bids[this.selectedBidIdx].type === 0">
+                                                        Option selected:
+                                                        {{this.updatedRun.row.bids[this.selectedBidIdx].bids[this.selectedBidOption].name}}
+                                                    </template>
+                                                </v-card-text>
+                                                <v-card-actions>
+                                                    <v-btn text color="error" @click="removeSelectedBid">
+                                                        Remove
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+                            <v-col v-if="newDonation.toBid">
+                                <v-row v-if="!savedBid">
+                                    <BidComponent :event="event" @saveBid="saveBid($event)"></BidComponent>
+                                </v-row>
+                            </v-col>
                         </v-card-text>
                     </v-card>
 
-                    <v-btn color="primary" @click="renderPaypalBtn()">
+                    <v-btn color="primary" @click="renderPaypalBtn()" :disabled="validateSecondBtn()">
                         Continue
                     </v-btn>
 
@@ -180,7 +179,25 @@ export default Vue.extend({
     },
     data() {
         return {
+            valid1: true,
+            valid2: true,
+            valid3: true,
             e1: 1,
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => (v && v.length <= 20) || 'Name must be less than 20 characters',
+            ],
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            ],
+            amountRules: [
+                v => !!v || 'Amount is required',
+                v => v >= this.event.isCharityData.minDonation || `Has to be greater than ${this.event.isCharityData.minDonation}`
+            ],
+            requiredRules: [
+                v => !!v || 'Amount is required',
+            ],
             savedBid: false,
             isReady: false,
             loaded: false,
@@ -188,7 +205,7 @@ export default Vue.extend({
                 name: "",
                 email: "",
                 time: 0,
-                amount: 0,
+                amount: undefined,
                 description: "",
                 toBid: false,
                 runId: "",
@@ -264,7 +281,7 @@ export default Vue.extend({
                 }
 
                 this.updatedRun.row.bids[this.selectedBidIdx] = bid
-                // console.log(this.updatedRun.row)
+                console.log(this.updatedRun.row)
                 await trackerRun.updateRun(this.updatedRun.row)
             }
 
@@ -297,6 +314,9 @@ export default Vue.extend({
             this.selectedBidOption = $event.selectedBidOption
             this.addedNewOpt = $event.addedNewOpt
             this.updatedRun = this.event.schedule.rows.find(element => element.row._id === $event.runId)
+        },
+        validateSecondBtn() {
+            return !this.valid2 && !(!this.newDonation.toBid && this.savedBid)
         }
     },
     watch: {
