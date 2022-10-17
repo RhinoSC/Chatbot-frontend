@@ -20,7 +20,8 @@ export default interface Event {
         paypalData: {
             token: string,
             currency: string,
-            logoUrl: string
+            logoUrl: string,
+            itemName: string
         }
     }
 }

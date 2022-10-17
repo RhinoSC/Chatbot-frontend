@@ -129,6 +129,10 @@
                 <v-text-field name="paypalLogo" label="Paypal logo URL" id="paypalLogo"
                   v-model="newEvent.isCharityData.paypalData.logoUrl"></v-text-field>
               </v-col>
+              <v-col>
+                <v-text-field name="paypalText" label="Paypal description" id="paypalText"
+                  v-model="newEvent.isCharityData.paypalData.itemName"></v-text-field>
+              </v-col>
             </v-row>
           </v-col>
           <v-row>
@@ -149,6 +153,8 @@ import selectorOptions from '@/utils/TZ'
 import Schedule from '@/utils/types/Schedule'
 import Donation from '@/utils/types/Donation'
 import Prize from '@/utils/types/Prize'
+import ExternalSchedule from '@/utils/types/ExternalSchedule'
+import { tz } from 'moment'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -177,6 +183,7 @@ export default Vue.extend({
         end: 0,
         TZ: {},
         schedule: {} as Schedule,
+        ExtSchedule: {} as ExternalSchedule,
         isCharity: true,
         allowDonations: true,
         donations: [] as Donation[],
@@ -187,7 +194,8 @@ export default Vue.extend({
           paypalData: {
             token: "",
             currency: "",
-            logoUrl: ""
+            logoUrl: "",
+            itemName: "",
           }
         }
       }

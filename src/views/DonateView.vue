@@ -257,7 +257,10 @@ export default Vue.extend({
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
                 business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
-                item_name: "Fundacion",
+                // item_name: "Tu donación ayuda a defender a víctimas de violaciones de derechos humanos en toda Latinoamérica. Gracias.",
+                item_name: `${this.event.isCharityData.paypalData.itemName}`,
+                // image_url: `https://pics.paypal.com/00/s/MWI0NjlkODItZWNmMy00ODIyLTkyZjctZGUzNjc2NzA3NGIx/file.PNG`,
+                image_url: `${this.event.isCharityData.paypalData.logoUrl}`,
                 image: {
                     src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
                     title: 'PayPal - The safer, easier way to pay online!',

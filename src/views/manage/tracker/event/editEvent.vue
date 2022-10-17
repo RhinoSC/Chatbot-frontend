@@ -136,6 +136,10 @@
                                 <v-text-field name="paypalLogo" label="Paypal logo URL" id="paypalLogo"
                                     v-model="oldEvent.isCharityData.paypalData.logoUrl"></v-text-field>
                             </v-col>
+                            <v-col>
+                                <v-text-field name="paypalText" label="Paypal description" id="paypalText"
+                                    v-model="oldEvent.isCharityData.paypalData.itemName"></v-text-field>
+                            </v-col>
                         </v-row>
                     </v-col>
                     <v-row>
@@ -217,7 +221,8 @@ export default Vue.extend({
                     paypalData: {
                         token: "",
                         currency: "",
-                        logoUrl: ""
+                        logoUrl: "",
+                        itemName: ""
                     }
                 }
             },
@@ -239,7 +244,8 @@ export default Vue.extend({
                     paypalData: {
                         token: "",
                         currency: "",
-                        logoUrl: ""
+                        logoUrl: "",
+                        itemName: "",
                     }
                 }
             }
