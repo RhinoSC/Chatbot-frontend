@@ -1,110 +1,162 @@
 <template>
     <v-container>
-        <v-card>
-            <v-card-title primary-title class="justify-center font-weight-bold">
-                DONATE
-            </v-card-title>
-            <v-card-text>
-                <v-col>
-                    <v-form class="mb-5">
-                        <v-col>
-                            <v-row>
-                                <h2>Your info</h2>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field name="name" label="Full name" id="name" v-model="newDonation.name">
-                                    </v-text-field>
-                                </v-col>
-                                <v-col>
-                                    <v-text-field name="email" label="Your email" id="email"
-                                        v-model="newDonation.email">
-                                    </v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-divider></v-divider>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field name="amount" label="Amount to donate (in USD)" id="amount"
-                                        v-model="newDonation.amount" type="number">
-                                    </v-text-field>
-                                </v-col>
-                                <v-col>
-                                    <v-textarea outlined name="input-7-4" label="Leave a message"
-                                        placeholder="(optional)" v-model="newDonation.description">
-                                    </v-textarea>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-divider></v-divider>
-                            </v-row>
-                            <v-row class="mt-8">
-                                <h2>Bid info</h2>
-                                <v-card>
-                                    <v-card-title primary-title>
-                                        
-                                    </v-card-title>
-                                    <v-card-actions>
-                                        <v-btn color="primary">text</v-btn>
-                                        <v-btn color="primary">text</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-row>
-                            <v-row v-if="isReady">
-                                <BidComponent :event="event"></BidComponent>
-                            </v-row>
-                        </v-col>
-                    </v-form>
+        <v-stepper v-model="e1">
+            <v-stepper-header>
+                <v-stepper-step :complete="e1 > 1" step="1">
+                    Personal info
+                </v-stepper-step>
+                <v-divider></v-divider>
+                <v-stepper-step :complete="e1 > 2" step="2">
+                    Donation info
+                </v-stepper-step>
+                <v-divider></v-divider>
+                <v-stepper-step step="3">
+                    Donate
+                </v-stepper-step>
+            </v-stepper-header>
 
-                </v-col>
-                <!-- <v-col class="d-flex flex-column align-center">
-                    <v-form class="mb-5">
-                        <v-col>
-                            <v-row>
-                                <h2>Your info</h2>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field name="name" label="Full name" id="name" v-model="newDonation.name">
-                                    </v-text-field>
-                                </v-col>
-                                <v-col>
-                                    <v-text-field name="email" label="Your email" id="email"
-                                        v-model="newDonation.email">
-                                    </v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-divider></v-divider>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field name="amount" label="Amount to donate" id="amount"
-                                        v-model="newDonation.amount" type="number">
-                                    </v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-spacer></v-spacer>
-                                <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/users'">Cancel
-                                </v-btn>
-                                <v-btn color="success" class="mr-5" @click="addUser">Save</v-btn>
-                            </v-row>
-                        </v-col>
-                    </v-form>
-                    <div id="paypal-donate-button-container"></div>
-                </v-col> -->
-            </v-card-text>
-        </v-card>
+            <v-stepper-items>
+                <v-stepper-content step="1">
+                    <v-card class="mb-5">
+                        <v-card-text>
+                            <v-col>
+                                <v-form>
+                                    <v-col>
+                                        <v-row>
+                                            <v-col>
+                                                <v-text-field name="name" label="Full name" id="name"
+                                                    v-model="newDonation.name">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field name="email" label="Your email" id="email"
+                                                    v-model="newDonation.email">
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                </v-form>
+                            </v-col>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-btn color="primary" @click="e1 = 2">
+                        Continue
+                    </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-content step="2">
+                    <v-card class="mb-5">
+                        <v-card-text>
+                            <v-col>
+                                <v-form>
+                                    <v-col>
+                                        <v-row>
+                                            <v-col cols="4">
+                                                <v-text-field name="amount" label="Amount to donate (in USD)"
+                                                    id="amount" v-model="newDonation.amount" type="number">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col>
+                                                <v-textarea outlined name="input-7-4" label="Leave a message"
+                                                    placeholder="(optional)" v-model="newDonation.description">
+                                                </v-textarea>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-n15">
+                                            <v-col>
+                                                <v-checkbox label="Donation goes to a bidwar?" v-model="isToBid">
+                                                </v-checkbox>
+                                            </v-col>
+                                            <v-col v-if="isToBid">
+                                                <v-row class="mt-8" v-if="savedBid">
+                                                    <v-card>
+                                                        <v-card-title class="text-h5">
+                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].game}}
+                                                        </v-card-title>
+
+                                                        <v-card-subtitle>
+                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].name}}
+                                                        </v-card-subtitle>
+                                                        <v-card-subtitle class="mt-n5">
+                                                            {{this.updatedRun.row.bids[this.selectedBidIdx].description}}
+                                                        </v-card-subtitle>
+                                                        <v-card-text>
+                                                            <template
+                                                                v-if="this.updatedRun.row.bids[this.selectedBidIdx].type === 0">
+                                                                Option selected:
+                                                                {{this.updatedRun.row.bids[this.selectedBidIdx].bids[this.selectedBidOption].name}}
+                                                            </template>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-btn text color="error" @click="removeSelectedBid">
+                                                                Remove
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-row>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                    <v-col v-if="isToBid">
+                                        <v-row v-if="isReady && !savedBid">
+                                            <BidComponent :event="event" @saveBid="saveBid($event)"></BidComponent>
+                                        </v-row>
+                                    </v-col>
+                                </v-form>
+                            </v-col>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-btn color="primary" @click="renderPaypalBtn()">
+                        Continue
+                    </v-btn>
+
+                    <v-btn text @click="e1 = 1">
+                        Cancel
+                    </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-content step="3">
+                    <v-col class="d-flex align-center justify-center">
+                        <v-card>
+                            <v-card-actions>
+                                <div id="paypal-donate-button-container"></div>
+                            </v-card-actions>
+                            <!-- <form action="https://www.sandbox.paypal.com/donate" method="post" target="_top">
+                            <input type="hidden" name="business" value="csolanoc@unal.edu.co">
+                            <input type="hidden" name="no_recurring" value="0">
+                            <input type="hidden" name="item_name" value="Friends of the Park">
+                            <input type="hidden" name="item_number" value="Fall Cleanup Campaign">
+                            <input type="hidden" name="currency_code"
+                                :value="this.event ? event.isCharityData.paypalData.currency : 'USD'">
+                            <input type="hidden" name="amount" :value="newDonation.amount">
+                            <input type="hidden" name="return" value="localhost:8080/donate-success">
+                            <input type="hidden" name="custom" :value="encodeURIComponent(JSON.stringify(this.testData))">
+                            <input type="image" name="submit"
+                                src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate">
+                            <img alt="" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
+                        </form> -->
+                        </v-card>
+                    </v-col>
+
+                    <v-btn color="info" @click="e1 = 2">
+                        Cancel
+                    </v-btn>
+                </v-stepper-content>
+            </v-stepper-items>
+        </v-stepper>
     </v-container>
 </template>
   
 <script>
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
+import trackerRun from '@/api/marathon/run'
+import trackerDonation from '@/api/marathon/donation'
 import BidComponent from '@/components/Donation/BidComponent.vue'
+
+import { loadScript, loadCustomScript } from "@paypal/paypal-js";
 
 export default Vue.extend({
     name: 'donate-view',
@@ -113,6 +165,9 @@ export default Vue.extend({
     },
     data() {
         return {
+            e1: 1,
+            isToBid: false,
+            savedBid: false,
             isReady: false,
             loaded: false,
             newDonation: {
@@ -122,11 +177,18 @@ export default Vue.extend({
                 amount: 0,
                 description: "",
                 toBid: false,
-                toBidArray: [],
-                bids: [],
+                runId: "",
+                bidId: "",
                 eventId: ""
             },
-            event: null
+            paymentCompleted: false,
+            event: null,
+            updatedRun: {},
+            selectedBidIdx: undefined,
+            selectedBidOption: undefined,
+            addedNewOpt: undefined,
+            paypalBtn: {},
+            testData: {}
         }
     },
     async created() {
@@ -140,36 +202,163 @@ export default Vue.extend({
             this.newDonation.eventId = this.event._id
             this.isReady = true
         }
+        // console.log(this.event.isCharityData.paypalData.currency)
     },
-    mounted() {
-        let donationScript = document.createElement('script')
-        donationScript.src = 'https://www.paypalobjects.com/donate/sdk/donate-sdk.js'
-        donationScript.addEventListener('load', this.setDonationScriptLoaded)
-        document.head.appendChild(donationScript)
+    async mounted() {
+        // let donationScript = document.createElement('script')
+        // donationScript.src = 'https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&components=buttons"'
+        // // donationScript.src = 'https://www.paypalobjects.com/donate/sdk/donate-sdk.js'
+        // donationScript.addEventListener('load', this.setDonationScriptLoaded)
+        // document.head.appendChild(donationScript)
+
+        try {
+            await loadCustomScript({
+                url: "https://www.paypalobjects.com/donate/sdk/donate-sdk.js",
+            });
+            console.log("successfully loaded the custom script");
+        } catch (error) {
+            console.error("failed to load the custom script", error);
+        }
+
+
+        // console.log(window.PayPal)
+
+        // window.PayPal.Donation.Button({
+        //     // currency_code: 'EUR',
+        //     currency_code: this.event.isCharityData.paypalData.currency,
+        //     amount: this.newDonation.amount,
+        //     env: 'sandbox',
+        //     business: 'csolanoc@unal.edu.co',
+        //     image: {
+        //         src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
+        //         title: 'PayPal - The safer, easier way to pay online!',
+        //         alt: 'Donate with PayPal button'
+        //     },
+        //     // onComplete: function (params) {
+        //     //     // this.addDonation(params)
+        //     //     console.log('completado')
+        //     //     this.paymentCompleted = true
+        //     // },
+        //     onComplete: this.test,
+        // }).render('#paypal-donate-button-container');
+
+        // console.log(window.PayPal)
+
+        // let paypal;
+
+        // try {
+        //     paypal = await loadScript({
+        //         "client-id": "AdPc9VYmyunK64_Dq4nq6NzdTCkzsn8XUyhhCiUAb0ATiiGCCaGgfwEpDufFi2wHNPOJE8orf_dbPEMY",
+        //         "currency": 'EUR',
+
+        //     });
+        // } catch (error) {
+        //     console.error("failed to load the PayPal JS SDK script", error);
+        // }
+
+        // console.log(paypal)
+
+        // if (paypal) {
+        //     try {
+        //         await paypal.Buttons().render("#paypal-donate-button-container");
+        //     } catch (error) {
+        //         console.error("failed to render the PayPal Buttons", error);
+        //     }
+        // }
     },
     methods: {
-        setDonationScriptLoaded() {
-            this.loaded = true
-
+        // setDonationScriptLoaded() {
+        // this.loaded = true
+        // window.PayPal.Donation.Button({
+        //     // currency_code: 'EUR',
+        //     currency_code: this.event.isCharityData.paypalData.currency,
+        //     amount: this.newDonation.amount,
+        //     env: 'sandbox',
+        //     // hosted_button_id: 'GD652TWFGE6HN',
+        //     // hosted_button_id: 'UZVWPCPJSCELE',
+        //     business: 'csolanoc@unal.edu.co',
+        //     image: {
+        //         src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
+        //         title: 'PayPal - The safer, easier way to pay online!',
+        //         alt: 'Donate with PayPal button'
+        //     },
+        //     // onComplete: function (params) {
+        //     //     // this.addDonation(params)
+        //     //     console.log('completado')
+        //     //     this.paymentCompleted = true
+        //     // },
+        //     onComplete: this.test,
+        // }).render('#paypal-donate-button-container');
+        // },
+        renderPaypalBtn() {
+            this.e1 = 3
+            let btn = document.querySelector('#donate-button')
+            if (btn) {
+                btn.remove()
+            }
             window.PayPal.Donation.Button({
-                env: 'sandbox',
-                // hosted_button_id: 'GD652TWFGE6HN',
-                hosted_button_id: 'PP42K8WK5PBZ2',
-                // business: 'YOUR_EMAIL_OR_PAYERID',
+                // currency_code: 'EUR',
+                currency_code: this.event.isCharityData.paypalData.currency,
+                amount: this.newDonation.amount,
+                env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
+                business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
                 image: {
                     src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
                     title: 'PayPal - The safer, easier way to pay online!',
                     alt: 'Donate with PayPal button'
                 },
-                onComplete: function (params) {
-                    this.addDonation(params)
-                    // Your onComplete handler
-                },
+                onComplete: this.nextStep,
             }).render('#paypal-donate-button-container');
         },
-        addDonation(params) {
-            console.log(params)
+        nextStep(params) {
+            this.paymentCompleted = true
+        },
+        test() {
+            this.addDonation()
+        },
+        addDonation() {
+            // Your onComplete handler
+            let bid = this.updatedRun.row.bids[this.selectedBidIdx]
+
+            if (this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
+                bid.bids[this.selectedBidOption].current += Number(this.newDonation.amount)
+                bid.bids.forEach(element => bid.current += Number(element.current))
+            } else {
+                bid.current += Number(this.newDonation.amount)
+            }
+
+            this.updatedRun.row.bids[this.selectedBidIdx] = bid
+            // console.log(this.updatedRun.row)
+            // this.trackerDonation.postDonation()
+            // this.trackerRun.updateRun()
+        },
+        removeSelectedBid() {
+            this.savedBid = false
+            this.newDonation.runId = ""
+            this.newDonation.bidId = ""
+            this.selectedBidIdx = undefined
+            this.selectedBidOption = undefined
+            this.addedNewOpt = undefined
+            this.updatedRun = undefined
+        },
+        saveBid($event) {
+            // console.log($event)
+            this.savedBid = true
+            this.newDonation.runId = $event.runId
+            this.newDonation.bidId = $event.bidId
+            this.selectedBidIdx = $event.selectedBidIdx
+            this.selectedBidOption = $event.selectedBidOption
+            this.addedNewOpt = $event.addedNewOpt
+            this.updatedRun = this.event.schedule.rows.find(element => element.row._id === $event.runId)
         }
+    },
+    watch: {
+        paymentCompleted() {
+            console.log('cambiado a: ', this.paymentCompleted)
+            if (this.paymentCompleted === true) {
+                this.addDonation()
+            }
+        },
     }
 })
 </script>

@@ -8,7 +8,7 @@
                             <v-col class="overflow-y-auto" style="max-height: 400px;">
                                 <h3>Runs</h3>
                                 <v-expansion-panels v-model="selectedRunIdx">
-                                    <v-expansion-panel v-for="(run, i) in rowTest" :key="i">
+                                    <v-expansion-panel v-for="(run, i) in event.schedule.rows" :key="i">
                                         <v-expansion-panel-header>
                                             {{run.row.name}}
                                         </v-expansion-panel-header>
@@ -107,7 +107,8 @@
                                         </v-expansion-panel-content>
                                     </v-expansion-panel>
                                 </v-expansion-panels>
-                                <v-btn color="success" class="mt-5" @click="saveBid()">Save bid</v-btn>
+                                <v-btn color="success" class="mt-5" @click="saveBid()"
+                                    :disabled="selectedRunIdx === undefined">Save bid</v-btn>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -134,8 +135,7 @@ export default Vue.extend({
             required: true
         },
     },
-    components: {
-    },
+
     data() {
         return {
             selectedRunIdx: undefined,
@@ -146,16 +146,6 @@ export default Vue.extend({
             selectedBidOption: -1,
             rowTest: [] as any,
         }
-    },
-    async created() {
-        for (let i = 0; i < 50; i++) {
-            this.rowTest.push(this.event.schedule.rows[0])
-            this.rowTest.push(this.event.schedule.rows[1])
-        }
-        // console.log(this.event)
-        // let a = [1, 2, 50, 3, 5]
-        // a.sort((a, b) => b - a)
-        // console.log(a)
     },
     methods: {
         getRunnerString(item: Run) {
@@ -178,7 +168,20 @@ export default Vue.extend({
             this.selectedBidOption = -1
         },
         saveBid() {
-            console.log(this.selectedRun.bids[this.selectedBidIdx])
+            // console.log(this.selectedRun.bids[this.selectedBidIdx])
+            let output = {
+                runId: this.selectedRun._id,
+                bidId: this.selectedRun.bids[this.selectedBidIdx]._id,
+                selectedBidIdx: this.selectedBidIdx as number | undefined,
+                selectedBidOption: undefined as number | undefined,
+                addedNewOpt: undefined as boolean | undefined
+            }
+            if (this.selectedRun.bids[this.selectedBidIdx].type === 0) {
+                output.selectedBidOption = this.selectedBidOption
+                output.addedNewOpt = this.createdNewBidOption
+            }
+            console.log(output)
+            this.$emit('saveBid', output)
         }
     },
     watch: {
@@ -194,7 +197,17 @@ export default Vue.extend({
             if (this.selectedRun.bids[this.selectedBidIdx].type === 0)
                 this.selectedRun.bids[this.selectedBidIdx].bids.sort((a: any, b: any) => parseInt(b.current) - parseInt(a.current))
         },
+        selectedBidOption() {
 
+            if (this.selectedBidOption !== this.selectedRun.bids.length - 1 &&
+                this.createdNewBidOption &&
+                this.selectedRun.bids[this.selectedBidIdx].newBids) {
+
+                this.selectedRun.bids[this.selectedBidIdx].bids.pop()
+                this.createdNewBidOption = false
+                this.bidOptionName = ""
+            }
+        },
     }
 })
 </script>
