@@ -91,7 +91,7 @@
                     Delete schedule {{ oldRun.name }}
                   </v-card-title>
                   <v-card-text>
-                    Do you really want to delete this prize?
+                    Do you really want to delete this run?
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>

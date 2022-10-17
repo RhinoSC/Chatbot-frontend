@@ -81,7 +81,7 @@
       </v-card-title>
       <v-card-subtitle>Total added: {{ addedBids.length }}</v-card-subtitle>
       <v-card-subtitle>
-        <v-btn color="error" @click="clearAddedBids">Clear all bids</v-btn>
+        <v-btn color="error" @click="confirmClearBids">Clear all bids</v-btn>
       </v-card-subtitle>
       <v-card-text>
         <v-list class="rounded-lg" color="accent">
@@ -112,10 +112,38 @@
             <v-btn color="info" @click="modifyBidState(addedBid)">{{computeBidState(addedBid)}}</v-btn>
             <v-spacer></v-spacer>
             <v-list-item-icon>
-              <v-icon @click="removeBid(addedBid)">mdi-close-circle</v-icon>
+              <v-icon @click="confirmRemoveBid(addedBid)">mdi-close-circle</v-icon>
             </v-list-item-icon>
           </v-list-item>
         </v-list>
+        <v-dialog v-model="deleteDialog" width="500">
+          <v-card>
+            <v-card-title primary-title>
+              Delete bid: {{ tryDeleteBid.name }}
+            </v-card-title>
+            <v-card-text>
+              Do you really want to delete this bid? Any donation will be erased
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="error" link @click="removeBid(tryDeleteBid)">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="deleteAllDialog" width="500">
+          <v-card>
+            <v-card-title primary-title>
+              Delete bids
+            </v-card-title>
+            <v-card-text>
+              Do you really want to delete all bids? Any donation will be erased
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="error" link @click="clearAddedBids">Delete all bids</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card-text>
     </v-card>
   </v-container>
@@ -148,6 +176,9 @@ export default Vue.extend({
   },
   data() {
     return {
+      deleteDialog: false,
+      deleteAllDialog: false,
+      tryDeleteBid: {} as Bid,
       newBidOption: "",
       events: [] as Event[],
       selectedEvent: {} as Event,
@@ -200,7 +231,12 @@ export default Vue.extend({
       }
       this.newBidOption = ""
     },
+    confirmRemoveBid(bid: Bid) {
+      this.deleteDialog = true
+      this.tryDeleteBid = bid
+    },
     removeBid(addedBid: Bid) {
+      this.deleteDialog = false
       let index = this.addedBids.findIndex((bid) => bid.name == addedBid.name)
       this.addedBids.splice(index, 1)
       this.$emit('populateBids', this.addedBids)
@@ -223,8 +259,12 @@ export default Vue.extend({
       this.newBid.game = this.$props.gameName
       this.$emit('populateBids', this.addedBids)
     },
+    confirmClearBids() {
+      this.deleteAllDialog = true
+    },
     clearAddedBids() {
       this.addedBids = []
+      this.deleteAllDialog = false
       this.$emit('clearBids', true)
     },
     computeBidState(addedBid: Bid) {

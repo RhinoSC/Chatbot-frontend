@@ -156,6 +156,11 @@ export default Vue.extend({
     mounted() {
         this.filteredRows = this.event.schedule.rows
     },
+    beforeDestroy() {
+        if (this.createdNewBidOption) {
+            this.deleteNewBidOption()
+        }
+    },
     methods: {
         verifyRunWithActiveBids(run: any) {
             let idx = run.row.bids.findIndex((bid: { openBid: boolean }) => bid.openBid === true)
@@ -170,12 +175,14 @@ export default Vue.extend({
         },
         addBidOption() {
             if (!this.createdNewBidOption) {
-                this.selectedRun.bids[this.selectedBidIdx].bids.push({ name: this.bidOptionName, current: 0 })
                 this.createdNewBidOption = true
+                this.selectedRun.bids[this.selectedBidIdx].bids.push({ name: this.bidOptionName, current: 0 })
                 this.selectedBidOption = this.selectedRun.bids[this.selectedBidIdx].bids.length - 1
                 this.bidOptionName = ""
 
-                console.log(this.selectedRun.bids[this.selectedBidIdx].bids)
+                // console.log(this.selectedRun.bids[this.selectedBidIdx].bids.length)
+                // console.log(this.selectedRun.bids[this.selectedBidIdx].bids[this.selectedBidOption])
+                // console.log(this.selectedRun.bids[this.selectedBidIdx])
             }
         },
         deleteNewBidOption() {
@@ -185,18 +192,23 @@ export default Vue.extend({
         },
         saveBid() {
             // console.log(this.selectedRun.bids[this.selectedBidIdx])
+
             let output = {
                 runId: this.selectedRun._id,
                 bidId: this.selectedRun.bids[this.selectedBidIdx]._id,
                 selectedBidIdx: this.selectedBidIdx as number | undefined,
                 selectedBidOption: undefined as number | undefined,
-                addedNewOpt: undefined as boolean | undefined
+                addedNewOpt: undefined as boolean | undefined,
+                runBid: undefined
+            }
+            if (this.selectedRunIdx !== undefined) {
+                this.filteredRows[this.selectedRunIdx].row = this.selectedRun
+                output.runBid = JSON.parse(JSON.stringify(this.filteredRows[this.selectedRunIdx]))
             }
             if (this.selectedRun.bids[this.selectedBidIdx].type === 0) {
                 output.selectedBidOption = this.selectedBidOption
                 output.addedNewOpt = this.createdNewBidOption
             }
-            console.log(output)
             this.$emit('saveBid', output)
         },
         validateBtn() {
@@ -223,14 +235,15 @@ export default Vue.extend({
             }
         },
         selectedBidIdx() {
+            // console.log(this.selectedBidIdx)
             if (this.selectedBidIdx === undefined) return
             if (this.selectedRun.bids[this.selectedBidIdx].type === 0)
-                this.selectedRun.bids[this.selectedBidIdx].bids.sort((a: any, b: any) => parseInt(b.current) - parseInt(a.current))
+                this.selectedRun.bids[this.selectedBidIdx].bids.sort((a: any, b: any) => parseFloat(b.current) - parseFloat(a.current))
             this.selectedBidOption = -1
         },
         selectedBidOption() {
 
-            if (this.selectedBidOption !== this.selectedRun.bids.length - 1 &&
+            if (this.selectedBidOption !== this.selectedRun.bids[this.selectedBidIdx].bids.length - 1 &&
                 this.createdNewBidOption &&
                 this.selectedRun.bids[this.selectedBidIdx].newBids) {
 
@@ -239,6 +252,10 @@ export default Vue.extend({
                 this.bidOptionName = ""
             }
         },
+        active() {
+            console.log('activo')
+            this.filteredRows = this.event.schedule.rows
+        }
     }
 })
 </script>

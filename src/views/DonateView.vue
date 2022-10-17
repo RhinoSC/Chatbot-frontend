@@ -106,7 +106,8 @@
                             </v-col>
                             <v-col v-if="newDonation.toBid">
                                 <v-row v-if="!savedBid">
-                                    <BidComponent :event="event" @saveBid="saveBid($event)"></BidComponent>
+                                    <BidComponent :event="event" @saveBid="saveBid($event)">
+                                    </BidComponent>
                                 </v-row>
                             </v-col>
                         </v-card-text>
@@ -214,7 +215,7 @@ export default Vue.extend({
             },
             paymentCompleted: false,
             event: null,
-            updatedRun: {},
+            updatedRun: undefined,
             selectedBidIdx: undefined,
             selectedBidOption: undefined,
             addedNewOpt: undefined,
@@ -314,10 +315,16 @@ export default Vue.extend({
             this.selectedBidIdx = $event.selectedBidIdx
             this.selectedBidOption = $event.selectedBidOption
             this.addedNewOpt = $event.addedNewOpt
-            this.updatedRun = this.event.schedule.rows.find(element => element.row._id === $event.runId)
+            // this.updatedRun = this.event.schedule.rows.find(element => element.row._id === $event.runId)
+            this.updatedRun = $event.runBid
+            // console.log('hola', $event.runBid)
+            // console.log(this.updatedRun.row.bids)
         },
         validateSecondBtn() {
-            return !this.valid2 || (this.newDonation.toBid && this.selectedBidOption === undefined)
+            if (this.updatedRun !== undefined && this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
+                return !this.valid2 || (this.newDonation.toBid && this.selectedBidOption === undefined)
+            }
+            return !this.valid2 || (this.newDonation.toBid && !this.savedBid)
         }
     },
     watch: {
