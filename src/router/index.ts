@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Tracker from '../views/TrackerView.vue'
+import Tracker from '../views/trackerViewer/TrackerView.vue'
 import Layout from '../views/LayoutView.vue'
 import Manage from '../views/manage/ManageView.vue'
 import Dashboard from '../views/manage/DashboardView.vue'
@@ -38,7 +38,14 @@ const routes: Array<RouteConfig> = [
   {
     path: '/tracker',
     name: 'tracker-view',
-    component: Tracker
+    component: Tracker,
+    children: [
+      {
+        path: 'schedule',
+        name: 'tracker.schedule',
+        component: () => import('../views/trackerViewer/schedule/scheduleViewer.vue')
+      },
+    ]
   },
   {
     path: '/manage',

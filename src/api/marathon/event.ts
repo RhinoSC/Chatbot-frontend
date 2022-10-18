@@ -18,6 +18,15 @@ export default {
             return error
         }
     },
+
+    async getOneEventByName(name: string): Promise<any> {
+        try {
+            const res = await api.backend.get(`api/tracker/event/name/${name}`)
+            return res.data
+        } catch (error) {
+            return error
+        }
+    },
     async postEvent(event: Event): Promise<any> {
         try {
             const res = await api.backend.post('api/tracker/event/', { event })

@@ -85,13 +85,11 @@
                                     <template v-for="(item, i) in scheduleRows">
                                         <template v-if="isRowDay(item)">
                                             <tr :key="i" style="background-color: #2196f3;" class="item-day-tr">
-                                                <td></td>
-                                                <td></td>
-                                                <td class="d-flex justify-center align-center" style="color: white;">
+                                                <td colspan="5" style="color: white; text-align:center;">
+                                                    {{item.dayText}}</td>
+                                                <!-- <td class="d-flex justify-center align-center" style="color: white;">
                                                     {{item.dayText}}
-                                                </td>
-                                                <td></td>
-                                                <td></td>
+                                                </td> -->
                                             </tr>
                                         </template>
                                         <template v-else>
@@ -376,6 +374,7 @@ export default Vue.extend({
             return testArr
         },
         saveStatus() {
+            // console.log([this.scheduleRows.filter((row: any) => { return row.dayRow === false }), this.availableRows])
             this.$emit('saveRuns', [this.scheduleRows.filter((row: any) => { return row.dayRow === false }), this.availableRows])
         }
     },
