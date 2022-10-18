@@ -7,6 +7,7 @@
       <v-btn color="info" class="mr-2" link :to="'/manage/tracker/schedules'">Schedules</v-btn>
       <v-btn color="info" class="mr-2" link :to="'/manage/tracker/runs'">Runs</v-btn>
       <v-btn color="info" class="mr-2" link :to="'/manage/tracker/prizes'">Prizes</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/manage/tracker/donations'">Donations</v-btn>
       <!-- <v-btn color="info" class="mr-2" link :to="'/manage/tracker/bids'">Bids</v-btn> -->
     </v-row>
     <router-view class="mt-10"></router-view>

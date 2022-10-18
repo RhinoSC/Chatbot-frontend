@@ -106,6 +106,11 @@ const routes: Array<RouteConfig> = [
         name: 'manage.tracker.bid',
         component: () => import('../views/manage/tracker/bid/bids.vue')
       },
+      {
+        path: 'donations',
+        name: 'manage.tracker.donation',
+        component: () => import('../views/manage/tracker/donation/donations.vue')
+      },
     ]
   },
 
@@ -174,6 +179,17 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/bids/add',
     component: () => import('../views/manage/tracker/bid/addBid.vue')
+  },
+
+  // donations
+  {
+    path: '/manage/tracker/donations/edit/:id',
+    name: 'manage.tracker.donations',
+    component: () => import('../views/manage/tracker/donation/editDonation.vue')
+  },
+  {
+    path: '/manage/tracker/donations/add',
+    component: () => import('../views/manage/tracker/donation/addDonation.vue')
   },
 
 

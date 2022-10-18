@@ -21,7 +21,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <!-- <tbody>
                     <tr v-for="(bid, i) in bids" :key="i">
                         <td>{{ bid.name }}</td>
                         <td>{{ bid.game }}</td>
@@ -29,7 +29,7 @@
                         <td>{{ currencyFormat(bid.current) }}</td>
                         <td>{{ calculateGoal(bid) }}</td>
                     </tr>
-                </tbody>
+                </tbody> -->
             </template>
         </v-simple-table>
     </v-container>
@@ -38,10 +38,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
-import trackerBid from '@/api/marathon/bid'
+import trackerDonation from '@/api/marathon/donation'
 import Event from '@/utils/types/Event'
-import Bid from '@/utils/types/Bid'
-import ScheduleRow from '@/utils/types/ScheduleRow'
+import Donation from '@/utils/types/Donation'
 import { getRunnerString, currencyFormat } from '@/utils/stringFuncs'
 import Run from '@/utils/types/Run'
 import Schedule from '@/utils/types/Schedule'
@@ -55,12 +54,12 @@ export default Vue.extend({
         return {
             event: {} as Event,
             tempSchedule: {} as Schedule,
-            bids: [] as Bid[]
+            donations: [] as Donation[]
         }
     },
     async created() {
         // const res = await trackerEvent.getOneEventByName(`${process.env.VUE_APP_EVENT}`)
-        const bidRes = await trackerBid.getBids()
+        // const bidRes = await trackerBid.getBids()
 
         // if (res[0]) {
         //     this.event = res[0]
@@ -70,20 +69,15 @@ export default Vue.extend({
         //     }
         // }
 
-        if (bidRes) {
-            this.bids = bidRes
-            // console.log(this.bids)
-        }
+        // if (bidRes) {
+        //     this.bids = bidRes
+        // }
         // console.log(this.scheduleRows)
     },
     mounted() {
         // console.log('hola')
     },
     methods: {
-        calculateGoal(bid: Bid) {
-            if (bid.type === 0) return '(None)'
-            return currencyFormat(bid.goal)
-        },
         currencyFormat(amount: number) {
             return currencyFormat(amount)
         },

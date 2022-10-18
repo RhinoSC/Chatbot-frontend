@@ -228,7 +228,7 @@ export default Vue.extend({
 
         // change
         // this.event = res.find(event => event.name === 'sre9')
-        this.event = res.find(event => event.name === 'sre19')
+        this.event = res.find(event => event.name === `${process.env.VUE_APP_EVENT}`)
 
         if (this.event) {
             this.newDonation.eventId = this.event._id

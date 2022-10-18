@@ -1,6 +1,6 @@
 <template>
   <v-col align="center">
-    <h1>Tracker manager</h1>
+    <h1>Tracker</h1>
     <v-row justify="center" class="mt-5">
       <v-btn color="info" class="mr-2" link :to="'/tracker/schedule'">Schedule</v-btn>
       <v-btn color="info" class="mr-2" link :to="'/tracker/bids'">Bids</v-btn>

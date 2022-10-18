@@ -1,10 +1,10 @@
 import Run from "./Run";
 
 export default interface Donation {
-    _id: string;
+    _id?: string;
     name: string;
     email: string;
-    time: string;
+    time: number;
     amount: number;
     description: string;
     toBid: boolean;
