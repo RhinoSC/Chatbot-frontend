@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container v-if="isReady">
     <v-card>
       <v-card-title primary-title>
-        Add Donation
+        Donation review
       </v-card-title>
       <v-card-text>
         <v-form class="mb-5">
@@ -12,13 +12,13 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field name="name" :rules="nameRules" label="Full name" id="name" v-model="newDonation.name"
-                  required>
+                <v-text-field name="name" :rules="nameRules" label="Full name" id="name" v-model="oldDonation.name"
+                  required readonly>
                 </v-text-field>
               </v-col>
               <v-col>
-                <v-text-field name="email" :rules="emailRules" label="Your email" id="email" v-model="newDonation.email"
-                  required>
+                <v-text-field name="email" :rules="emailRules" label="Your email" id="email" v-model="oldDonation.email"
+                  required readonly>
                 </v-text-field>
               </v-col>
             </v-row>
@@ -30,22 +30,22 @@
             </v-row>
             <v-row>
               <v-col cols="4">
-                <v-text-field name="amount" :label="amountLabel" id="amount" v-model="newDonation.amount" type="number"
-                  :rules="amountRules">
+                <v-text-field name="amount" :label="amountLabel" id="amount" v-model="oldDonation.amount" type="number"
+                  :rules="amountRules" readonly>
                 </v-text-field>
               </v-col>
               <v-col>
                 <v-textarea outlined name="input-7-4" label="Leave a message (optional)" placeholder="You are amazing!"
-                  v-model="newDonation.description">
+                  v-model="oldDonation.description" readonly>
                 </v-textarea>
               </v-col>
             </v-row>
             <v-row class="mt-n10">
               <v-col>
-                <v-checkbox label="Donation goes to a bidwar?" v-model="newDonation.toBid">
+                <v-checkbox label="Donation goes to a bidwar?" v-model="oldDonation.toBid" :disabled="true">
                 </v-checkbox>
               </v-col>
-              <v-col v-if="newDonation.toBid">
+              <v-col v-if="oldDonation.toBid">
                 <v-row class="mt-8" v-if="savedBid">
                   <v-card>
                     <v-card-title class="text-h5">
@@ -65,7 +65,7 @@
                       </template>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn text color="error" @click="removeSelectedBid">
+                      <v-btn text color="error" :disabled="true">
                         Remove
                       </v-btn>
                     </v-card-actions>
@@ -73,14 +73,35 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-row v-if="newDonation.toBid && !savedBid">
-              <BidComponent :event="event" @saveBid="saveBid($event)">
+            <v-row v-if="oldDonation.toBid && !savedBid">
+              <BidComponent :event="event" @saveBid="saveBid($event)" :isEditedBid="isEditedBid">
               </BidComponent>
             </v-row>
+          </v-col>
+          <v-col>
             <v-row>
               <v-spacer></v-spacer>
+              <v-dialog v-model="deleteDialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5">
+                    Delete
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title primary-title>
+                    Delete user {{ oldDonation.name }}
+                  </v-card-title>
+                  <v-card-text>
+                    Do you really want to delete this donation?
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" link @click="deleteDonation">Delete</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
               <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/donations'">Cancel</v-btn>
-              <v-btn color="success" class="mr-5" @click="addDonation">Save</v-btn>
+              <!-- <v-btn color="success" class="mr-5" @click="editDonation">Save</v-btn> -->
             </v-row>
           </v-col>
         </v-form>
@@ -114,7 +135,9 @@ export default Vue.extend({
       selectedBidIdx: -1,
       selectedBidOption: -1,
       addedNewOpt: false,
-      newDonation: {
+      deleteDialog: false,
+      oldDonation: {
+        _id: "",
         name: "",
         email: "",
         time: 0,
@@ -123,8 +146,23 @@ export default Vue.extend({
         toBid: false,
         runId: "",
         bidId: "",
+        optionName: "",
         eventId: ""
-      },
+      } as Donation,
+      newDonation: {
+        _id: "",
+        name: "",
+        email: "",
+        time: 0,
+        amount: 0,
+        description: "",
+        toBid: false,
+        runId: "",
+        bidId: "",
+        optionName: "",
+        eventId: ""
+      } as Donation,
+      isEditedBid: {} as any,
       nameRules: [
         (v: any) => !!v || 'Name is required',
         (v: string | any[]) => (v && v.length <= 20) || 'Name must be less than 20 characters',
@@ -139,54 +177,57 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents()
-    this.event = res.find((event: { name: string }) => event.name === `${process.env.VUE_APP_EVENT}`)
+    const res: Event[] = await trackerEvent.getEvents()
+    const donRes: Donation[] = await trackerDonation.getOneDonation(this.$route.params.id)
 
-    if (this.event) {
-      if (this.event._id) {
-        this.newDonation.eventId = this.event._id
-        this.isReady = true
+    if (donRes[0]) {
+      let event = res.find((event) => event._id === donRes[0].eventId)
+      if (event) {
+        this.event = event
+        if (this.event._id)
+          this.newDonation.eventId = this.event._id
       }
+
+      this.oldDonation = donRes[0]
+
+      this.isEditedBid = {
+        runId: this.oldDonation.runId,
+        bidId: this.oldDonation.bidId,
+        optionName: this.oldDonation.optionName,
+      }
+      this.isReady = true
     }
+
+
   },
   methods: {
-    async addDonation() {
-      if (this.newDonation.toBid) {
+    async deleteDonation() {
+      if (this.oldDonation.toBid) {
         let bid = this.updatedRun?.row.bids[this.selectedBidIdx]
 
+        // console.log(this.updatedRun)
         if (this.updatedRun) {
           if (this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
-            bid.bids[this.selectedBidOption].current += Number(this.newDonation.amount)
+            bid.bids[this.selectedBidOption].current -= Number(this.oldDonation.amount)
             bid.bids.forEach((element: { current: any }) => bid.current += Number(element.current))
           } else {
-            bid.current += Number(this.newDonation.amount)
+            bid.current -= Number(this.oldDonation.amount)
           }
 
           this.updatedRun.row.bids[this.selectedBidIdx] = bid
-          console.log(this.updatedRun.row)
+          // console.log(this.updatedRun.row)
           await trackerRun.updateRun(this.updatedRun.row)
         }
+
       }
 
-      this.newDonation.time = new Date().getTime()
-      // console.log(this.newDonation)
-      try {
-        let response = await trackerDonation.postDonation(this.newDonation)
-        if (response) {
+      if (this.oldDonation._id) {
+        const res = await trackerDonation.deleteDonation(this.oldDonation._id)
+        if (res) {
+          console.log(res)
           this.$router.push('/manage/tracker/donations')
         }
-      } catch (e) {
-        console.error(e)
       }
-    },
-    removeSelectedBid() {
-      this.savedBid = false
-      this.newDonation.runId = ""
-      this.newDonation.bidId = ""
-      this.selectedBidIdx = -1
-      this.selectedBidOption = -1
-      this.addedNewOpt = false
-      this.updatedRun = undefined
     },
     saveBid($event: any) {
       // console.log($event)
@@ -220,132 +261,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-
-<!-- <template>
-  <v-container grid-list-xs>
-    <v-card>
-      <v-card-title primary-title>
-        Add User
-      </v-card-title>
-      <v-card-text>
-        <v-form class="mb-5">
-          <v-col>
-            <v-row>
-              <h2>General info</h2>
-            </v-row>
-            <v-row>
-              <v-col>
-                <v-text-field name="name" label="User name" id="userName" v-model="oldUser.name">
-                </v-text-field>
-              </v-col>
-              <v-col>
-                <v-text-field name="twitch" label="Twitch username" id="twitch" v-model="oldUser.social.twitch">
-                </v-text-field>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col>
-            <v-row>
-              <v-spacer></v-spacer>
-              <v-dialog v-model="deleteDialog" width="500">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn color="error" v-bind="attrs" v-on="on" class="mr-5" :disabled="true">
-                    Delete
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title primary-title>
-                    Delete user {{ oldUser.name }}
-                  </v-card-title>
-                  <v-card-text>
-                    Do you really want to delete this user?
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="error" link @click="deleteUser">Delete</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/users'">Cancel</v-btn>
-              <v-btn color="success" class="mr-5" @click="editUser">Save</v-btn>
-            </v-row>
-          </v-col>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-container>
-</template>
-
-<script lang="ts">
-import Vue from 'vue'
-import trackerUser from '@/api/marathon/user'
-import User from '@/utils/types/User'
-import trackerRun from '@/api/marathon/run'
-import Run from '@/utils/types/Run'
-
-export default Vue.extend({
-  name: 'manage-tracker',
-
-  components: {
-  },
-  data() {
-    return {
-      deleteDialog: false,
-      oldUser: {
-        _id: "",
-        name: "",
-        social: { twitch: "" }
-      },
-      newUser: {
-        _id: "",
-        name: "",
-        social: { twitch: "" }
-      }
-    }
-  },
-  async created() {
-    const res = await trackerUser.getOneUser(this.$route.params.id)
-    this.oldUser = res[0]
-  },
-  methods: {
-    async deleteUser() {
-      const res = await trackerUser.deleteUser(this.oldUser._id)
-      if (res) {
-        console.log(res)
-        this.$router.push('/manage/tracker/users')
-      }
-    },
-    async editUser() {
-
-      const runs: Run[] = await trackerRun.getRuns()
-
-      this.newUser = this.oldUser
-
-      runs.forEach(async (run) => {
-        let update = false
-        run.teams = run.teams.map((team) => {
-          team.players = team.players.map((player) => {
-            if (player._id == this.newUser._id) {
-              player = this.newUser
-              update = true
-            }
-            return player
-          })
-          return team
-        })
-        if (update) {
-          console.log(run, update)
-          await trackerRun.updateRun(run)
-        }
-      })
-
-      const res = await trackerUser.updateUser(this.newUser)
-      if (res) {
-        console.log(res)
-        //   this.$router.push('/manage/tracker/users')
-      }
-    },
-  },
-})
-</script> -->

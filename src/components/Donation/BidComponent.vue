@@ -140,6 +140,10 @@ export default Vue.extend({
             type: Object,
             required: true
         },
+        isEditedBid: {
+            type: Object
+        }
+
     },
 
     data() {
@@ -155,6 +159,25 @@ export default Vue.extend({
     },
     mounted() {
         this.filteredRows = this.event.schedule.rows
+
+        if (this.isEditedBid !== undefined) {
+            // console.log(this.isEditedBid)
+            this.selectedRunIdx = this.filteredRows.findIndex((row: { row: { _id: any } }) => row.row._id === this.isEditedBid.runId)
+            if (this.selectedRunIdx !== undefined) {
+                this.selectedRun = this.filteredRows[this.selectedRunIdx].row
+                this.selectedBidIdx = this.selectedRun.bids.findIndex(bid => bid._id === this.isEditedBid.bidId)
+                this.selectedRun.bids[this.selectedBidIdx].bids.sort((a: any, b: any) => parseFloat(b.current) - parseFloat(a.current))
+                this.selectedBidOption = this.selectedRun.bids[this.selectedBidIdx].bids.findIndex((option: { name: any }) => option.name === this.isEditedBid.optionName)
+                // this.selectedBidOption = this.selectedRun.bids[this.selectedBidIdx].bids.findIndex((option: { name: any }) => {
+                //     console.log(option.name, this.isEditedBid.optionName)
+                //     return option.name === this.isEditedBid.optionName
+                // })
+                // console.log(this.selectedBidOption)
+                this.saveBid()
+            }
+            // console.log(this.selectedBidIdx)
+        }
+        // console.log(this.selectedBidOption)
     },
     beforeDestroy() {
         if (this.createdNewBidOption) {
@@ -239,10 +262,10 @@ export default Vue.extend({
             if (this.selectedBidIdx === undefined) return
             if (this.selectedRun.bids[this.selectedBidIdx].type === 0)
                 this.selectedRun.bids[this.selectedBidIdx].bids.sort((a: any, b: any) => parseFloat(b.current) - parseFloat(a.current))
+
             this.selectedBidOption = -1
         },
         selectedBidOption() {
-
             if (this.selectedBidOption !== this.selectedRun.bids[this.selectedBidIdx].bids.length - 1 &&
                 this.createdNewBidOption &&
                 this.selectedRun.bids[this.selectedBidIdx].newBids) {
