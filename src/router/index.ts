@@ -45,6 +45,11 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.schedule',
         component: () => import('../views/trackerViewer/schedule/scheduleViewer.vue')
       },
+      {
+        path: 'bids',
+        name: 'tracker.bids',
+        component: () => import('../views/trackerViewer/bid/bidViewer.vue')
+      },
     ]
   },
   {
