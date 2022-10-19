@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(bid, i) in bids" :key="i">
+                    <tr v-for="(bid, i) in bids" :key="i" @click="bidSum(bid)">
                         <td>{{ bid.name }}</td>
                         <td>{{ bid.game }}</td>
                         <td>{{ bid.description }}</td>
@@ -32,6 +32,42 @@
                 </tbody>
             </template>
         </v-simple-table>
+        <v-dialog v-model="lookDialog" width="500">
+            <v-card class="mx-auto">
+                <v-card-text>
+                    <div>{{lookingBid.game}}</div>
+                    <p class="text-h4 text--primary">
+                        {{lookingBid.name}}
+                    </p>
+                    <v-divider></v-divider>
+                    <template v-if="lookingBid.type !== 0">
+                        <div class="text--primary d-flex">
+                            {{lookingBid.description}}
+                            <v-spacer></v-spacer>
+                            {{currencyFormat(lookingBid.current)}} /
+                            {{currencyFormat(lookingBid.goal)}}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="text--primary d-flex">
+                            {{lookingBid.description}}
+                            <v-spacer></v-spacer>
+                            {{currencyFormat(lookingBid.current)}}
+                        </div>
+                        <div class="text--primary d-flex flex-column">
+                            <b>Options:</b>
+                            <div v-for="(optionBid, ind) in lookingBid.bids" :key="ind">
+                                <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}:
+                                {{currencyFormat(optionBid.current)}}
+                            </div>
+                        </div>
+                    </template>
+                    <div>
+
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
   
@@ -53,9 +89,11 @@ export default Vue.extend({
     },
     data() {
         return {
+            lookDialog: false,
             event: {} as Event,
             tempSchedule: {} as Schedule,
-            bids: [] as Bid[]
+            bids: [] as Bid[],
+            lookingBid: {} as Bid,
         }
     },
     async created() {
@@ -72,7 +110,7 @@ export default Vue.extend({
 
         if (bidRes) {
             this.bids = bidRes
-            console.log(this.bids)
+            // console.log(this.bids)
             // console.log(this.bids)
         }
         // console.log(this.scheduleRows)
@@ -88,7 +126,17 @@ export default Vue.extend({
         currencyFormat(amount: number) {
             return currencyFormat(amount)
         },
+        bidSum(bid: Bid) {
+            this.lookingBid = bid
+            this.lookDialog = true
+        }
+    },
+    watch: {
+        lookDialog(){
+            // console.log(this.lookDialog)
+        }
     }
+
 })
 </script>
   
