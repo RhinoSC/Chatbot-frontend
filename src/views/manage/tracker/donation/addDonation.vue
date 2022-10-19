@@ -159,6 +159,7 @@ export default Vue.extend({
           if (this.updatedRun.row.bids[this.selectedBidIdx].type === 0) {
             this.newDonation.optionName = bid.bids[this.selectedBidOption].name
             bid.bids[this.selectedBidOption].current += Number(this.newDonation.amount)
+            bid.current = 0
             bid.bids.forEach((element: { current: any }) => bid.current += Number(element.current))
           } else {
             bid.current += Number(this.newDonation.amount)

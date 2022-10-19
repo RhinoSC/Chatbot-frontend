@@ -72,6 +72,7 @@ export default Vue.extend({
 
         if (bidRes) {
             this.bids = bidRes
+            console.log(this.bids)
             // console.log(this.bids)
         }
         // console.log(this.scheduleRows)
