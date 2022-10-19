@@ -26,7 +26,7 @@ export default {
             return error
         }
     },
-    async postRunWithEmptyFields(run: Run): Promise<any> {
+    async createWithBidsAndTeams(run: Run): Promise<any> {
         try {
             const res = await api.backend.post('api/tracker/run/advanced', { run })
             return res

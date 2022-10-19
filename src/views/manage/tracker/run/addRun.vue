@@ -154,7 +154,7 @@ export default Vue.extend({
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
       // console.log(this.newRun)
-      const res = await trackerRun.postRunWithEmptyFields(this.newRun)
+      const res = await trackerRun.createWithBidsAndTeams(this.newRun)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/runs')
