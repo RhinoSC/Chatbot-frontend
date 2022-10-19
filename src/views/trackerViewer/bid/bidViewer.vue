@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-xs>
+    <v-container grid-list-xs v-if="isReady">
         <v-simple-table>
             <template v-slot:default>
                 <thead>
@@ -86,6 +86,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            isReady: false,
             lookDialog: false,
             event: {} as Event,
             tempSchedule: {} as Schedule,
@@ -94,22 +95,23 @@ export default Vue.extend({
         }
     },
     async created() {
-        // const res = await trackerEvent.getOneEventByName(`${process.env.VUE_APP_EVENT}`)
+        const res = await trackerEvent.getOneEventByName(`${process.env.VUE_APP_EVENT}`)
         const bidRes = await trackerBid.getBids()
 
-        // if (res[0]) {
-        //     this.event = res[0]
+        if (res[0]) {
+            this.event = res[0]
 
-        //     if (this.event.schedule) {
-        //         this.tempSchedule = this.event.schedule
-        //     }
-        // }
+            if (this.event.schedule) {
+                this.tempSchedule = this.event.schedule
+            }
+        }
 
         if (bidRes) {
             this.bids = bidRes
             // console.log(this.bids)
             // console.log(this.bids)
         }
+        this.isReady = true
         // console.log(this.scheduleRows)
     },
     mounted() {
@@ -118,10 +120,10 @@ export default Vue.extend({
     methods: {
         calculateGoal(bid: Bid) {
             if (bid.type === 0) return '(None)'
-            return currencyFormat(bid.goal)
+            return currencyFormat(bid.goal, this.event.isCharityData.paypalData.currency)
         },
         currencyFormat(amount: number) {
-            return currencyFormat(amount)
+            return currencyFormat(amount, this.event.isCharityData.paypalData.currency)
         },
         bidSummerize(bid: Bid) {
             this.lookingBid = bid

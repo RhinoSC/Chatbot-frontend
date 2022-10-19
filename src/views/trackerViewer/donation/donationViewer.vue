@@ -97,7 +97,7 @@ export default Vue.extend({
     },
     methods: {
         currencyFormat(amount: number) {
-            return currencyFormat(amount)
+            return currencyFormat(amount, this.event.isCharityData.paypalData.currency)
         },
         getRunName(runId: string) {
             const run = this.tempSchedule.rows.find(row => row.row._id === runId)

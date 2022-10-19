@@ -31,6 +31,7 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-checkbox label="active?" v-model="oldPrize.active"></v-checkbox>
               <v-spacer></v-spacer>
               <v-dialog v-model="deleteDialog" width="500">
                 <template v-slot:activator="{ on, attrs }">
@@ -86,6 +87,7 @@ export default Vue.extend({
         minAmount: 0,
         imgUrl: "",
         eventId: "",
+        active: false,
       },
       oldPrize: {
         _id: "",
@@ -93,6 +95,7 @@ export default Vue.extend({
         minAmount: 0,
         imgUrl: "",
         eventId: "",
+        active: false,
       }
     }
   },

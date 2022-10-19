@@ -310,7 +310,7 @@ export default Vue.extend({
   },
   methods: {
     currencyFormat(amount: number) {
-      return currencyFormat(amount)
+      return currencyFormat(amount, this.selectedEvent.isCharityData.paypalData.currency)
     },
     modifyAllowNewBids() {
       if (this.newBid.type != 0) {

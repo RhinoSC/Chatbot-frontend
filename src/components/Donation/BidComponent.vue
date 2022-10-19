@@ -194,7 +194,7 @@ export default Vue.extend({
             return getRunnerString(item)
         },
         currencyFormat(amount: number) {
-            return currencyFormat(amount)
+            return currencyFormat(amount, this.event.isCharityData.paypalData.currency)
         },
         addBidOption() {
             if (!this.createdNewBidOption) {

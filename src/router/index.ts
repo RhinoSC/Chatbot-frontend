@@ -58,23 +58,35 @@ const routes: Array<RouteConfig> = [
       {
         path: 'schedule',
         name: 'tracker.schedule',
-        component: () => import('../views/trackerViewer/schedule/scheduleViewer.vue')
+        component: () => import('../views/trackerViewer/schedule/scheduleViewer.vue'),
+        meta: {
+          hideNavbar: true,
+        },
       },
       {
         path: 'bids',
         name: 'tracker.bids',
-        component: () => import('../views/trackerViewer/bid/bidViewer.vue')
+        component: () => import('../views/trackerViewer/bid/bidViewer.vue'),
+        meta: {
+          hideNavbar: true,
+        },
       },
       {
         path: 'donations',
         name: 'tracker.donations',
         component: () => import('../views/trackerViewer/donation/donationViewer.vue')
+        , meta: {
+          hideNavbar: true,
+        },
       },
-      // {
-      //   path: 'prizes',
-      //   name: 'tracker.prizes',
-      //   component: () => import('../views/trackerViewer/prizes/prizesViewer.vue')
-      // },
+      {
+        path: 'prizes',
+        name: 'tracker.prizes',
+        component: () => import('../views/trackerViewer/prize/prizeViewer.vue'),
+        meta: {
+          hideNavbar: true,
+        },
+      },
     ]
   },
   {

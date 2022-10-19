@@ -37,10 +37,10 @@ export const getRunnerString = (item: Run) => {
     return runnerArr.join(', ')
 }
 
-export const currencyFormat = (amount: number) => {
+export const currencyFormat = (amount: number, currency: string) => {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD'
+        currency: currency
     })
 
     return formatter.format(amount)

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container grid-list-xs>
+        <v-container grid-list-xs v-if="isReady">
             <v-row>
                 <h2>Schedule</h2>
             </v-row>
@@ -91,6 +91,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            isReady: false,
             event: {} as Event,
             scheduleRows: [] as ScheduleRow[],
             tempSchedule: {} as Schedule,
@@ -123,6 +124,7 @@ export default Vue.extend({
             }
         }
         // console.log(this.scheduleRows)
+        this.isReady = true
     },
     mounted() {
         // console.log('hola')

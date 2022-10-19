@@ -64,6 +64,7 @@ export default Vue.extend({
         minAmount: 0,
         imgUrl: "",
         eventId: "",
+        active: false,
       }
     }
   },
