@@ -7,7 +7,11 @@ export default interface Event {
     name: string;
     start: number;
     end: number;
-    TZ: {},
+    TZ: {
+        name: string;
+        offset: number;
+        text: string;
+    },
     schedule?: Schedule;
     ExtSchedule: ExternalSchedule;
     isCharity: boolean,

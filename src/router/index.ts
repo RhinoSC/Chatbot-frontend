@@ -65,6 +65,16 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.bids',
         component: () => import('../views/trackerViewer/bid/bidViewer.vue')
       },
+      {
+        path: 'donations',
+        name: 'tracker.donations',
+        component: () => import('../views/trackerViewer/donation/donationViewer.vue')
+      },
+      // {
+      //   path: 'prizes',
+      //   name: 'tracker.prizes',
+      //   component: () => import('../views/trackerViewer/prizes/prizesViewer.vue')
+      // },
     ]
   },
   {

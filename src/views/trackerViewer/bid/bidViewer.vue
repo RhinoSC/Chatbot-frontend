@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(bid, i) in bids" :key="i" @click="bidSum(bid)">
+                    <tr v-for="(bid, i) in bids" :key="i" @click="bidSummerize(bid)">
                         <td>{{ bid.name }}</td>
                         <td>{{ bid.game }}</td>
                         <td>{{ bid.description }}</td>
@@ -62,9 +62,6 @@
                             </div>
                         </div>
                     </template>
-                    <div>
-
-                    </div>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -126,13 +123,13 @@ export default Vue.extend({
         currencyFormat(amount: number) {
             return currencyFormat(amount)
         },
-        bidSum(bid: Bid) {
+        bidSummerize(bid: Bid) {
             this.lookingBid = bid
             this.lookDialog = true
         }
     },
     watch: {
-        lookDialog(){
+        lookDialog() {
             // console.log(this.lookDialog)
         }
     }
