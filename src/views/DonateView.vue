@@ -193,8 +193,9 @@ export default Vue.extend({
                 v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
             ],
             amountRules: [
+                v => /(\d{1}(\.|,)\d{2})|(\d)/.test(v) || 'E.G: try 3.70 or try 4',
+                v => v >= this.event.isCharityData.minDonation || `Has to be greater than ${this.event.isCharityData.minDonation}`,
                 v => !!v || 'Amount is required',
-                v => v >= this.event.isCharityData.minDonation || `Has to be greater than ${this.event.isCharityData.minDonation}`
             ],
             requiredRules: [
                 v => !!v || 'Amount is required',
@@ -289,7 +290,7 @@ export default Vue.extend({
 
                 this.updatedRun.row.bids[this.selectedBidIdx] = bid
                 console.log(this.updatedRun.row)
-                await trackerRun.updateRun(this.updatedRun.row)
+                await trackerRun.updateRunWithBidsAndTeams(this.updatedRun.row)
             }
 
             this.newDonation.time = new Date().getTime()
@@ -347,7 +348,7 @@ export default Vue.extend({
     margin-left: 0 !important;
 }
 
-.sidebar-component {
-    display: none;
-}
+// .sidebar-component {
+//     display: none;
+// }
 </style>

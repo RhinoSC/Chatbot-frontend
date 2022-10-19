@@ -42,6 +42,14 @@ export default {
             return error
         }
     },
+    async updateRunWithBidsAndTeams(run: Run): Promise<any> {
+        try {
+            const res = await api.backend.put(`api/tracker/run/advanced/${run._id}`, { run })
+            return res
+        } catch (error) {
+            return error
+        }
+    },
     async deleteRun(id: string): Promise<any> {
         try {
             const res = await api.backend.delete(`api/tracker/run/${id}`)

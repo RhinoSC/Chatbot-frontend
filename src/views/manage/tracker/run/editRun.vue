@@ -209,7 +209,7 @@ export default Vue.extend({
       this.newRun.estimate = stringTimeToMS(this.newRun.estimateS)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
-      const res = await trackerRun.updateRun(this.newRun)
+      const res = await trackerRun.updateRunWithBidsAndTeams(this.newRun)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/runs')

@@ -74,7 +74,7 @@
             <v-row>
               <v-spacer></v-spacer>
               <v-btn color="warning" class="mr-5" link :to="'/manage/tracker/bids'">Cancel</v-btn>
-              <v-btn color="success" class="mr-5" @click="addBid">Save</v-btn>
+              <v-btn color="success" class="mr-5" @click="addBid" :disabled="true">Save</v-btn>
             </v-row>
           </v-col>
         </v-form>
@@ -118,13 +118,18 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        openBid: false
+        openBid: false,
+        runId: "",
+        eventId: ""
       }
     }
   },
   async created() {
-    // const eventRes = await trackerEvent.getEvents()
-    // this.events = eventRes
+    const eventRes = await trackerEvent.getEvents()
+
+    if (eventRes) {
+      this.events = eventRes
+    }
   },
   computed: {
     isBidwar() {
@@ -142,7 +147,7 @@ export default Vue.extend({
     getRunArray() {
       if (this.selectedEvent.schedule && this.selectedEvent.schedule.rows.length > 0) {
         this.runs = this.selectedEvent.schedule.rows.map(scheduleRow => scheduleRow.row)
-        this.runs = [...this.selectedEvent.schedule.availableRuns]
+        this.runs = [...this.selectedEvent.schedule.availableRuns, ...this.runs]
       }
     },
     modifyAllowNewBids() {

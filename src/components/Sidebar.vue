@@ -50,11 +50,12 @@ export default Vue.extend({
   data() {
     return {
       items: [
-        { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
-        { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
-        { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
+        // { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
+        // { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
+        // { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
         { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
-        { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
+        { icon: 'mdi-calendar-account', name: 'Tracker Visualizer', path: '/tracker' },
+        // { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
       ],
       itemsGroups: [
         {

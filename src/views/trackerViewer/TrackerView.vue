@@ -4,7 +4,7 @@
     <v-row justify="center" class="mt-5">
       <v-btn color="info" class="mr-2" link :to="'/tracker/schedule'">Schedule</v-btn>
       <v-btn color="info" class="mr-2" link :to="'/tracker/bids'">Bids</v-btn>
-      <v-btn color="info" class="mr-2" link :to="'/tracker/runs'">Donations</v-btn>
+      <v-btn color="info" class="mr-2" link :to="'/tracker/donations'">Donations</v-btn>
       <v-btn color="info" class="mr-2" link :to="'/tracker/prizes'">Prizes</v-btn>
     </v-row>
     <router-view class="mt-10"></router-view>
@@ -37,3 +37,13 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss">
+// .v-application .ml-16 {
+//   margin-left: 0 !important;
+// }
+
+// .sidebar-component {
+//   display: none;
+// }
+</style>

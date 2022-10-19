@@ -109,13 +109,102 @@
                 Current: {{currencyFormat(addedBid.current)}} / {{currencyFormat(addedBid.goal)}}
               </v-col>
             </v-list-item-content>
-            <v-btn color="info" @click="modifyBidState(addedBid)">{{computeBidState(addedBid)}}</v-btn>
+            <!-- <v-btn color="info" @click="modifyBidState(addedBid)">{{computeBidState(addedBid)}}</v-btn> -->
+            <v-btn color="info" class="mr-1" small @click="openEditDialog(addedBid)">Edit</v-btn>
+            <v-btn :color="computeBidState(addedBid) === 'Enable' ? 'success' : 'warning'"
+              @click="modifyBidState(addedBid)" small>{{computeBidState(addedBid)}}</v-btn>
             <v-spacer></v-spacer>
             <v-list-item-icon>
               <v-icon @click="confirmRemoveBid(addedBid)">mdi-close-circle</v-icon>
             </v-list-item-icon>
           </v-list-item>
         </v-list>
+        <v-dialog v-model="editDialog" width="500">
+          <v-card>
+            <v-card-title primary-title>
+              Edit bid: {{ tryEditBid.name }}
+            </v-card-title>
+            <v-card-text>
+              <v-col>
+                <v-row>
+                  <v-col>
+                    <v-text-field name="name" label="Bid name" id="bidName" v-model="tryEditBid.name">
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-textarea outlined name="input-7-4" label="Description" v-model="tryEditBid.description">
+                    </v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <template v-if="tryEditBid.type !== 0">
+                    <v-col>
+                      <v-row>
+                        <v-col>
+                          <v-text-field name="bidGoal" label="Current amount" id="bidCurrent" type="number"
+                            v-model="tryEditBid.current" outlined>
+                          </v-text-field>
+                        </v-col>
+                        <v-col>
+                          <v-text-field name="bidGoal" label="Goal amount" id="bidGoal" v-model="tryEditBid.goal"
+                            type="number" outlined>
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </template>
+                  <template v-else>
+                    <v-col>
+                      <v-row>
+                        <v-col>
+                          <v-text-field name="bidCurrent" label="Current amount" id="bidCurrent" type="number"
+                            v-model="tryEditBid.current" outlined readonly>
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <h2 class="mb-5">Options</h2>
+                          <v-row>
+                            <v-text-field name="newOption" label="New option" id="newOption" type="text"
+                              v-model="editNewOption" solo outlined dense>
+                            </v-text-field>
+                            <v-btn color="success" icon @click="addEditNewOption()">
+                              <v-icon>mdi-check-circle</v-icon>
+                            </v-btn>
+                          </v-row>
+                          <v-list>
+                            <v-list-item v-for="(option, i) in tryEditBid.bids" :key="i">
+                              <v-list-item-icon>
+                                <v-icon>mdi-arrow-right</v-icon>
+                              </v-list-item-icon>
+                              <v-list-item-content>
+                                <v-list-item-title> {{ option.name }} </v-list-item-title>
+                                <v-text-field name="optionCurrent" label="Current amount" id="bidCurrent" type="number"
+                                  v-model="option.current" solo outlined dense @change="updateCurrentAmount()">
+                                </v-text-field>
+                              </v-list-item-content>
+                              <v-spacer></v-spacer>
+                              <v-btn color="error" icon @click="deleteOption(i)">
+                                <v-icon>mdi-close-circle</v-icon>
+                              </v-btn>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </template>
+                </v-row>
+              </v-col>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="success" link @click="editBid()">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog v-model="deleteDialog" width="500">
           <v-card>
             <v-card-title primary-title>
@@ -176,8 +265,11 @@ export default Vue.extend({
   },
   data() {
     return {
+      editDialog: false,
       deleteDialog: false,
       deleteAllDialog: false,
+      tryEditBid: {} as Bid,
+      editNewOption: "",
       tryDeleteBid: {} as Bid,
       newBidOption: "",
       events: [] as Event[],
@@ -199,7 +291,9 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        openBid: true
+        openBid: true,
+        runId: "",
+        eventId: "",
       }
     }
   },
@@ -212,7 +306,7 @@ export default Vue.extend({
   computed: {
     isBidwar() {
       return this.newBid.type != 0 ? true : false
-    }
+    },
   },
   methods: {
     currencyFormat(amount: number) {
@@ -254,10 +348,26 @@ export default Vue.extend({
         type: goalType.goal,
         newBids: false,
         bids: [] as any,
-        openBid: true
+        openBid: true,
+        runId: "",
+        eventId: ""
       }
       this.newBid.game = this.$props.gameName
       this.$emit('populateBids', this.addedBids)
+    },
+    openEditDialog(tryEditBid: Bid) {
+      this.editDialog = true
+      this.tryEditBid = tryEditBid
+      this.sortedOptions()
+    },
+    editBid() {
+      // console.log('hola')
+      const idx = this.addedBids.findIndex(bid => bid._id === this.tryEditBid._id)
+      if (idx !== -1) {
+        this.addedBids[idx] = this.tryEditBid
+      }
+      this.editDialog = false
+      // this.tryEditBid = tryEditBid
     },
     confirmClearBids() {
       this.deleteAllDialog = true
@@ -275,12 +385,28 @@ export default Vue.extend({
       addedBid.openBid = !addedBid.openBid
       // console.log(this.addedBids)
       this.$emit('populateBids', this.addedBids)
+    },
+    sortedOptions() {
+      return this.tryEditBid.bids.sort((a: any, b: any) => parseFloat(b.current) - parseFloat(a.current))
+    },
+    updateCurrentAmount() {
+      this.tryEditBid.current = 0
+      this.tryEditBid.bids.forEach((element: { current: any }) => this.tryEditBid.current += Number(element.current))
+    },
+    deleteOption(i: number) {
+      this.tryEditBid.bids.splice(i, 1)
+      this.updateCurrentAmount()
+    },
+    addEditNewOption() {
+      this.tryEditBid.bids.push({ name: this.editNewOption, current: 0 })
+      this.editNewOption = ""
     }
   },
   watch: {
     gameName() {
       this.newBid.game = this.$props.gameName
-    }
+    },
+
   }
 })
 </script>

@@ -15,11 +15,17 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'home-view',
+    meta: {
+      hideNavbar: true,
+    },
     component: HomeView
   },
   {
     path: '/about',
     name: 'about',
+    meta: {
+      hideNavbar: true,
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -28,17 +34,26 @@ const routes: Array<RouteConfig> = [
   {
     path: '/donate',
     name: 'Donate',
+    meta: {
+      hideNavbar: true,
+    },
     component: () => import(/* webpackChunkName: "about" */ '../views/DonateView.vue')
   },
   {
     path: '/layout',
     name: 'Layout',
+    meta: {
+      hideNavbar: true,
+    },
     component: Layout
   },
   {
     path: '/tracker',
     name: 'tracker-view',
     component: Tracker,
+    meta: {
+      hideNavbar: true,
+    },
     children: [
       {
         path: 'schedule',
