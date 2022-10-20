@@ -105,7 +105,7 @@ export default Vue.extend({
         },
         donationSummerize(donation: Donation) {
             this.lookingDonation = donation
-            console.log(this.lookingDonation)
+            // console.log(this.lookingDonation)
             this.lookDialog = true
         },
         getDateFromMS(ms: number) {

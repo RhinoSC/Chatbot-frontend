@@ -156,7 +156,7 @@ export default Vue.extend({
       // console.log(this.newRun)
       const res = await trackerRun.createWithBidsAndTeams(this.axios, this.newRun)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/runs')
       }
     },

@@ -242,7 +242,7 @@ export default Vue.extend({
             await loadCustomScript({
                 url: "https://www.paypalobjects.com/donate/sdk/donate-sdk.js",
             });
-            console.log("successfully loaded the custom script");
+            // console.log("successfully loaded the custom script");
         } catch (error) {
             console.error("failed to load the custom script", error);
         }

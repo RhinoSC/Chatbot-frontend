@@ -217,12 +217,12 @@ export default Vue.extend({
       // console.log(this.newEvent)
       const res = await trackerEvent.postEvent(this.axios, this.newEvent)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/events')
       }
     },
     getMinDate(end: boolean) {
-      console.log(end)
+      // console.log(end)
       let today = new Date()
       let dd = String(today.getDate()).padStart(2, '0');
       let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

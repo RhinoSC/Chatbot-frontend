@@ -159,7 +159,7 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="error" link @click="deleteEvent">Delete</v-btn>
+                                    <v-btn color="error" link @click="deleteEvent" :disabled="true">Delete</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -266,7 +266,7 @@ export default Vue.extend({
             if (this.oldEvent._id) {
                 const res = await trackerEvent.deleteEvent(this.axios, this.oldEvent._id)
                 if (res) {
-                    console.log(res)
+                    // console.log(res)
                     this.$router.push('/manage/tracker/events')
                 }
             }
@@ -280,14 +280,15 @@ export default Vue.extend({
 
             this.newEvent = this.oldEvent
 
+            // console.log(this.newEvent.isCharityData.totalDonated)
             const res = await trackerEvent.updateEvent(this.axios, this.newEvent)
             if (res) {
-                console.log(res)
+                // console.log(res)
                 this.$router.push('/manage/tracker')
             }
         },
         getMinDate(end: boolean) {
-            console.log(end)
+            // console.log(end)
             let today = new Date()
             let dd = String(today.getDate()).padStart(2, '0');
             let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

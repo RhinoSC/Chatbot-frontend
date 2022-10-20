@@ -140,7 +140,7 @@ export default Vue.extend({
       // eslint-disable-next-line
       const res = await trackerBid.postBid(this.axios, this.newBid)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/bids')
       }
     },

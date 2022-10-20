@@ -87,7 +87,7 @@ export default Vue.extend({
         this.newPrize.eventId = this.selectedEvent._id
       const res = await trackerPrize.postPrize(this.axios, this.newPrize)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/prizes')
       }
     },

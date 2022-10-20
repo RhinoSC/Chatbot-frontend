@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 export default {
     async getEvents(API: AxiosInstance): Promise<any> {
         try {
-            const res = await API.get('api/tracker/event/')
+            const res = await API.get('api/tracker/event/all')
             return res.data
         } catch (error) {
             return error
@@ -12,7 +12,7 @@ export default {
 
     async getOneEvent(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.get(`api/tracker/event/${id}`)
+            const res = await API.get(`api/tracker/event/one/${id}`)
             return res.data
         } catch (error) {
             return error
@@ -29,7 +29,7 @@ export default {
     },
     async postEvent(API: AxiosInstance, event: Event): Promise<any> {
         try {
-            const res = await API.post('api/tracker/event/', { event })
+            const res = await API.post('api/tracker/event/one', { event })
             return res
         } catch (error) {
             return error
@@ -37,7 +37,7 @@ export default {
     },
     async updateEvent(API: AxiosInstance, event: Event): Promise<any> {
         try {
-            const res = await API.put(`api/tracker/event/${event._id}`, { event })
+            const res = await API.put(`api/tracker/event/one/${event._id}`, { event })
             return res
         } catch (error) {
             return error
@@ -45,7 +45,16 @@ export default {
     },
     async deleteEvent(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.delete(`api/tracker/event/${id}`)
+            const res = await API.delete(`api/tracker/event/one/${id}`)
+            return res
+        } catch (error) {
+            return error
+        }
+    },
+
+    async getTotalDonated(API: AxiosInstance, id: string): Promise<any> {
+        try {
+            const res = await API.get(`api/tracker/event/one/${id}/total-donated`)
             return res
         } catch (error) {
             return error

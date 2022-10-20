@@ -87,7 +87,7 @@ export default Vue.extend({
     async deleteUser() {
       const res = await trackerUser.deleteUser(this.axios, this.oldUser._id)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/users')
       }
     },
@@ -110,15 +110,15 @@ export default Vue.extend({
           return team
         })
         if (update) {
-          console.log(run, update)
+          // console.log(run, update)
           await trackerRun.updateRunWithBidsAndTeams(this.axios, run)
         }
       })
 
       const res = await trackerUser.updateUser(this.axios, this.newUser)
       if (res) {
-        console.log(res)
-        //   this.$router.push('/manage/tracker/users')
+        // console.log(res)
+        this.$router.push('/manage/tracker/users')
       }
     },
   },

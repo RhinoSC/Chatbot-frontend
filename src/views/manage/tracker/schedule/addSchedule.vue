@@ -84,7 +84,7 @@ export default Vue.extend({
       // console.log(this.newSchedule)
       const res = await trackerSchedule.postSchedule(this.axios, this.newSchedule)
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.$router.push('/manage/tracker/schedules')
       }
     },

@@ -224,7 +224,7 @@ export default Vue.extend({
       if (this.oldDonation._id) {
         const res = await trackerDonation.deleteDonation(this.axios, this.oldDonation._id)
         if (res) {
-          console.log(res)
+          // console.log(res)
           this.$router.push('/manage/tracker/donations')
         }
       }

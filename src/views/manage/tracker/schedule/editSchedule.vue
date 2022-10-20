@@ -148,7 +148,7 @@ export default Vue.extend({
 
             const res = await trackerSchedule.deleteSchedule(this.axios, this.oldSchedule._id)
             if (res) {
-                console.log(res)
+                // console.log(res)
                 this.$router.push('/manage/tracker/schedules')
             }
         },
@@ -160,12 +160,12 @@ export default Vue.extend({
 
             this.newSchedule = this.oldSchedule
 
-            console.log(this.newSchedule)
+            // console.log(this.newSchedule)
 
             const res = await trackerSchedule.updateSchedule(this.axios, this.newSchedule)
             if (res) {
-                console.log(res)
-                //   this.$router.push('/manage/tracker/schedules')
+                // console.log(res)
+                this.$router.push('/manage/tracker/schedules')
             }
         },
         saveRuns($event: any) {

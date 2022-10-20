@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios'
 export default {
     async getBids(API: AxiosInstance): Promise<any> {
         try {
-            const res = await API.get('api/tracker/bid/')
+            const res = await API.get('api/tracker/bid/all')
             return res.data
         } catch (error) {
             return error
@@ -13,7 +13,7 @@ export default {
 
     async getOneBid(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.get(`api/tracker/bid/${id}`)
+            const res = await API.get(`api/tracker/bid/one/${id}`)
             return res.data
         } catch (error) {
             return error
@@ -21,7 +21,7 @@ export default {
     },
     async postBid(API: AxiosInstance, bid: Bid): Promise<any> {
         try {
-            const res = await API.post('api/tracker/bid/', { bid })
+            const res = await API.post('api/tracker/bid/one', { bid })
             return res
         } catch (error) {
             return error
@@ -29,7 +29,7 @@ export default {
     },
     async updateBid(API: AxiosInstance, bid: Bid): Promise<any> {
         try {
-            const res = await API.put(`api/tracker/bid/${bid._id}`, { bid })
+            const res = await API.put(`api/tracker/bid/one/${bid._id}`, { bid })
             return res
         } catch (error) {
             return error
@@ -37,7 +37,7 @@ export default {
     },
     async deleteBid(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.delete(`api/tracker/bid/${id}`)
+            const res = await API.delete(`api/tracker/bid/one/${id}`)
             return res
         } catch (error) {
             return error

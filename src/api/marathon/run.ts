@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 export default {
     async getRuns(API: AxiosInstance): Promise<any> {
         try {
-            const res = await API.get('api/tracker/run/')
+            const res = await API.get('api/tracker/run/all')
             return res.data
         } catch (error) {
             return error
@@ -12,7 +12,7 @@ export default {
 
     async getOneRun(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.get(`api/tracker/run/${id}`)
+            const res = await API.get(`api/tracker/run/one/${id}`)
             return res.data
         } catch (error) {
             return error
@@ -20,7 +20,7 @@ export default {
     },
     async postRun(API: AxiosInstance, run: Run): Promise<any> {
         try {
-            const res = await API.post('api/tracker/run/', { run })
+            const res = await API.post('api/tracker/run/one', { run })
             return res
         } catch (error) {
             return error
@@ -36,7 +36,7 @@ export default {
     },
     async updateRun(API: AxiosInstance, run: Run): Promise<any> {
         try {
-            const res = await API.put(`api/tracker/run/${run._id}`, { run })
+            const res = await API.put(`api/tracker/run/one/${run._id}`, { run })
             return res
         } catch (error) {
             return error
@@ -44,7 +44,7 @@ export default {
     },
     async updateRunWithBidsAndTeams(API: AxiosInstance, run: Run): Promise<any> {
         try {
-            const res = await API.put(`api/tracker/run/advanced/${run._id}`, { run })
+            const res = await API.put(`api/tracker/run/one/advanced/${run._id}`, { run })
             return res
         } catch (error) {
             return error
@@ -52,7 +52,7 @@ export default {
     },
     async deleteRun(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await API.delete(`api/tracker/run/${id}`)
+            const res = await API.delete(`api/tracker/run/one/${id}`)
             return res
         } catch (error) {
             return error

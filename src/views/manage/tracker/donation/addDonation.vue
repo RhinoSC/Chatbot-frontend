@@ -166,7 +166,7 @@ export default Vue.extend({
           }
 
           this.updatedRun.row.bids[this.selectedBidIdx] = bid
-          console.log(this.updatedRun.row)
+          // console.log(this.updatedRun.row)
           await trackerRun.updateRunWithBidsAndTeams(this.axios, this.updatedRun.row)
         }
       }
