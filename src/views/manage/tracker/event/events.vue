@@ -17,30 +17,30 @@
     </div>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerEvent from '@/api/marathon/event'
-  import Event from '@/utils/types/Event'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              events: [] as Event[]
-          }
-      },
-      async created() {
-          const res = await trackerEvent.getEvents()
-          // console.log('llegue')
-          // console.log(res)
-          this.events = res
-      },
-      mounted() {
-          // console.log('hola')
-      }
-  })
-  </script>
+<script lang="ts">
+import Vue from 'vue'
+import trackerEvent from '@/api/marathon/event'
+import Event from '@/utils/types/Event'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            events: [] as Event[]
+        }
+    },
+    async created() {
+        const res = await trackerEvent.getEvents(this.axios)
+        // console.log('llegue')
+        // console.log(res)
+        this.events = res
+    },
+    mounted() {
+        // console.log('hola')
+    }
+})
+</script>
   

@@ -34,7 +34,7 @@
           }
       },
       async created() {
-            const res = await trackerSchedule.getSchedules()
+            const res = await trackerSchedule.getSchedules(this.axios)
             // console.log('llegue')
             // console.log(res)
             this.schedules = res

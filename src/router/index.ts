@@ -8,6 +8,7 @@ import Dashboard from '../views/manage/DashboardView.vue'
 import Commands from '../views/manage/CommandsView.vue'
 import ScheduleManager from '../views/manage/ScheduleManagerView.vue'
 import TrackerManager from '../views/manage/tracker/TrackerManagerView.vue'
+import { authGuard } from '../auth/authGuard';
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,15 @@ const routes: Array<RouteConfig> = [
       hideNavbar: true,
     },
     component: HomeView
+  },
+  {
+    path: '/profile',
+    name: 'profile-view',
+    meta: {
+      hideNavbar: true,
+    },
+    beforeEnter: authGuard,
+    component: () => import('../views/ProfileView.vue'),
   },
   {
     path: '/about',
@@ -92,26 +102,31 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage',
     component: Manage,
+    beforeEnter: authGuard,
   },
   {
     path: '/manage/dashboard',
     name: 'manage.dashboard',
-    component: Dashboard
+    component: Dashboard,
+    beforeEnter: authGuard,
   },
   {
     path: '/manage/commands',
     name: 'manage.commands',
-    component: Commands
+    component: Commands,
+    beforeEnter: authGuard,
   },
   {
     path: '/manage/schedule',
     name: 'manage.schedule',
-    component: ScheduleManager
+    component: ScheduleManager,
+    beforeEnter: authGuard,
   },
   {
     path: '/manage/tracker',
     name: 'manage.tracker',
     component: TrackerManager,
+    beforeEnter: authGuard,
     children: [
       {
         path: 'events',
@@ -155,10 +170,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/events/edit/:id',
     name: 'manage.tracker.event',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/event/editEvent.vue')
   },
   {
     path: '/manage/tracker/events/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/event/addEvent.vue')
   },
 
@@ -166,10 +183,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/schedules/edit/:id',
     name: 'manage.tracker.schedules',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/schedule/editSchedule.vue')
   },
   {
     path: '/manage/tracker/schedules/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/schedule/addSchedule.vue')
   },
 
@@ -177,10 +196,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/runs/edit/:id',
     name: 'manage.tracker.runs',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/run/editRun.vue')
   },
   {
     path: '/manage/tracker/runs/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/run/addRun.vue')
   },
 
@@ -188,10 +209,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/users/edit/:id',
     name: 'manage.tracker.users',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/user/editUser.vue')
   },
   {
     path: '/manage/tracker/users/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/user/addUser.vue')
   },
 
@@ -200,10 +223,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/prizes/edit/:id',
     name: 'manage.tracker.prizes',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/prize/editPrize.vue')
   },
   {
     path: '/manage/tracker/prizes/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/prize/addPrize.vue')
   },
 
@@ -211,10 +236,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/bids/edit/:id',
     name: 'manage.tracker.bids',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/bid/editBid.vue')
   },
   {
     path: '/manage/tracker/bids/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/bid/addBid.vue')
   },
 
@@ -222,10 +249,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/donations/edit/:id',
     name: 'manage.tracker.donations',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/donation/editDonation.vue')
   },
   {
     path: '/manage/tracker/donations/add',
+    beforeEnter: authGuard,
     component: () => import('../views/manage/tracker/donation/addDonation.vue')
   },
 

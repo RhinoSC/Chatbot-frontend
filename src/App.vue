@@ -18,6 +18,10 @@ export default Vue.extend({
   data: () => ({
     //
   }),
+  // async mounted() {
+  //   const res = await this.axios.get('/api/tracker/bid/')
+  //   console.log(res)
+  // }
 });
 </script>
 

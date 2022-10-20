@@ -118,9 +118,9 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerSchedule.getOneSchedule(this.$route.params.id)
+        const res = await trackerSchedule.getOneSchedule(this.axios, this.$route.params.id)
         this.oldSchedule = res[0]
-        const eventRes = await trackerEvent.getEvents()
+        const eventRes = await trackerEvent.getEvents(this.axios)
         this.events = eventRes
         let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
         this.selectedEvent = selectedEvent
@@ -137,16 +137,16 @@ export default Vue.extend({
 
             this.oldSchedule.availableRuns.forEach(async (row) => {
                 if (row._id)
-                    await trackerRun.deleteRun(row._id)
+                    await trackerRun.deleteRun(this.axios, row._id)
 
             })
 
             this.oldSchedule.rows.forEach(async (scheduleRow) => {
                 if (scheduleRow.row._id)
-                    await trackerRun.deleteRun(scheduleRow.row._id)
+                    await trackerRun.deleteRun(this.axios, scheduleRow.row._id)
             })
 
-            const res = await trackerSchedule.deleteSchedule(this.oldSchedule._id)
+            const res = await trackerSchedule.deleteSchedule(this.axios, this.oldSchedule._id)
             if (res) {
                 console.log(res)
                 this.$router.push('/manage/tracker/schedules')
@@ -162,7 +162,7 @@ export default Vue.extend({
 
             console.log(this.newSchedule)
 
-            const res = await trackerSchedule.updateSchedule(this.newSchedule)
+            const res = await trackerSchedule.updateSchedule(this.axios, this.newSchedule)
             if (res) {
                 console.log(res)
                 //   this.$router.push('/manage/tracker/schedules')

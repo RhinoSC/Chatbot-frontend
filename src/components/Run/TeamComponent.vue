@@ -95,7 +95,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerUser.getUsers()
+        const res = await trackerUser.getUsers(this.axios)
         this.users = res
         this.createArrayOfTeams()
     },

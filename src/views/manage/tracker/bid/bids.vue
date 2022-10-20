@@ -33,7 +33,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerBid.getBids()
+        const res = await trackerBid.getBids(this.axios)
         //   console.log('llegue')
         //   console.log(res)
         this.bids = res

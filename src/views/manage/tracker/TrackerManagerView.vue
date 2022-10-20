@@ -30,7 +30,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents()
+    const res = await trackerEvent.getEvents(this.axios)
     // console.log('llegue')
     // console.log(res)
     this.events = res

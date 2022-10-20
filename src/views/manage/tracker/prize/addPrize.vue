@@ -69,7 +69,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvents = await trackerEvent.getEvents()
+    const resEvents = await trackerEvent.getEvents(this.axios)
     this.events = resEvents
     this.isReady = true
   },
@@ -85,7 +85,7 @@ export default Vue.extend({
     async addPrize() {
       if (this.selectedEvent._id)
         this.newPrize.eventId = this.selectedEvent._id
-      const res = await trackerPrize.postPrize(this.newPrize)
+      const res = await trackerPrize.postPrize(this.axios, this.newPrize)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/prizes')

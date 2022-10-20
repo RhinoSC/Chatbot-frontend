@@ -252,7 +252,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getOneEvent(this.$route.params.id)
+        const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
         this.oldEvent = res[0]
     },
     mounted() {
@@ -260,7 +260,7 @@ export default Vue.extend({
     },
     methods: {
         async deleteEvent() {
-            const res = await trackerEvent.deleteEvent(this.oldEvent._id)
+            const res = await trackerEvent.deleteEvent(this.axios, this.oldEvent._id)
             if (res) {
                 console.log(res)
                 this.$router.push('/manage/tracker/events')
@@ -275,7 +275,7 @@ export default Vue.extend({
 
             this.newEvent = this.oldEvent
 
-            const res = await trackerEvent.updateEvent(this.newEvent)
+            const res = await trackerEvent.updateEvent(this.axios, this.newEvent)
             if (res) {
                 console.log(res)
                 this.$router.push('/manage/tracker')

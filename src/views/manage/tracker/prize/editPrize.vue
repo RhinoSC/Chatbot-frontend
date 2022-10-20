@@ -100,10 +100,10 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvents = await trackerEvent.getEvents()
+    const resEvents = await trackerEvent.getEvents(this.axios)
     this.events = resEvents
 
-    const res = await trackerPrize.getOnePrize(this.$route.params.id)
+    const res = await trackerPrize.getOnePrize(this.axios, this.$route.params.id)
     this.oldPrize = res[0]
 
     const event = this.events.find(event => this.oldPrize.eventId == event._id)
@@ -123,7 +123,7 @@ export default Vue.extend({
   },
   methods: {
     async deletePrize() {
-      const res = await trackerPrize.deletePrize(this.oldPrize._id)
+      const res = await trackerPrize.deletePrize(this.axios, this.oldPrize._id)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/prizes')
@@ -133,7 +133,7 @@ export default Vue.extend({
 
       this.newPrize = this.oldPrize
 
-      const res = await trackerPrize.updatePrize(this.newPrize)
+      const res = await trackerPrize.updatePrize(this.axios, this.newPrize)
       if (res) {
         console.log(res)
         //   this.$router.push('/manage/tracker/prizes')

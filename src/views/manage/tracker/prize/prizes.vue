@@ -33,7 +33,7 @@
           }
       },
       async created() {
-          const res = await trackerPrize.getPrizes()
+          const res = await trackerPrize.getPrizes(this.axios)
           this.prizes = res
       },
       mounted() {

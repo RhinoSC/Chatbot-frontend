@@ -175,12 +175,12 @@ export default Vue.extend({
   },
   async created() {
 
-    const run = await trackerRun.getOneRun(this.$route.params.id)
+    const run = await trackerRun.getOneRun(this.axios, this.$route.params.id)
 
     this.oldRun = run[0]
-    const schedule = await trackerSchedule.getOneSchedule(this.oldRun.scheduleId)
+    const schedule = await trackerSchedule.getOneSchedule(this.axios, this.oldRun.scheduleId)
     this.selectedSchedule = schedule[0]
-    const res = await trackerSchedule.getSchedules()
+    const res = await trackerSchedule.getSchedules(this.axios)
     this.schedules = res
 
     this.setupAsString = MStoStringTime(this.oldRun.setup)
@@ -193,7 +193,7 @@ export default Vue.extend({
   },
   methods: {
     async deleteRun() {
-      const res = await trackerRun.deleteRun(this.oldRun._id)
+      const res = await trackerRun.deleteRun(this.axios, this.oldRun._id)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/runs')
@@ -209,7 +209,7 @@ export default Vue.extend({
       this.newRun.estimate = stringTimeToMS(this.newRun.estimateS)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
-      const res = await trackerRun.updateRunWithBidsAndTeams(this.newRun)
+      const res = await trackerRun.updateRunWithBidsAndTeams(this.axios, this.newRun)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/runs')

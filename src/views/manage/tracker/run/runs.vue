@@ -33,7 +33,7 @@
           }
       },
       async created() {
-          const res = await trackerRun.getRuns()
+          const res = await trackerRun.getRuns(this.axios)
           // console.log('llegue')
           // console.log(res)
           this.runs = res

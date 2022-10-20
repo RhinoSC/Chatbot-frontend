@@ -1,42 +1,42 @@
 import Schedule from '@/utils/types/Schedule'
-import api from '../index'
+import { AxiosInstance } from 'axios'
 export default {
-    async getSchedules(): Promise<any> {
+    async getSchedules(API: AxiosInstance): Promise<any> {
         try {
-            const res = await api.backend.get('api/tracker/schedule/')
+            const res = await API.get('api/tracker/schedule/')
             return res.data
         } catch (error) {
             return error
         }
     },
 
-    async getOneSchedule(id: string): Promise<any> {
+    async getOneSchedule(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.get(`api/tracker/schedule/${id}`)
+            const res = await API.get(`api/tracker/schedule/${id}`)
             return res.data
         } catch (error) {
             return error
         }
     },
-    async postSchedule(schedule: Schedule): Promise<any> {
+    async postSchedule(API: AxiosInstance, schedule: Schedule): Promise<any> {
         try {
-            const res = await api.backend.post('api/tracker/schedule/', { schedule })
+            const res = await API.post('api/tracker/schedule/', { schedule })
             return res
         } catch (error) {
             return error
         }
     },
-    async updateSchedule(schedule: Schedule): Promise<any> {
+    async updateSchedule(API: AxiosInstance, schedule: Schedule): Promise<any> {
         try {
-            const res = await api.backend.put(`api/tracker/schedule/${schedule._id}`, { schedule })
+            const res = await API.put(`api/tracker/schedule/${schedule._id}`, { schedule })
             return res
         } catch (error) {
             return error
         }
     },
-    async deleteSchedule(id: string): Promise<any> {
+    async deleteSchedule(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.delete(`api/tracker/schedule/${id}`)
+            const res = await API.delete(`api/tracker/schedule/${id}`)
             return res
         } catch (error) {
             return error

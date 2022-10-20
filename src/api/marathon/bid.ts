@@ -1,42 +1,43 @@
 import Bid from '@/utils/types/Bid'
-import api from '../index'
+import { AxiosInstance } from 'axios'
+
 export default {
-    async getBids(): Promise<any> {
+    async getBids(API: AxiosInstance): Promise<any> {
         try {
-            const res = await api.backend.get('api/tracker/bid/')
+            const res = await API.get('api/tracker/bid/')
             return res.data
         } catch (error) {
             return error
         }
     },
 
-    async getOneBid(id: string): Promise<any> {
+    async getOneBid(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.get(`api/tracker/bid/${id}`)
+            const res = await API.get(`api/tracker/bid/${id}`)
             return res.data
         } catch (error) {
             return error
         }
     },
-    async postBid(bid: Bid): Promise<any> {
+    async postBid(API: AxiosInstance, bid: Bid): Promise<any> {
         try {
-            const res = await api.backend.post('api/tracker/bid/', { bid })
+            const res = await API.post('api/tracker/bid/', { bid })
             return res
         } catch (error) {
             return error
         }
     },
-    async updateBid(bid: Bid): Promise<any> {
+    async updateBid(API: AxiosInstance, bid: Bid): Promise<any> {
         try {
-            const res = await api.backend.put(`api/tracker/bid/${bid._id}`, { bid })
+            const res = await API.put(`api/tracker/bid/${bid._id}`, { bid })
             return res
         } catch (error) {
             return error
         }
     },
-    async deleteBid(id: string): Promise<any> {
+    async deleteBid(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.delete(`api/tracker/bid/${id}`)
+            const res = await API.delete(`api/tracker/bid/${id}`)
             return res
         } catch (error) {
             return error

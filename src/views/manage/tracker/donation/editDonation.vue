@@ -177,8 +177,8 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res: Event[] = await trackerEvent.getEvents()
-    const donRes: Donation[] = await trackerDonation.getOneDonation(this.$route.params.id)
+    const res: Event[] = await trackerEvent.getEvents(this.axios)
+    const donRes: Donation[] = await trackerDonation.getOneDonation(this.axios, this.$route.params.id)
 
     if (donRes[0]) {
       let event = res.find((event) => event._id === donRes[0].eventId)
@@ -216,13 +216,13 @@ export default Vue.extend({
 
           this.updatedRun.row.bids[this.selectedBidIdx] = bid
           // console.log(this.updatedRun.row)
-          await trackerRun.updateRun(this.updatedRun.row)
+          await trackerRun.updateRun(this.axios, this.updatedRun.row)
         }
 
       }
 
       if (this.oldDonation._id) {
-        const res = await trackerDonation.deleteDonation(this.oldDonation._id)
+        const res = await trackerDonation.deleteDonation(this.axios, this.oldDonation._id)
         if (res) {
           console.log(res)
           this.$router.push('/manage/tracker/donations')

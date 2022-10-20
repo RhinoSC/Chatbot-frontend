@@ -81,12 +81,12 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerUser.getOneUser(this.$route.params.id)
+    const res = await trackerUser.getOneUser(this.axios, this.$route.params.id)
     this.oldUser = res[0]
   },
   methods: {
     async deleteUser() {
-      const res = await trackerUser.deleteUser(this.oldUser._id)
+      const res = await trackerUser.deleteUser(this.axios, this.oldUser._id)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/users')
@@ -94,7 +94,7 @@ export default Vue.extend({
     },
     async editUser() {
 
-      const runs: Run[] = await trackerRun.getRuns()
+      const runs: Run[] = await trackerRun.getRuns(this.axios)
 
       this.newUser = this.oldUser
 
@@ -112,11 +112,11 @@ export default Vue.extend({
         })
         if (update) {
           console.log(run, update)
-          await trackerRun.updateRun(run)
+          await trackerRun.updateRunWithBidsAndTeams(this.axios, run)
         }
       })
 
-      const res = await trackerUser.updateUser(this.newUser)
+      const res = await trackerUser.updateUser(this.axios, this.newUser)
       if (res) {
         console.log(res)
         //   this.$router.push('/manage/tracker/users')
