@@ -18,9 +18,12 @@ export default Vue.extend({
   data: () => ({
     //
   }),
-  // async mounted() {
-  //   const res = await this.axios.get('/api/tracker/bid/')
-  //   console.log(res)
+  // async created() {
+  //   if (this.$auth.isAuthenticated) {
+  //     const token = await this.$auth.getTokenSilently();
+  //     console.log('lo registre')
+  //     this.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  //   }
   // }
 });
 </script>

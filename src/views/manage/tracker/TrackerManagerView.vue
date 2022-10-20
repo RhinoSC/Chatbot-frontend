@@ -34,6 +34,13 @@ export default Vue.extend({
     // console.log('llegue')
     // console.log(res)
     this.events = res
+
+    if (this.$auth.isAuthenticated) {
+      const token = await this.$auth.getTokenSilently();
+      console.log('lo registre')
+      // this.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      this.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
   },
   mounted() {
     // console.log('hola')

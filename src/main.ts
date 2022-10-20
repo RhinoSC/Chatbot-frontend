@@ -22,7 +22,8 @@ import { RawLocation } from 'vue-router'
 Vue.use(Auth0Plugin, {
   domain: process.env.VUE_APP_AUTH0_DOMAIN,
   clientId: process.env.VUE_APP_AUTH0_CLIENTID,
-  serverUrl: process.env.VUE_APP_AUTH0_CLIENT_ORIGIN_URL,
+  // serverUrl: process.env.VUE_APP_AUTH0_CLIENT_ORIGIN_URL,
+  audience: process.env.VUE_APP_AUTH0_AUTH0_AUDIENCE,
   onRedirectCallback: (appState: { targetUrl: RawLocation }) => {
     router.push(
       appState && appState.targetUrl
