@@ -1,90 +1,91 @@
 <template>
-  <div class="ma-0 pa-0">
-    <v-card>
-      <v-navigation-drawer permanent expand-on-hover app @transitionend="hideBtn()">
-        <v-list>
-          <v-list-item link to="/home">
-            <v-list-item-content>
-              <v-card>
-                <v-img alt="SRE logo" src="../assets/logo_plano.png" style="background-color: rgb(100,100,100)"></v-img>
-                <v-card-actions :class="!expanded ? 'd-none' : 'd-flex justify-center'">
-                  <v-btn color="error" x-small @click="logout()">Log out</v-btn>
-                </v-card-actions>
-              </v-card>
-              <!-- <v-list-item-title class="text-h6">
-                SRE
-              </v-list-item-title> -->
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+    <div class="ma-0 pa-0">
+        <v-card>
+            <v-navigation-drawer permanent expand-on-hover app @transitionend="hideBtn()">
+                <v-list>
+                    <v-list-item link to="/home">
+                        <v-list-item-content>
+                            <v-card>
+                                <v-img alt="SRE logo" src="../assets/logo_plano.png"
+                                    style="background-color: rgb(100,100,100)"></v-img>
+                                <v-card-actions :class="!expanded ? 'd-none' : 'd-flex justify-center'">
+                                    <v-btn color="error" x-small @click="logout()">Log out</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                            <!-- <v-list-item-title class="text-h6">
+                  SRE
+                </v-list-item-title> -->
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
 
-        <v-divider></v-divider>
+                <v-divider></v-divider>
 
-        <v-list nav dense>
-          <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-          </v-list-item>
-          <!-- <v-list-group :value="true" v-for="(itemGroup, i) in itemsGroups" :key="i">
-            <template v-slot:activator>
-              <v-list-item-icon>
-                <v-icon>{{ itemGroup.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>{{ itemGroup.name }}</v-list-item-title>
-            </template>
-            <v-list-item v-for="(subItem, subIndex) in itemGroup.childs" :key="subIndex" link :to="subItem.path">
-              <v-list-item-icon>
-                <v-icon>{{ subItem.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>{{ subItem.name }}</v-list-item-title>
-            </v-list-item>
-          </v-list-group> -->
-        </v-list>
-      </v-navigation-drawer>
-    </v-card>
-  </div>
+                <v-list nav dense>
+                    <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    </v-list-item>
+                    <!-- <v-list-group :value="true" v-for="(itemGroup, i) in itemsGroups" :key="i">
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon>{{ itemGroup.icon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ itemGroup.name }}</v-list-item-title>
+              </template>
+              <v-list-item v-for="(subItem, subIndex) in itemGroup.childs" :key="subIndex" link :to="subItem.path">
+                <v-list-item-icon>
+                  <v-icon>{{ subItem.icon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ subItem.name }}</v-list-item-title>
+              </v-list-item>
+            </v-list-group> -->
+                </v-list>
+            </v-navigation-drawer>
+        </v-card>
+    </div>
 </template>
-
+  
 <script lang="ts">
 import { ref } from 'vue'
 
 import Vue from "vue";
 export default Vue.extend({
-  name: "SideBar",
-  data() {
-    return {
-      expanded: false,
-      items: [
-        // { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
-        // { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
-        // { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
-        { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
-        { icon: 'mdi-calendar-account', name: 'Tracker Visualizer', path: '/tracker' },
-        // { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
-      ],
-      itemsGroups: [
-        {
-          icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker', childs: [
-            { icon: 'mdi-calendar', name: 'Events', path: '/manage/tracker/events' }]
-        },
-      ],
-    }
-  },
-  methods: {
-    hideBtn() {
-      this.expanded = !this.expanded
+    name: "Side-bar",
+    data() {
+        return {
+            expanded: false,
+            items: [
+                // { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
+                // { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
+                // { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
+                { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
+                { icon: 'mdi-calendar-account', name: 'Tracker Visualizer', path: '/tracker' },
+                // { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
+            ],
+            itemsGroups: [
+                {
+                    icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker', childs: [
+                        { icon: 'mdi-calendar', name: 'Events', path: '/manage/tracker/events' }]
+                },
+            ],
+        }
     },
-    logout() {
-      this.$auth.logout({
-        returnTo: window.location.origin
-      });
-    }
-  },
+    methods: {
+        hideBtn() {
+            this.expanded = !this.expanded
+        },
+        logout() {
+            this.$auth.logout({
+                returnTo: window.location.origin
+            });
+        }
+    },
 });
 </script>
-
+  
 <style lang="scss" scoped>
 // .link {
 //   display: flex;

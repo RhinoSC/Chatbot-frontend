@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Sidebar from "./components/SideBar.vue";
+import Sidebar from "./components/Sidebar.vue";
 
 export default Vue.extend({
   name: 'App',
