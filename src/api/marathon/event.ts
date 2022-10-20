@@ -1,51 +1,51 @@
 import Event from '@/utils/types/Event'
-import api from '../index'
+import { AxiosInstance } from 'axios'
 export default {
-    async getEvents(): Promise<any> {
+    async getEvents(API: AxiosInstance): Promise<any> {
         try {
-            const res = await api.backend.get('api/tracker/event/')
+            const res = await API.get('api/tracker/event/')
             return res.data
         } catch (error) {
             return error
         }
     },
 
-    async getOneEvent(id: string): Promise<any> {
+    async getOneEvent(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.get(`api/tracker/event/${id}`)
+            const res = await API.get(`api/tracker/event/${id}`)
             return res.data
         } catch (error) {
             return error
         }
     },
 
-    async getOneEventByName(name: string): Promise<any> {
+    async getOneEventByName(API: AxiosInstance, name: string): Promise<any> {
         try {
-            const res = await api.backend.get(`api/tracker/event/name/${name}`)
+            const res = await API.get(`api/tracker/event/name/${name}`)
             return res.data
         } catch (error) {
             return error
         }
     },
-    async postEvent(event: Event): Promise<any> {
+    async postEvent(API: AxiosInstance, event: Event): Promise<any> {
         try {
-            const res = await api.backend.post('api/tracker/event/', { event })
+            const res = await API.post('api/tracker/event/', { event })
             return res
         } catch (error) {
             return error
         }
     },
-    async updateEvent(event: Event): Promise<any> {
+    async updateEvent(API: AxiosInstance, event: Event): Promise<any> {
         try {
-            const res = await api.backend.put(`api/tracker/event/${event._id}`, { event })
+            const res = await API.put(`api/tracker/event/${event._id}`, { event })
             return res
         } catch (error) {
             return error
         }
     },
-    async deleteEvent(id: string): Promise<any> {
+    async deleteEvent(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.delete(`api/tracker/event/${id}`)
+            const res = await API.delete(`api/tracker/event/${id}`)
             return res
         } catch (error) {
             return error

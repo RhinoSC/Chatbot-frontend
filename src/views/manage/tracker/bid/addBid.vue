@@ -125,7 +125,8 @@ export default Vue.extend({
     }
   },
   async created() {
-    const eventRes = await trackerEvent.getEvents()
+    // eslint-disable-next-line
+    const eventRes = await trackerEvent.getEvents(this.axios)
 
     if (eventRes) {
       this.events = eventRes
@@ -138,7 +139,8 @@ export default Vue.extend({
   },
   methods: {
     async addBid() {
-      const res = await trackerBid.postBid(this.newBid)
+      // eslint-disable-next-line
+      const res = await trackerBid.postBid(this.axios, this.newBid)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/bids')

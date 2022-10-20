@@ -138,7 +138,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerSchedule.getSchedules()
+    const res = await trackerSchedule.getSchedules(this.axios)
     this.schedules = res
 
     this.isReady = true
@@ -154,7 +154,7 @@ export default Vue.extend({
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
       // console.log(this.newRun)
-      const res = await trackerRun.createWithBidsAndTeams(this.newRun)
+      const res = await trackerRun.createWithBidsAndTeams(this.axios, this.newRun)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/runs')

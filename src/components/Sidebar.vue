@@ -1,13 +1,19 @@
 <template>
   <div class="ma-0 pa-0">
     <v-card>
-      <v-navigation-drawer permanent expand-on-hover app>
+      <v-navigation-drawer permanent expand-on-hover app @transitionend="hideBtn()">
         <v-list>
           <v-list-item link to="/home">
             <v-list-item-content>
-              <v-list-item-title class="text-h6">
+              <v-card>
+                <v-img alt="SRE logo" src="../assets/logo_plano.png" style="background-color: rgb(100,100,100)"></v-img>
+                <v-card-actions :class="!expanded ? 'd-none' : 'd-flex justify-center'">
+                  <v-btn color="error" x-small @click="logout()">Log out</v-btn>
+                </v-card-actions>
+              </v-card>
+              <!-- <v-list-item-title class="text-h6">
                 SRE
-              </v-list-item-title>
+              </v-list-item-title> -->
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -49,6 +55,7 @@ export default Vue.extend({
   name: "SideBar",
   data() {
     return {
+      expanded: false,
       items: [
         // { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
         // { icon: 'mdi-console', name: 'Commands', path: '/manage/commands' },
@@ -66,7 +73,15 @@ export default Vue.extend({
     }
   },
   methods: {
-  }
+    hideBtn() {
+      this.expanded = !this.expanded
+    },
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin
+      });
+    }
+  },
 });
 </script>
 

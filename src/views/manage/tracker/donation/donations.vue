@@ -33,7 +33,7 @@
           }
       },
       async created() {
-          const res = await trackerDonation.getDonations()
+          const res = await trackerDonation.getDonations(this.axios)
         //   console.log('llegue')
         //   console.log(res)
           this.donations = res

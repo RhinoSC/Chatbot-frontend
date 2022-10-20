@@ -213,7 +213,7 @@ export default Vue.extend({
       this.newEvent.end = endDate.getTime()
 
       // console.log(this.newEvent)
-      const res = await trackerEvent.postEvent(this.newEvent)
+      const res = await trackerEvent.postEvent(this.axios, this.newEvent)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/events')

@@ -68,7 +68,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents()
+    const res = await trackerEvent.getEvents(this.axios)
     this.events = res
   },
   methods: {
@@ -80,9 +80,9 @@ export default Vue.extend({
           this.newSchedule.eventId = this.selectedEvent._id
       }
 
-      this.newSchedule.defaultSetup = stringTimeToMS(this.defaultSetupAsString)
+      this.newSchedule.defaultSetup = stringTimeToMS(this.axios, this.defaultSetupAsString)
       // console.log(this.newSchedule)
-      const res = await trackerSchedule.postSchedule(this.newSchedule)
+      const res = await trackerSchedule.postSchedule(this.axios, this.newSchedule)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/schedules')

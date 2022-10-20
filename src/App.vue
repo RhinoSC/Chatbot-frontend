@@ -18,6 +18,13 @@ export default Vue.extend({
   data: () => ({
     //
   }),
+  // async created() {
+  //   if (this.$auth.isAuthenticated) {
+  //     const token = await this.$auth.getTokenSilently();
+  //     console.log('lo registre')
+  //     this.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  //   }
+  // }
 });
 </script>
 

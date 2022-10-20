@@ -53,7 +53,7 @@ export default Vue.extend({
   },
   methods: {
     async addUser() {
-      const res = await trackerUser.postUser(this.newUser)
+      const res = await trackerUser.postUser(this.axios, this.newUser)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/users')

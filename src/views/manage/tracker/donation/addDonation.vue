@@ -140,7 +140,7 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents()
+    const res = await trackerEvent.getEvents(this.axios)
     this.event = res.find((event: { name: string }) => event.name === `${process.env.VUE_APP_EVENT}`)
 
     if (this.event) {
@@ -167,14 +167,14 @@ export default Vue.extend({
 
           this.updatedRun.row.bids[this.selectedBidIdx] = bid
           console.log(this.updatedRun.row)
-          await trackerRun.updateRunWithBidsAndTeams(this.updatedRun.row)
+          await trackerRun.updateRunWithBidsAndTeams(this.axios, this.updatedRun.row)
         }
       }
 
       this.newDonation.time = new Date().getTime()
       // console.log(this.newDonation)
       try {
-        let response = await trackerDonation.postDonation(this.newDonation)
+        let response = await trackerDonation.postDonation(this.axios, this.newDonation)
         if (response) {
           this.$router.push('/manage/tracker/donations')
         }

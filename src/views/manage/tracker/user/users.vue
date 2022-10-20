@@ -33,7 +33,7 @@
           }
       },
       async created() {
-          const res = await trackerUser.getUsers()
+          const res = await trackerUser.getUsers(this.axios)
         //   console.log('llegue')
         //   console.log(res)
           this.users = res

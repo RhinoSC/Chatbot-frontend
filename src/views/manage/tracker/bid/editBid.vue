@@ -187,7 +187,7 @@ export default Vue.extend({
   },
   methods: {
     async deleteBid() {
-      const res = await trackerBid.deleteBid(this.oldBid._id)
+      const res = await trackerBid.deleteBid(this.axios, this.oldBid._id)
       if (res) {
         console.log(res)
         this.$router.push('/manage/tracker/bids')
@@ -197,7 +197,7 @@ export default Vue.extend({
 
       this.newBid = this.oldBid
 
-      const res = await trackerBid.updateBid(this.newBid)
+      const res = await trackerBid.updateBid(this.axios, this.newBid)
       if (res) {
         console.log(res)
         //   this.$router.push('/manage/tracker/bids')

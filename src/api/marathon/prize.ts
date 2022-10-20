@@ -1,42 +1,42 @@
 import Prize from '@/utils/types/Prize'
-import api from '../index'
+import { AxiosInstance } from 'axios'
 export default {
-    async getPrizes(): Promise<any> {
+    async getPrizes(API: AxiosInstance): Promise<any> {
         try {
-            const res = await api.backend.get('api/tracker/prize/')
+            const res = await API.get('api/tracker/prize/')
             return res.data
         } catch (error) {
             return error
         }
     },
 
-    async getOnePrize(id: string): Promise<any> {
+    async getOnePrize(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.get(`api/tracker/prize/${id}`)
+            const res = await API.get(`api/tracker/prize/${id}`)
             return res.data
         } catch (error) {
             return error
         }
     },
-    async postPrize(prize: Prize): Promise<any> {
+    async postPrize(API: AxiosInstance, prize: Prize): Promise<any> {
         try {
-            const res = await api.backend.post('api/tracker/prize/', { prize })
+            const res = await API.post('api/tracker/prize/', { prize })
             return res
         } catch (error) {
             return error
         }
     },
-    async updatePrize(prize: Prize): Promise<any> {
+    async updatePrize(API: AxiosInstance, prize: Prize): Promise<any> {
         try {
-            const res = await api.backend.put(`api/tracker/prize/${prize._id}`, { prize })
+            const res = await API.put(`api/tracker/prize/${prize._id}`, { prize })
             return res
         } catch (error) {
             return error
         }
     },
-    async deletePrize(id: string): Promise<any> {
+    async deletePrize(API: AxiosInstance, id: string): Promise<any> {
         try {
-            const res = await api.backend.delete(`api/tracker/prize/${id}`)
+            const res = await API.delete(`api/tracker/prize/${id}`)
             return res
         } catch (error) {
             return error

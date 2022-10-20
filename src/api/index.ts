@@ -1,17 +1,12 @@
-import axios from "axios";
-const API_URL = `http://${process.env.VUE_APP_BACKEND_URL}:${process.env.VUE_APP_BACKEND_PORT}/`;
-
-console.log(API_URL)
-const API = axios.create({
-  baseURL: API_URL
-})
+import { AxiosInstance } from 'axios';
+import Vue from 'vue'
 
 export default {
-  backend: API,
-  getCommands() {
+
+  getCommands(API: AxiosInstance) {
     return API.get('api/commands/');
   },
-  postCommand(command: { name: any; alias: any; permissionLvl: any; params: any; cooldown: any; description: any; message: any; custom: any; active: any; }) {
+  postCommand(API: AxiosInstance, command: { name: any; alias: any; permissionLvl: any; params: any; cooldown: any; description: any; message: any; custom: any; active: any; }) {
     return API.post('api/commands', {
       name: command.name,
       alias: command.alias,
@@ -24,7 +19,7 @@ export default {
       active: command.active
     })
   },
-  updateCommand(id: any, command: { name: any; alias: any; permissionLvl: any; params: any; cooldown: any; description: any; message: any; custom: any; active: any; }) {
+  updateCommand(API: AxiosInstance, id: any, command: { name: any; alias: any; permissionLvl: any; params: any; cooldown: any; description: any; message: any; custom: any; active: any; }) {
     return API.post(`api/commands/${id}`, {
       name: command.name,
       alias: command.alias,
@@ -37,7 +32,7 @@ export default {
       active: command.active
     })
   },
-  deleteCommand(id: any) {
+  deleteCommand(API: AxiosInstance, id: any) {
     return API.post(`api/commands/${id}`)
 
   }
