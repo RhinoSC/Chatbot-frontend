@@ -15,9 +15,9 @@
                                     label="Runner" @change="addUser">
                                 </v-autocomplete>
                             </v-row>
-                            <v-row>
+                            <!-- <v-row>
                                 <v-btn color="success" @click="saveTeams">Save teams</v-btn>
-                            </v-row>
+                            </v-row> -->
                         </v-col>
                         <v-col>
                             <v-expansion-panels v-model="teamSelected" v-if="teams.length > 0">
@@ -103,6 +103,7 @@ export default Vue.extend({
         addUser() {
             this.teamSelectedInfo.players.push(this.userSelected as User)
             this.userSelected = {}
+            // this.$emit('saveTeams', this.teams)
         },
         removeUser(player: User) {
             let index = this.teamSelectedInfo.players.findIndex((user) => user._id == player._id)
@@ -110,7 +111,6 @@ export default Vue.extend({
         },
         saveTeams() {
             this.$emit('saveTeams', this.teams)
-            this.verifyOneRunnerPerTeam()
         },
         createArrayOfTeams() {
             if (this.$props.editTeams.length > 0) {
@@ -118,7 +118,6 @@ export default Vue.extend({
                     const team = this.$props.editTeams[i - 1]
                     this.teams.push({ name: team.name, players: team.players, _id: team._id, runId: "", eventId: "" })
                 }
-                this.verifyOneRunnerPerTeam()
             } else {
                 for (let i = 1; i <= this.numOfTeams; i++) {
                     this.teams.push({ name: `Team ${i}`, players: [], runId: "", eventId: "" })
@@ -126,13 +125,6 @@ export default Vue.extend({
             }
             this.teamSelectedInfo = this.teams[0]
         },
-        verifyOneRunnerPerTeam() {
-            for (let i = 0; i < this.teams.length; i++) {
-                if (this.teams[i].players.length < 1)
-                    this.$emit('populateTeams', false)
-            }
-            // this.$emit('populateTeams', true)
-        }
     },
     watch: {
         teamSelected() {
@@ -156,7 +148,6 @@ export default Vue.extend({
                         break
                 }
             }
-            this.verifyOneRunnerPerTeam()
         }
     }
 })

@@ -65,8 +65,8 @@
               <h2>Runners info</h2>
             </v-row>
             <v-row v-if="isReady">
-              <TeamComponent v-bind="{ numOfTeams: numOfTeams, editTeams: oldRun.teams }" @saveTeams="saveTeams($event)"
-                @populateTeams="verifyTeams($event)"></TeamComponent>
+              <TeamComponent v-bind="{ numOfTeams: numOfTeams, editTeams: oldRun.teams }"
+                @saveTeams="saveTeams($event)"></TeamComponent>
             </v-row>
             <v-row class="my-8">
               <v-divider></v-divider>
@@ -174,7 +174,6 @@ export default Vue.extend({
     }
   },
   async created() {
-
     const run = await trackerRun.getOneRun(this.axios, this.$route.params.id)
 
     this.oldRun = run[0]
@@ -189,7 +188,6 @@ export default Vue.extend({
     this.numOfTeams = this.oldRun.teams.length
 
     this.isReady = true
-
   },
   methods: {
     async deleteRun() {
@@ -200,6 +198,7 @@ export default Vue.extend({
       }
     },
     async editRun() {
+      this.verifyTeams()
       if (!this.teamsSaved) {
         alert('Add runners to all teams and save')
         return
@@ -219,11 +218,19 @@ export default Vue.extend({
       this.oldRun.teams = $event
       this.teamsSaved = true
     },
-    verifyTeams($event: boolean) {
-      if (!$event)
+    verifyTeams() {
+      this.teamsSaved = true
+      if (this.oldRun.teams.length !== this.numOfTeams) {
         this.teamsSaved = false
-      else
-        this.teamsSaved = true
+        return
+      }
+
+      for (let i = 0; i < this.oldRun.teams.length; i++) {
+        if (this.oldRun.teams[i].players.length < 1) {
+          this.teamsSaved = false
+          return
+        }
+      }
     },
     populateBids($event: Bid[]) {
       this.oldRun.bids = $event

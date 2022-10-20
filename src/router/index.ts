@@ -10,6 +10,7 @@ import ScheduleManager from '../views/manage/ScheduleManagerView.vue'
 import TrackerManager from '../views/manage/tracker/TrackerManagerView.vue'
 import { authGuard } from '../auth/authGuard';
 import { authorizationGuard } from '../auth/authorizationGuard';
+import { hasIdParam } from '../guards/hasIdParam'
 import multiguard from 'vue-router-multiguard';
 
 Vue.use(VueRouter)
@@ -143,36 +144,43 @@ const routes: Array<RouteConfig> = [
       {
         path: 'events',
         name: 'manage.tracker.event',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/event/events.vue')
       },
       {
         path: 'schedules',
         name: 'manage.tracker.schedule',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/schedule/schedules.vue')
       },
       {
         path: 'runs',
         name: 'manage.tracker.run',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/run/runs.vue')
       },
       {
         path: 'users',
         name: 'manage.tracker.user',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/user/users.vue')
       },
       {
         path: 'prizes',
         name: 'manage.tracker.prize',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/prize/prizes.vue')
       },
       {
         path: 'bids',
         name: 'manage.tracker.bid',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/bid/bids.vue')
       },
       {
         path: 'donations',
         name: 'manage.tracker.donation',
+        beforeEnter: multiguard([authGuard, authorizationGuard]),
         component: () => import('../views/manage/tracker/donation/donations.vue')
       },
     ]
@@ -182,7 +190,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/events/edit/:id',
     name: 'manage.tracker.event',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/event/editEvent.vue')
   },
   {
@@ -195,7 +203,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/schedules/edit/:id',
     name: 'manage.tracker.schedules',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/schedule/editSchedule.vue')
   },
   {
@@ -208,7 +216,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/runs/edit/:id',
     name: 'manage.tracker.runs',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/run/editRun.vue')
   },
   {
@@ -221,7 +229,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/users/edit/:id',
     name: 'manage.tracker.users',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/user/editUser.vue')
   },
   {
@@ -235,7 +243,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/prizes/edit/:id',
     name: 'manage.tracker.prizes',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/prize/editPrize.vue')
   },
   {
@@ -248,7 +256,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/bids/edit/:id',
     name: 'manage.tracker.bids',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/bid/editBid.vue')
   },
   {
@@ -261,7 +269,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/tracker/donations/edit/:id',
     name: 'manage.tracker.donations',
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
+    beforeEnter: multiguard([authGuard, authorizationGuard, hasIdParam]),
     component: () => import('../views/manage/tracker/donation/editDonation.vue')
   },
   {
@@ -269,8 +277,6 @@ const routes: Array<RouteConfig> = [
     beforeEnter: multiguard([authGuard, authorizationGuard]),
     component: () => import('../views/manage/tracker/donation/addDonation.vue')
   },
-
-
 ]
 
 const router = new VueRouter({
