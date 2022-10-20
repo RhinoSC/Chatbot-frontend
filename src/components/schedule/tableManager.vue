@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <v-container fluid>
         <v-simple-table fixed-header>
             <template v-slot:default>
@@ -42,7 +42,6 @@ export default {
                 { text: 'Game', name: 'game' },
                 { text: 'Category', name: 'category' },
                 { text: 'Runner', name: 'runner' },
-
                 myArray: [
                     // { start: 12049812,  setup: 600000, estimate: }
                 { time: '10:00 PM', estimate: '05:30:00', game: 'Scott Pilgrim vs. The World: The Game - Complete Edition', category: 'any%', runner: 'Chemigoku', platform: 'ps1', coms: 'chemigoku', comsTwitch: 'chemigoku2', gameTwitch: 'Dark Souls', runnerTwitch: 'chemigoku2', setup: "0h10m00s" },
@@ -73,4 +72,4 @@ export default {
         // });
     },
 };
-</script>
+</script> -->

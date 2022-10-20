@@ -162,12 +162,12 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerBid.getOneBid(this.$route.params.id)
+    const res = await trackerBid.getOneBid(this.axios, this.$route.params.id)
 
     if (res[0]) {
       this.oldBid = res[0]
 
-      const eventRes = await trackerEvent.getEvents()
+      const eventRes = await trackerEvent.getEvents(this.axios)
 
       if (eventRes) {
         this.events = eventRes

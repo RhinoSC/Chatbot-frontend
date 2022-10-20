@@ -21,6 +21,7 @@ export default interface Event {
     isCharityData: {
         targetAmount: number,
         minDonation: number,
+        totalDonated: number,
         paypalData: {
             token: string,
             currency: string,

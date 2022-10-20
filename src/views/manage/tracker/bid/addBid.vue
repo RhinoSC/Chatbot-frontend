@@ -86,9 +86,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerBid from '@/api/marathon/bid'
-import trackerSchedule from '@/api/marathon/schedule'
 import trackerEvent from '@/api/marathon/event'
-import Bid from '@/utils/types/Bid'
 import { goalType } from '@/utils/enums/goal.enum'
 import Run from '@/utils/types/Run'
 import Event from '@/utils/types/Event'

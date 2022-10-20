@@ -171,7 +171,7 @@ import trackerRun from '@/api/marathon/run'
 import trackerDonation from '@/api/marathon/donation'
 import BidComponent from '@/components/Donation/BidComponent.vue'
 
-import { loadScript, loadCustomScript } from "@paypal/paypal-js";
+import { loadCustomScript } from "@paypal/paypal-js";
 
 export default Vue.extend({
     name: 'donate-view',
@@ -230,7 +230,7 @@ export default Vue.extend({
 
         // change
         // this.event = res.find(event => event.name === 'sre9')
-        this.event = res.find(event => event.name === `${process.env.VUE_APP_EVENT}`)
+        this.event = res.find(event => event.name === process.env.VUE_APP_EVENT)
 
         if (this.event) {
             this.newDonation.eventId = this.event._id

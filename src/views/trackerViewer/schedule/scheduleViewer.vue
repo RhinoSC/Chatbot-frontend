@@ -101,7 +101,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getOneEventByName(`${process.env.VUE_APP_EVENT}`)
+        const res = await trackerEvent.getOneEventByName(this.axios, process.env.VUE_APP_EVENT)
 
         if (res[0]) {
             this.event = res[0]

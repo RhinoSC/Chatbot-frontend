@@ -116,12 +116,12 @@ export default Vue.extend({
             if (this.$props.editTeams.length > 0) {
                 for (let i = 1; i <= this.$props.editTeams.length; i++) {
                     const team = this.$props.editTeams[i - 1]
-                    this.teams.push({ name: team.name, players: team.players, _id: team._id })
+                    this.teams.push({ name: team.name, players: team.players, _id: team._id, runId: "", eventId: "" })
                 }
                 this.verifyOneRunnerPerTeam()
             } else {
                 for (let i = 1; i <= this.numOfTeams; i++) {
-                    this.teams.push({ name: `Team ${i}`, players: [], })
+                    this.teams.push({ name: `Team ${i}`, players: [], runId: "", eventId: "" })
                 }
             }
             this.teamSelectedInfo = this.teams[0]
@@ -145,7 +145,7 @@ export default Vue.extend({
                 let i = 0
                 if (this.teams.length != newValue) {
                     while (i < dif) {
-                        this.teams.push({ name: `Team ${oldValue + i + 1}`, players: [], })
+                        this.teams.push({ name: `Team ${oldValue + i + 1}`, players: [], runId: "", eventId: "" })
                         i++
                     }
                 }

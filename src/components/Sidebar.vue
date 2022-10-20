@@ -63,6 +63,7 @@ export default Vue.extend({
                 // { icon: 'mdi-clock', name: 'Timers', path: '/manage/timers' },
                 { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
                 { icon: 'mdi-calendar-account', name: 'Tracker Visualizer', path: '/tracker' },
+                { icon: 'mdi-hand-coin', name: 'Donate', path: '/donate' },
                 // { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
             ],
             itemsGroups: [

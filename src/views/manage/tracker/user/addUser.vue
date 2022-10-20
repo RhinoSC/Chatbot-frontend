@@ -35,8 +35,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerUser from '@/api/marathon/user'
-import trackerSchedule from '@/api/marathon/schedule'
-import User from '@/utils/types/User'
 
 export default Vue.extend({
   name: 'manage-tracker',

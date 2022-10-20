@@ -181,6 +181,7 @@ import Donation from '@/utils/types/Donation'
 import Prize from '@/utils/types/Prize'
 import Schedule from '@/utils/types/Schedule'
 import ExternalSchedule from '@/utils/types/ExternalSchedule'
+import Event from '@/utils/types/Event'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -218,6 +219,7 @@ export default Vue.extend({
                 isCharityData: {
                     targetAmount: 0,
                     minDonation: 0,
+                    totalDonated: 0,
                     paypalData: {
                         token: "",
                         currency: "",
@@ -225,7 +227,7 @@ export default Vue.extend({
                         itemName: ""
                     }
                 }
-            },
+            } as Event,
             newEvent: {
                 _id: "",
                 name: "",
@@ -241,6 +243,7 @@ export default Vue.extend({
                 isCharityData: {
                     targetAmount: 0,
                     minDonation: 0,
+                    totalDonated: 0,
                     paypalData: {
                         token: "",
                         currency: "",
@@ -248,7 +251,7 @@ export default Vue.extend({
                         itemName: "",
                     }
                 }
-            }
+            } as Event,
         }
     },
     async created() {
@@ -260,10 +263,12 @@ export default Vue.extend({
     },
     methods: {
         async deleteEvent() {
-            const res = await trackerEvent.deleteEvent(this.axios, this.oldEvent._id)
-            if (res) {
-                console.log(res)
-                this.$router.push('/manage/tracker/events')
+            if (this.oldEvent._id) {
+                const res = await trackerEvent.deleteEvent(this.axios, this.oldEvent._id)
+                if (res) {
+                    console.log(res)
+                    this.$router.push('/manage/tracker/events')
+                }
             }
         },
         async editEvent() {

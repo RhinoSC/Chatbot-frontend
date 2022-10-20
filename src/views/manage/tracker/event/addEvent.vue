@@ -155,6 +155,7 @@ import Donation from '@/utils/types/Donation'
 import Prize from '@/utils/types/Prize'
 import ExternalSchedule from '@/utils/types/ExternalSchedule'
 import { tz } from 'moment'
+import Event from '@/utils/types/Event'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -191,6 +192,7 @@ export default Vue.extend({
         isCharityData: {
           targetAmount: 0,
           minDonation: 0,
+          totalDonated: 0,
           paypalData: {
             token: "",
             currency: "",
@@ -198,7 +200,7 @@ export default Vue.extend({
             itemName: "",
           }
         }
-      }
+      } as Event,
     }
   },
   mounted() {

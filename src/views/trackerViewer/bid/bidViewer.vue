@@ -74,9 +74,7 @@ import trackerEvent from '@/api/marathon/event'
 import trackerBid from '@/api/marathon/bid'
 import Event from '@/utils/types/Event'
 import Bid from '@/utils/types/Bid'
-import ScheduleRow from '@/utils/types/ScheduleRow'
-import { getRunnerString, currencyFormat } from '@/utils/stringFuncs'
-import Run from '@/utils/types/Run'
+import { currencyFormat } from '@/utils/stringFuncs'
 import Schedule from '@/utils/types/Schedule'
 
 export default Vue.extend({
@@ -95,8 +93,8 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getOneEventByName(`${process.env.VUE_APP_EVENT}`)
-        const bidRes = await trackerBid.getBids()
+        const res = await trackerEvent.getOneEventByName(this.axios, process.env.VUE_APP_EVENT)
+        const bidRes = await trackerBid.getBids(this.axios)
 
         if (res[0]) {
             this.event = res[0]

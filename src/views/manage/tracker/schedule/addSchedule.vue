@@ -80,7 +80,7 @@ export default Vue.extend({
           this.newSchedule.eventId = this.selectedEvent._id
       }
 
-      this.newSchedule.defaultSetup = stringTimeToMS(this.axios, this.defaultSetupAsString)
+      this.newSchedule.defaultSetup = stringTimeToMS(this.defaultSetupAsString)
       // console.log(this.newSchedule)
       const res = await trackerSchedule.postSchedule(this.axios, this.newSchedule)
       if (res) {

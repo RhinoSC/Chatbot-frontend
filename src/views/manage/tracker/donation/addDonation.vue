@@ -141,7 +141,7 @@ export default Vue.extend({
   },
   async created() {
     const res = await trackerEvent.getEvents(this.axios)
-    this.event = res.find((event: { name: string }) => event.name === `${process.env.VUE_APP_EVENT}`)
+    this.event = res.find((event: { name: string }) => event.name === process.env.VUE_APP_EVENT)
 
     if (this.event) {
       if (this.event._id) {

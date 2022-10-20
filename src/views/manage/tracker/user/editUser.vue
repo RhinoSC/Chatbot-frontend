@@ -56,7 +56,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerUser from '@/api/marathon/user'
-import User from '@/utils/types/User'
 import trackerRun from '@/api/marathon/run'
 import Run from '@/utils/types/Run'
 

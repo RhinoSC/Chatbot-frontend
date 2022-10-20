@@ -16,6 +16,14 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/donate',
+    name: 'Donate',
+    meta: {
+      hideNavbar: true,
+    },
+    component: () => import('../views/DonateView.vue')
+  },
+  {
     path: '/',
     name: 'home-view',
     meta: {
@@ -32,16 +40,16 @@ const routes: Array<RouteConfig> = [
     },
     component: () => import('../views/LoginSuccessView.vue'),
   },
-  {
-    path: '/profile',
-    name: 'profile-view',
-    meta: {
-      hideNavbar: true,
-    },
-    // beforeEnter: [authGuard, authorizationGuard],
-    beforeEnter: multiguard([authGuard, authorizationGuard]),
-    component: () => import('../views/ProfileView.vue'),
-  },
+  // {
+  //   path: '/profile',
+  //   name: 'profile-view',
+  //   meta: {
+  //     hideNavbar: true,
+  //   },
+  //   // beforeEnter: [authGuard, authorizationGuard],
+  //   beforeEnter: multiguard([authGuard, authorizationGuard]),
+  //   component: () => import('../views/ProfileView.vue'),
+  // },
   {
     path: '/about',
     name: 'about',
@@ -52,14 +60,6 @@ const routes: Array<RouteConfig> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
-  {
-    path: '/donate',
-    name: 'Donate',
-    meta: {
-      hideNavbar: true,
-    },
-    component: () => import(/* webpackChunkName: "about" */ '../views/DonateView.vue')
   },
   {
     path: '/layout',
