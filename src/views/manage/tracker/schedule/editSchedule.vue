@@ -131,6 +131,7 @@ export default Vue.extend({
     },
     methods: {
         getSchedule() {
+            // eslint-disable-next-line
             return structuredClone(this.oldSchedule)
         },
         async deleteSchedule() {
