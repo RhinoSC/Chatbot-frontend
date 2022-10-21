@@ -7,7 +7,7 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 import Sidebar from "./components/Sidebar.vue";
 

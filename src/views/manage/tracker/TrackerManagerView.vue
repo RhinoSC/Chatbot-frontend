@@ -14,7 +14,7 @@
   </v-col>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
 import Event from '@/utils/types/Event'
@@ -26,7 +26,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      events: [] as Event[]
+      events: []
     }
   },
   async created() {

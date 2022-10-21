@@ -5,7 +5,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -13,7 +13,7 @@ export default Vue.extend({
   mounted() {
     const roles = ["Admin"]
 
-    const multipleExist = this.$auth.user['sre9/roles'].every((value: string) => {
+    const multipleExist = this.$auth.user['sre9/roles'].every((value) => {
       return roles.includes(value);
     });
     

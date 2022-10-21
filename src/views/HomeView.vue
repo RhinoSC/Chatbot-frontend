@@ -20,7 +20,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 // import HelloWorld from '../components/HelloWorld.vue'
 
@@ -43,7 +43,7 @@ export default Vue.extend({
     if (this.$auth.isAuthenticated) {
       const roles = ["Admin"]
 
-      const multipleExist = this.$auth.user['sre9/roles'].every((value: string) => {
+      const multipleExist = this.$auth.user['sre9/roles'].every((value) => {
         return roles.includes(value);
       });
 
