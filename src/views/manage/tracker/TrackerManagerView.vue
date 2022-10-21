@@ -17,7 +17,6 @@
 <script>
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
-import Event from '@/utils/types/Event'
 
 export default Vue.extend({
   name: 'manage-tracker',
