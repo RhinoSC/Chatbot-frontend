@@ -158,6 +158,7 @@ export default Vue.extend({
         }
     },
     mounted() {
+        console.log(this.event.isCharityData.paypalData.currency)
         this.filteredRows = this.event.schedule.rows
 
         if (this.isEditedBid !== undefined) {

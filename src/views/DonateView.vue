@@ -232,6 +232,7 @@ export default Vue.extend({
         // this.event = res.find(event => event.name === 'sre9')
         this.event = res.find(event => event.name === process.env.VUE_APP_EVENT)
 
+        // console.log(this.event)
         if (this.event) {
             this.newDonation.eventId = this.event._id
             this.isReady = true
@@ -259,8 +260,8 @@ export default Vue.extend({
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
                 // env: 'production',
-                business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
-                // business: 'AJANX95PLVCPE', this is my paypalid
+                // business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
+                business: 'AJANX95PLVCPE', //this is my paypalid
                 // business: 'KH3FB5LQMDTG8', this is amnistia paypalid
                 // item_name: "Tu donación ayuda a defender a víctimas de violaciones de derechos humanos en toda Latinoamérica. Gracias.",
                 item_name: `${this.event.isCharityData.paypalData.itemName}`,
@@ -294,13 +295,13 @@ export default Vue.extend({
 
                 this.updatedRun.row.bids[this.selectedBidIdx] = bid
                 console.log(this.updatedRun.row)
-                await trackerRun.updateRunWithBidsAndTeams(this.axios, this.updatedRun.row)
+                await trackerRun.updateRunWithBids(this.axios, this.updatedRun.row)
             }
 
             this.newDonation.time = new Date().getTime()
             // console.log(this.newDonation)
             try {
-                let response = await trackerDonation.postDonation(this.axios, this.newDonation)
+                let response = await trackerDonation.postDonationPublic(this.axios, this.newDonation)
                 if (response) {
                     this.e1 = 4
                 }

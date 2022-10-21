@@ -26,6 +26,15 @@ export default {
             return error
         }
     },
+
+    async postDonationPublic(API: AxiosInstance, donation: Donation): Promise<any> {
+        try {
+            const res = await API.post('api/tracker/donation/public', { donation })
+            return res
+        } catch (error) {
+            return error
+        }
+    },
     async updateDonation(API: AxiosInstance, donation: Donation): Promise<any> {
         try {
             const res = await API.put(`api/tracker/donation/one/${donation._id}`, { donation })

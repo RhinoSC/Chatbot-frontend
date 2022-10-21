@@ -50,6 +50,14 @@ export default {
             return error
         }
     },
+    async updateRunWithBids(API: AxiosInstance, run: Run): Promise<any> {
+        try {
+            const res = await API.put(`api/tracker/run/bids/${run._id}`, { run })
+            return res
+        } catch (error) {
+            return error
+        }
+    },
     async deleteRun(API: AxiosInstance, id: string): Promise<any> {
         try {
             const res = await API.delete(`api/tracker/run/one/${id}`)

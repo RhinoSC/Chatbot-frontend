@@ -75,7 +75,8 @@
               <h2>Bids info</h2>
             </v-row>
             <v-row v-if="isReady">
-              <BidComponent v-bind="{ gameName: newRun.name, editBids: newRun.bids }"
+              <BidComponent
+                v-bind="{ gameName: newRun.name, editBids: newRun.bids , currency: event.isCharityData.paypalData.currency}"
                 @populateBids="populateBids($event)" @clearBids="clearBids($event)"></BidComponent>
             </v-row>
             <v-row>
@@ -94,6 +95,7 @@
 import Vue from 'vue'
 import TeamComponent from '@/components/Run/TeamComponent.vue'
 import BidComponent from '@/components/Run/BidComponent.vue'
+import trackerEvent from '@/api/marathon/event'
 import trackerRun from '@/api/marathon/run'
 import trackerSchedule from '@/api/marathon/schedule'
 import Run from '@/utils/types/Run'
@@ -102,6 +104,7 @@ import Schedule from '@/utils/types/Schedule'
 import run from '@/api/marathon/run'
 import { stringTimeToMS, MStoStringTime } from '@/utils/stringFuncs'
 import Bid from '@/utils/types/Bid'
+import Event from '@/utils/types/Event'
 
 
 export default Vue.extend({
@@ -113,6 +116,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      event: {} as Event,
       isReady: false,
       numOfTeams: 1,
       teamSizeOpts: [1, 2, 3, 4],
@@ -138,6 +142,9 @@ export default Vue.extend({
     }
   },
   async created() {
+    const resEvent = await trackerEvent.getEvents(this.axios)
+    this.event = resEvent.find((event: { name: any }) => event.name === process.env.VUE_APP_EVENT)
+
     const res = await trackerSchedule.getSchedules(this.axios)
     this.schedules = res
 

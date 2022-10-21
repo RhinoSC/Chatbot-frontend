@@ -259,6 +259,10 @@ export default Vue.extend({
     editBids: {
       type: Array,
       required: true
+    },
+    currency: {
+      type: String,
+      required: true
     }
   },
   components: {
@@ -310,7 +314,7 @@ export default Vue.extend({
   },
   methods: {
     currencyFormat(amount: number) {
-      return currencyFormat(amount, this.selectedEvent.isCharityData.paypalData.currency)
+      return currencyFormat(amount, this.currency)
     },
     modifyAllowNewBids() {
       if (this.newBid.type != 0) {
