@@ -68,8 +68,12 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents(this.axios)
-    this.events = res
+    try {
+      const res = await trackerEvent.getEvents(this.axios)
+      this.events = res
+    } catch (error) {
+      this.$router.push('/manage/tracker/schedules')
+    }
   },
   methods: {
     async addSchedule() {

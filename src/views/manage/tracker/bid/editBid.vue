@@ -162,28 +162,30 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/')
-    const res = await trackerBid.getOneBid(this.axios, this.$route.params.id)
+    if (this.$route.params.id) this.$router.push('/manage/tracker/bids')
 
-    if (res[0]) {
-      this.oldBid = res[0]
+    try {
+      const res = await trackerBid.getOneBid(this.axios, this.$route.params.id)
+      if (res[0]) {
+        this.oldBid = res[0]
 
-      const eventRes = await trackerEvent.getEvents(this.axios)
+        const eventRes = await trackerEvent.getEvents(this.axios)
 
-      if (eventRes) {
-        this.events = eventRes
-        this.selectedEvent = eventRes.find((event: { _id: string }) => event._id === this.oldBid.eventId)
-        this.getRunArray(this.selectedEvent)
-        // console.log(this.runs)
-        let run = this.runs.find(run => {
-          // console.log(run._id, this.oldBid.runId, run._id === this.oldBid.runId)
-          return run._id === this.oldBid.runId
-        })
-        if (run)
-          this.selectedRun = run
+        if (eventRes) {
+          this.events = eventRes
+          this.selectedEvent = eventRes.find((event: { _id: string }) => event._id === this.oldBid.eventId)
+          this.getRunArray(this.selectedEvent)
+          // console.log(this.runs)
+          let run = this.runs.find(run => {
+            // console.log(run._id, this.oldBid.runId, run._id === this.oldBid.runId)
+            return run._id === this.oldBid.runId
+          })
+          if (run)
+            this.selectedRun = run
+        }
       }
-
-      //  this.oldBid.runId
+    } catch (error) {
+      this.$router.push('/manage/tracker/bids')
     }
   },
   methods: {

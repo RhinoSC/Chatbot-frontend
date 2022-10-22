@@ -98,10 +98,8 @@ import BidComponent from '@/components/Run/BidComponent.vue'
 import trackerEvent from '@/api/marathon/event'
 import trackerRun from '@/api/marathon/run'
 import trackerSchedule from '@/api/marathon/schedule'
-import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
-import run from '@/api/marathon/run'
 import { stringTimeToMS, MStoStringTime } from '@/utils/stringFuncs'
 import Bid from '@/utils/types/Bid'
 import Event from '@/utils/types/Event'
@@ -142,13 +140,17 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvent = await trackerEvent.getEvents(this.axios)
-    this.event = resEvent.find((event: { name: any }) => event.name === process.env.VUE_APP_EVENT)
+    try {
+      const resEvent = await trackerEvent.getEvents(this.axios)
+      this.event = resEvent.find((event: { name: any }) => event.name === process.env.VUE_APP_EVENT)
 
-    const res = await trackerSchedule.getSchedules(this.axios)
-    this.schedules = res
+      const res = await trackerSchedule.getSchedules(this.axios)
+      this.schedules = res
 
-    this.isReady = true
+      this.isReady = true
+    } catch (error) {
+      this.$router.push('/manage/tracker/runs')
+    }
   },
   methods: {
     async addRun() {

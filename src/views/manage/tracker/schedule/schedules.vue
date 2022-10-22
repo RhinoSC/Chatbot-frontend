@@ -18,30 +18,29 @@
     </div>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerSchedule from '@/api/marathon/schedule'
-  import Schedule from '@/utils/types/Schedule'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              schedules: [] as Schedule[]
-          }
-      },
-      async created() {
+<script lang="ts">
+import Vue from 'vue'
+import trackerSchedule from '@/api/marathon/schedule'
+import Schedule from '@/utils/types/Schedule'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            schedules: [] as Schedule[]
+        }
+    },
+    async created() {
+        try {
             const res = await trackerSchedule.getSchedules(this.axios)
-            // console.log('llegue')
-            // console.log(res)
             this.schedules = res
-      },
-      mounted() {
-          // console.log('hola')
-      }
-  })
-  </script>
+        } catch (error) {
+            this.$router.push('/')
+        }
+    },
+})
+</script>
   

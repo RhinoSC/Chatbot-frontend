@@ -33,14 +33,13 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getEvents(this.axios)
-        // console.log('llegue')
-        // console.log(res)
-        this.events = res
+        try {
+            const res = await trackerEvent.getEvents(this.axios)
+            this.events = res
+        } catch (error) {
+            this.$router.push('/')
+        }
     },
-    mounted() {
-        // console.log('hola')
-    }
 })
 </script>
   

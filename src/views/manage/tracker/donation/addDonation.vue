@@ -94,7 +94,6 @@ import Vue from 'vue'
 import trackerDonation from '@/api/marathon/donation'
 import trackerEvent from '@/api/marathon/event'
 import trackerRun from '@/api/marathon/run'
-import Donation from '@/utils/types/Donation'
 import Event from '@/utils/types/Event'
 import BidComponent from '@/components/Donation/BidComponent.vue'
 import ScheduleRow from '@/utils/types/ScheduleRow'
@@ -140,14 +139,18 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res = await trackerEvent.getEvents(this.axios)
-    this.event = res.find((event: { name: string }) => event.name === process.env.VUE_APP_EVENT)
+    try {
+      const res = await trackerEvent.getEvents(this.axios)
+      this.event = res.find((event: { name: string }) => event.name === process.env.VUE_APP_EVENT)
 
-    if (this.event) {
-      if (this.event._id) {
-        this.newDonation.eventId = this.event._id
-        this.isReady = true
+      if (this.event) {
+        if (this.event._id) {
+          this.newDonation.eventId = this.event._id
+          this.isReady = true
+        }
       }
+    } catch (error) {
+      this.$router.push('/manage/tracker/donations')
     }
   },
   methods: {

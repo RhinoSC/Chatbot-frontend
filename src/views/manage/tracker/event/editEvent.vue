@@ -175,7 +175,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import trackerEvent from '@/api/marathon/event'
-import moment, { tz } from 'moment-timezone'
+import { tz } from 'moment-timezone'
 import selectorOptions from '@/utils/TZ'
 import Donation from '@/utils/types/Donation'
 import Prize from '@/utils/types/Prize'
@@ -255,8 +255,12 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
-        this.oldEvent = res[0]
+        try {
+            const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
+            this.oldEvent = res[0]
+        } catch (error) {
+            this.$router.push('/manage/tracker/events')
+        }
     },
     mounted() {
         this.tz = selectorOptions

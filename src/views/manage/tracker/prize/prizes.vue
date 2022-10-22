@@ -17,28 +17,29 @@
     </div>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerPrize from '@/api/marathon/prize'
-  import Prize from '@/utils/types/Prize'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              prizes: [] as Prize[]
-          }
-      },
-      async created() {
-          const res = await trackerPrize.getPrizes(this.axios)
-          this.prizes = res
-      },
-      mounted() {
-          // console.log('hola')
-      }
-  })
-  </script>
+<script lang="ts">
+import Vue from 'vue'
+import trackerPrize from '@/api/marathon/prize'
+import Prize from '@/utils/types/Prize'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            prizes: [] as Prize[]
+        }
+    },
+    async created() {
+        try {
+            const res = await trackerPrize.getPrizes(this.axios)
+            this.prizes = res
+        } catch (error) {
+            this.$router.push('/')
+        }
+    },
+})
+</script>
   

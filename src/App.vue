@@ -18,6 +18,9 @@ export default Vue.extend({
   data: () => ({
     //
   }),
+  created() {
+    document.title = 'SRE9'
+  }
   // async created() {
   //   if (this.$auth.isAuthenticated) {
   //     const token = await this.$auth.getTokenSilently();

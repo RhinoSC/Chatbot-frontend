@@ -123,11 +123,14 @@ export default Vue.extend({
     }
   },
   async created() {
-    // eslint-disable-next-line
-    const eventRes = await trackerEvent.getEvents(this.axios)
+    try {
+      const eventRes = await trackerEvent.getEvents(this.axios)
 
-    if (eventRes) {
-      this.events = eventRes
+      if (eventRes) {
+        this.events = eventRes
+      }
+    } catch (error) {
+      this.$router.push('/manage/tracker/bids')
     }
   },
   computed: {

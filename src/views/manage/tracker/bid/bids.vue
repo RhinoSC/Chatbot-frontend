@@ -33,10 +33,12 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerBid.getBids(this.axios)
-        //   console.log('llegue')
-        //   console.log(res)
-        this.bids = res
+        try {
+            const res = await trackerBid.getBids(this.axios)
+            this.bids = res
+        } catch (error) {
+            this.$router.push('/')
+        }
     },
     mounted() {
         // console.log('hola')

@@ -128,20 +128,6 @@
                             <v-card-actions>
                                 <div id="paypal-donate-button-container"></div>
                             </v-card-actions>
-                            <!-- <form action="https://www.sandbox.paypal.com/donate" method="post" target="_top">
-                            <input type="hidden" name="business" value="csolanoc@unal.edu.co">
-                            <input type="hidden" name="no_recurring" value="0">
-                            <input type="hidden" name="item_name" value="Friends of the Park">
-                            <input type="hidden" name="item_number" value="Fall Cleanup Campaign">
-                            <input type="hidden" name="currency_code"
-                                :value="this.event ? event.isCharityData.paypalData.currency : 'USD'">
-                            <input type="hidden" name="amount" :value="newDonation.amount">
-                            <input type="hidden" name="return" value="localhost:8080/donate-success">
-                            <input type="hidden" name="custom" :value="encodeURIComponent(JSON.stringify(this.testData))">
-                            <input type="image" name="submit"
-                                src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate">
-                            <img alt="" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
-                        </form> -->
                         </v-card>
                     </v-col>
 
@@ -226,16 +212,16 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerEvent.getEvents(this.axios)
+        try {
+            const res = await trackerEvent.getEvents(this.axios)
+            this.event = res.find(event => event.name === process.env.VUE_APP_EVENT)
 
-        // change
-        // this.event = res.find(event => event.name === 'sre9')
-        this.event = res.find(event => event.name === process.env.VUE_APP_EVENT)
-
-        // console.log(this.event)
-        if (this.event) {
-            this.newDonation.eventId = this.event._id
-            this.isReady = true
+            if (this.event) {
+                this.newDonation.eventId = this.event._id
+                this.isReady = true
+            }
+        } catch (error) {
+            this.$router.push('/404')
         }
     },
     async mounted() {
@@ -259,13 +245,8 @@ export default Vue.extend({
                 currency_code: this.event.isCharityData.paypalData.currency,
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
-                // env: 'production',
-                // business: this.event.isCharityData.paypalData.token || 'csolanoc@unal.edu.co',
-                business: 'AJANX95PLVCPE', //this is my paypalid
-                // business: 'KH3FB5LQMDTG8', this is amnistia paypalid
-                // item_name: "Tu donación ayuda a defender a víctimas de violaciones de derechos humanos en toda Latinoamérica. Gracias.",
+                business: this.event.isCharityData.paypalData.token,
                 item_name: `${this.event.isCharityData.paypalData.itemName}`,
-                // image_url: `https://pics.paypal.com/00/s/MWI0NjlkODItZWNmMy00ODIyLTkyZjctZGUzNjc2NzA3NGIx/file.PNG`,
                 image_url: `${this.event.isCharityData.paypalData.logoUrl}`,
                 image: {
                     src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',

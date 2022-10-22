@@ -17,30 +17,29 @@
     </div>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerUser from '@/api/marathon/user'
-  import User from '@/utils/types/User'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              users: [] as User[]
-          }
-      },
-      async created() {
-          const res = await trackerUser.getUsers(this.axios)
-        //   console.log('llegue')
-        //   console.log(res)
-          this.users = res
-      },
-      mounted() {
-          // console.log('hola')
-      }
-  })
-  </script>
+<script lang="ts">
+import Vue from 'vue'
+import trackerUser from '@/api/marathon/user'
+import User from '@/utils/types/User'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            users: [] as User[]
+        }
+    },
+    async created() {
+        try {
+            const res = await trackerUser.getUsers(this.axios)
+            this.users = res
+        } catch (error) {
+            this.$router.push('/')
+        }
+    },
+})
+</script>
   

@@ -118,16 +118,19 @@ export default Vue.extend({
         }
     },
     async created() {
-        const res = await trackerSchedule.getOneSchedule(this.axios, this.$route.params.id)
-        this.oldSchedule = res[0]
-        const eventRes = await trackerEvent.getEvents(this.axios)
-        this.events = eventRes
-        let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
-        this.selectedEvent = selectedEvent
-
-        // this.scheduleId = this.oldSchedule._id
-
-        this.isReady = true
+        if (this.$route.params.id) this.$router.push('/manage/tracker/schedules')
+        
+        try {
+            const res = await trackerSchedule.getOneSchedule(this.axios, this.$route.params.id)
+            this.oldSchedule = res[0]
+            const eventRes = await trackerEvent.getEvents(this.axios)
+            this.events = eventRes
+            let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
+            this.selectedEvent = selectedEvent
+            this.isReady = true
+        } catch (error) {
+            this.$router.push('/manage/tracker/schedules')
+        }
     },
     methods: {
         getSchedule() {

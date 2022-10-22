@@ -277,6 +277,15 @@ const routes: Array<RouteConfig> = [
     beforeEnter: multiguard([authGuard, authorizationGuard]),
     component: () => import('../views/manage/tracker/donation/addDonation.vue')
   },
+
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    meta: {
+      hideNavbar: true,
+    },
+    component: () => import('../components/NotFound.vue')
+  }
 ]
 
 const router = new VueRouter({

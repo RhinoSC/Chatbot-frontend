@@ -17,30 +17,29 @@
     </div>
 </template>
   
-  <script lang="ts">
-  import Vue from 'vue'
-  import trackerRun from '@/api/marathon/run'
-  import Run from '@/utils/types/Run'
-  
-  export default Vue.extend({
-      name: 'manage-tracker',
-  
-      components: {
-      },
-      data() {
-          return {
-              runs: [] as Run[]
-          }
-      },
-      async created() {
-          const res = await trackerRun.getRuns(this.axios)
-          // console.log('llegue')
-          // console.log(res)
-          this.runs = res
-      },
-      mounted() {
-          // console.log('hola')
-      }
-  })
-  </script>
+<script lang="ts">
+import Vue from 'vue'
+import trackerRun from '@/api/marathon/run'
+import Run from '@/utils/types/Run'
+
+export default Vue.extend({
+    name: 'manage-tracker',
+
+    components: {
+    },
+    data() {
+        return {
+            runs: [] as Run[]
+        }
+    },
+    async created() {
+        try {
+            const res = await trackerRun.getRuns(this.axios)
+            this.runs = res
+        } catch (error) {
+            this.$router.push('/')
+        }
+    },
+})
+</script>
   

@@ -177,28 +177,32 @@ export default Vue.extend({
     }
   },
   async created() {
-    const res: Event[] = await trackerEvent.getEvents(this.axios)
-    const donRes: Donation[] = await trackerDonation.getOneDonation(this.axios, this.$route.params.id)
+    if (this.$route.params.id) this.$router.push('/manage/tracker/donations')
 
-    if (donRes[0]) {
-      let event = res.find((event) => event._id === donRes[0].eventId)
-      if (event) {
-        this.event = event
-        if (this.event._id)
-          this.newDonation.eventId = this.event._id
+    try {
+      const res: Event[] = await trackerEvent.getEvents(this.axios)
+      const donRes: Donation[] = await trackerDonation.getOneDonation(this.axios, this.$route.params.id)
+
+      if (donRes[0]) {
+        let event = res.find((event) => event._id === donRes[0].eventId)
+        if (event) {
+          this.event = event
+          if (this.event._id)
+            this.newDonation.eventId = this.event._id
+        }
+
+        this.oldDonation = donRes[0]
+
+        this.isEditedBid = {
+          runId: this.oldDonation.runId,
+          bidId: this.oldDonation.bidId,
+          optionName: this.oldDonation.optionName,
+        }
+        this.isReady = true
       }
-
-      this.oldDonation = donRes[0]
-
-      this.isEditedBid = {
-        runId: this.oldDonation.runId,
-        bidId: this.oldDonation.bidId,
-        optionName: this.oldDonation.optionName,
-      }
-      this.isReady = true
+    } catch (error) {
+      this.$router.push('/manage/tracker/donations')
     }
-
-
   },
   methods: {
     async deleteDonation() {

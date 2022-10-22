@@ -69,9 +69,14 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvents = await trackerEvent.getEvents(this.axios)
-    this.events = resEvents
-    this.isReady = true
+    try {
+      const resEvents = await trackerEvent.getEvents(this.axios)
+      this.events = resEvents
+      this.isReady = true
+    } catch (error) {
+      this.$router.push('/manage/tracker/prizes')
+    }
+
   },
   computed: {
     minAmountLabel() {

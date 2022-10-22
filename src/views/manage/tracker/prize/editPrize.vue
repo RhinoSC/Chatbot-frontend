@@ -100,18 +100,25 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvents = await trackerEvent.getEvents(this.axios)
-    this.events = resEvents
+    if (this.$route.params.id) this.$router.push('/manage/tracker/prizes')
+    
+    try {
+      const resEvents = await trackerEvent.getEvents(this.axios)
+      this.events = resEvents
 
-    const res = await trackerPrize.getOnePrize(this.axios, this.$route.params.id)
-    this.oldPrize = res[0]
+      const res = await trackerPrize.getOnePrize(this.axios, this.$route.params.id)
+      this.oldPrize = res[0]
 
-    const event = this.events.find(event => this.oldPrize.eventId == event._id)
-    if (event) {
-      this.selectedEvent = event
+      const event = this.events.find(event => this.oldPrize.eventId == event._id)
+      if (event) {
+        this.selectedEvent = event
+      }
+
+      this.isReady = true
+    } catch (error) {
+      this.$router.push('/manage/tracker/prizes')
     }
 
-    this.isReady = true
   },
   computed: {
     minAmountLabel() {

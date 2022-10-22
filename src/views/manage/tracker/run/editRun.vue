@@ -117,10 +117,8 @@ import BidComponent from '@/components/Run/BidComponent.vue'
 import trackerEvent from '@/api/marathon/event'
 import trackerRun from '@/api/marathon/run'
 import trackerSchedule from '@/api/marathon/schedule'
-import Run from '@/utils/types/Run'
 import Team from '@/utils/types/Team'
 import Schedule from '@/utils/types/Schedule'
-import run from '@/api/marathon/run'
 import { stringTimeToMS, MStoStringTime } from '@/utils/stringFuncs'
 import Bid from '@/utils/types/Bid'
 import Event from '@/utils/types/Event'
@@ -178,23 +176,29 @@ export default Vue.extend({
     }
   },
   async created() {
-    const resEvent = await trackerEvent.getEvents(this.axios)
-    this.event = resEvent.find((event: { name: any }) => event.name === process.env.VUE_APP_EVENT)
+    if (this.$route.params.id) this.$router.push('/manage/tracker/runs')
 
-    const run = await trackerRun.getOneRun(this.axios, this.$route.params.id)
+    try {
+      const resEvent = await trackerEvent.getEvents(this.axios)
+      this.event = resEvent.find((event: { name: any }) => event.name === process.env.VUE_APP_EVENT)
 
-    this.oldRun = run[0]
-    const schedule = await trackerSchedule.getOneSchedule(this.axios, this.oldRun.scheduleId)
-    this.selectedSchedule = schedule[0]
-    const res = await trackerSchedule.getSchedules(this.axios)
-    this.schedules = res
+      const run = await trackerRun.getOneRun(this.axios, this.$route.params.id)
 
-    this.setupAsString = MStoStringTime(this.oldRun.setup)
+      this.oldRun = run[0]
+      const schedule = await trackerSchedule.getOneSchedule(this.axios, this.oldRun.scheduleId)
+      this.selectedSchedule = schedule[0]
+      const res = await trackerSchedule.getSchedules(this.axios)
+      this.schedules = res
 
-    this.oldRun.teams.length > 1 ? this.isRace = true : this.isRace = false
-    this.numOfTeams = this.oldRun.teams.length
+      this.setupAsString = MStoStringTime(this.oldRun.setup)
 
-    this.isReady = true
+      this.oldRun.teams.length > 1 ? this.isRace = true : this.isRace = false
+      this.numOfTeams = this.oldRun.teams.length
+
+      this.isReady = true
+    } catch (error) {
+      this.$router.push('/manage/tracker/runs')
+    }
   },
   methods: {
     async deleteRun() {
