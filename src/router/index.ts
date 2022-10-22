@@ -20,7 +20,8 @@ const routes: Array<RouteConfig> = [
     path: '/donate',
     name: 'Donate',
     meta: {
-      hideNavbar: true,
+      hideNavbar: false,
+      public: true
     },
     component: () => import('../views/DonateView.vue')
   },
@@ -75,7 +76,8 @@ const routes: Array<RouteConfig> = [
     name: 'tracker-view',
     component: Tracker,
     meta: {
-      hideNavbar: true,
+      hideNavbar: false,
+      public: true
     },
     children: [
       {
@@ -83,7 +85,8 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.schedule',
         component: () => import('../views/trackerViewer/schedule/scheduleViewer.vue'),
         meta: {
-          hideNavbar: true,
+          hideNavbar: false,
+          public: true
         },
       },
       {
@@ -91,7 +94,8 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.bids',
         component: () => import('../views/trackerViewer/bid/bidViewer.vue'),
         meta: {
-          hideNavbar: true,
+          hideNavbar: false,
+          public: true
         },
       },
       {
@@ -99,7 +103,8 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.donations',
         component: () => import('../views/trackerViewer/donation/donationViewer.vue')
         , meta: {
-          hideNavbar: true,
+          hideNavbar: false,
+          public: true
         },
       },
       {
@@ -107,7 +112,8 @@ const routes: Array<RouteConfig> = [
         name: 'tracker.prizes',
         component: () => import('../views/trackerViewer/prize/prizeViewer.vue'),
         meta: {
-          hideNavbar: true,
+          hideNavbar: false,
+          public: true
         },
       },
     ]

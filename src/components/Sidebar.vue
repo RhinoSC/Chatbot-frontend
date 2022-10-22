@@ -8,9 +8,9 @@
                             <v-card>
                                 <v-img alt="SRE logo" src="../assets/logo_plano.png"
                                     style="background-color: rgb(100,100,100)"></v-img>
-                                <v-card-actions :class="!expanded ? 'd-none' : 'd-flex justify-center'">
+                                <!-- <v-card-actions :class="!expanded ? 'd-none' : 'd-flex justify-center'">
                                     <v-btn color="error" x-small @click="logout()">Log out</v-btn>
-                                </v-card-actions>
+                                </v-card-actions> -->
                             </v-card>
                             <!-- <v-list-item-title class="text-h6">
                   SRE
@@ -22,26 +22,28 @@
                 <v-divider></v-divider>
 
                 <v-list nav dense>
-                    <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
+                    <template v-if="!$route.meta.public">
+                        <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
+                            <v-list-item-icon>
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        </v-list-item>
+                    </template>
+                    <template v-else>
+                        <v-list-item v-for="(item, index) in itemsPublic" :key="index" link :to="item.path">
+                            <v-list-item-icon>
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        </v-list-item>
+                    </template>
+                    <v-list-item @click="logout" v-if="$auth.isAuthenticated">
                         <v-list-item-icon>
-                            <v-icon>{{ item.icon }}</v-icon>
+                            <v-icon>{{ logOut.icon }}</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        <v-list-item-title>{{ logOut.name }}</v-list-item-title>
                     </v-list-item>
-                    <!-- <v-list-group :value="true" v-for="(itemGroup, i) in itemsGroups" :key="i">
-              <template v-slot:activator>
-                <v-list-item-icon>
-                  <v-icon>{{ itemGroup.icon }}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>{{ itemGroup.name }}</v-list-item-title>
-              </template>
-              <v-list-item v-for="(subItem, subIndex) in itemGroup.childs" :key="subIndex" link :to="subItem.path">
-                <v-list-item-icon>
-                  <v-icon>{{ subItem.icon }}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>{{ subItem.name }}</v-list-item-title>
-              </v-list-item>
-            </v-list-group> -->
                 </v-list>
             </v-navigation-drawer>
         </v-card>
@@ -64,13 +66,13 @@ export default Vue.extend({
                 { icon: 'mdi-calendar', name: 'Tracker Manager', path: '/manage/tracker' },
                 { icon: 'mdi-calendar-account', name: 'Tracker Visualizer', path: '/tracker' },
                 { icon: 'mdi-hand-coin', name: 'Donate', path: '/donate' },
+
                 // { icon: 'mdi-calendar-clock', name: 'Schedule Visualizer', path: '/manage/schedule' },
             ],
-            itemsGroups: [
-                {
-                    icon: 'mdi-calendar', name: 'Tracker', path: '/manage/tracker', childs: [
-                        { icon: 'mdi-calendar', name: 'Events', path: '/manage/tracker/events' }]
-                },
+            logOut: { icon: 'mdi-logout', name: 'Log out', path: '/' },
+            itemsPublic: [
+                { icon: 'mdi-calendar-account', name: 'Tracker', path: '/tracker' },
+                { icon: 'mdi-hand-coin', name: 'Donate', path: '/donate' },
             ],
         }
     },
