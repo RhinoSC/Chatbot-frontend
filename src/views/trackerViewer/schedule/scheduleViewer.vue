@@ -37,7 +37,7 @@
                                                     colspan="4">
                                                     {{item.dayText}}
                                                 </td> -->
-                                                <td colspan="4" style="color: white; text-align:center;">
+                                                <td colspan="4" style="color: white; font-weight: bold; text-align:center;">
                                                     {{item.dayText}}</td>
                                             </tr>
                                         </template>

@@ -86,7 +86,7 @@
                                         <template v-if="isRowDay(item)">
                                             <tr :key="i" style="background-color: var(--v-secondary-darken1);"
                                                 class="item-day-tr">
-                                                <td colspan="5" style="color: white; text-align:center;">
+                                                <td colspan="5" style="color: white; font-weight: bold; text-align:center;">
                                                     {{item.dayText}}</td>
                                                 <!-- <td class="d-flex justify-center align-center" style="color: white;">
                                                     {{item.dayText}}
