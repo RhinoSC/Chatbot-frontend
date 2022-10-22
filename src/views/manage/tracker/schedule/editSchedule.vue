@@ -128,7 +128,8 @@ export default Vue.extend({
             this.selectedEvent = selectedEvent
             this.isReady = true
         } catch (error) {
-            this.$router.push('/manage/tracker/schedules')
+            console.error(error)
+            // this.$router.push('/manage/tracker/schedules')
         }
     },
     methods: {

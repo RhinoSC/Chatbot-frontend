@@ -200,7 +200,8 @@ export default Vue.extend({
         this.isReady = true
       }
     } catch (error) {
-      this.$router.push('/manage/tracker/donations')
+      console.error(error)
+      // this.$router.push('/manage/tracker/donations')
     }
   },
   methods: {

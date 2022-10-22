@@ -184,7 +184,8 @@ export default Vue.extend({
         }
       }
     } catch (error) {
-      this.$router.push('/manage/tracker/bids')
+      console.error(error)
+      // this.$router.push('/manage/tracker/bids')
     }
   },
   methods: {

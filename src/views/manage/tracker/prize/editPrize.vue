@@ -114,7 +114,8 @@ export default Vue.extend({
 
       this.isReady = true
     } catch (error) {
-      this.$router.push('/manage/tracker/prizes')
+      console.error(error)
+      // this.$router.push('/manage/tracker/prizes')
     }
 
   },
