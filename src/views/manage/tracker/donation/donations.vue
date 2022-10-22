@@ -6,11 +6,11 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'donations/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="donation in donations" :key="donation._id" link
                     :to="`donations/edit/${donation._id}`">
                     <v-list-item-content>
-                        {{ donation.name }}
+                        {{ donation.name }} - {{ donation.email }} - {{ currencyFormat(donation.amount) }}
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -22,6 +22,7 @@
 import Vue from 'vue'
 import trackerDonation from '@/api/marathon/donation'
 import Donation from '@/utils/types/Donation'
+import { currencyFormat } from '@/utils/stringFuncs'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -41,6 +42,11 @@ export default Vue.extend({
             this.$router.push('/')
         }
     },
+    methods: {
+        currencyFormat(amount: number) {
+            return currencyFormat(amount)
+        },
+    }
 })
 </script>
   

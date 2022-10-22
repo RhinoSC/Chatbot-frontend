@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'users/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="user in users" :key="user._id" link :to="`users/edit/${user._id}`">
                     <v-list-item-content>
                         {{ user.name }}

@@ -20,7 +20,6 @@
                 </v-list>
 
                 <v-divider></v-divider>
-
                 <v-list nav dense>
                     <template v-if="!$route.meta.public">
                         <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
@@ -45,6 +44,11 @@
                         <v-list-item-title>{{ logOut.name }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
+                <template v-slot:append>
+                    <div class="pa-2">
+                        <v-switch v-model="$vuetify.theme.dark" inset label="Dark theme" persistent-hint></v-switch>
+                    </div>
+                </template>
             </v-navigation-drawer>
         </v-card>
     </div>

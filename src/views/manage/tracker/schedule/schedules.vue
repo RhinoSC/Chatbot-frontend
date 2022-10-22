@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'schedules/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="schedule in schedules" :key="schedule._id" link
                     :to="`schedules/edit/${schedule._id}`">
                     <v-list-item-content>
