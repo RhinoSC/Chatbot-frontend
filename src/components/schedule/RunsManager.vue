@@ -187,7 +187,9 @@ export default Vue.extend({
         this.startTimeMS = date.getTime()
         this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
 
-        console.log('child', this.tempSchedule)
+        console.log(date)
+
+        // console.log('child', this.tempSchedule)
         this.availableRows = this.tempSchedule.availableRuns
         if (this.tempSchedule.rows.length > 0) {
             this.tempSchedule.rows.forEach((row: ScheduleRow) => {
@@ -236,11 +238,13 @@ export default Vue.extend({
             if (this.scheduleRows.length === 0) {
                 this.setFirstRow(run, true)
             } else {
-                const runTime = this.scheduleRows[this.scheduleRows.length - 1].row.estimate - this.scheduleRows[this.scheduleRows.length - 1].row.setup
+                const runTime = this.scheduleRows[this.scheduleRows.length - 1].row.estimate + this.scheduleRows[this.scheduleRows.length - 1].row.setup
+                // const runTime = this.scheduleRows[this.scheduleRows.length - 1].row.estimate
                 const oldStartDate = new Date(this.actualTimeMS - runTime)
                 const oldEndDate = new Date(this.actualTimeMS)
 
                 this.actualTimeMS += run.row.estimate + run.row.setup
+                // this.actualTimeMS += run.row.estimate
 
 
                 run.row.start = oldEndDate.getTime()
@@ -315,6 +319,7 @@ export default Vue.extend({
         },
         setFirstRow(item: any, firstTime: boolean) {
             this.actualTimeMS = this.startTimeMS + item.row.estimate + item.row.setup
+            // this.actualTimeMS = this.startTimeMS + item.row.estimate
 
             item.row.start = this.startDate.getTime()
             item.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
@@ -334,6 +339,7 @@ export default Vue.extend({
             const oldEndDate = new Date(this.actualTimeMS)
 
             this.actualTimeMS += item.row.estimate + item.row.setup
+            // this.actualTimeMS += item.row.estimate
 
             item.row.start = oldEndDate.getTime()
             item.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })

@@ -118,7 +118,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        
+
         try {
             const res = await trackerSchedule.getOneSchedule(this.axios, this.$route.params.id)
             this.oldSchedule = res[0]
@@ -126,6 +126,9 @@ export default Vue.extend({
             this.events = eventRes
             let selectedEvent = this.events.find((event: Event) => event._id == this.oldSchedule.eventId)
             this.selectedEvent = selectedEvent
+
+            this.oldSchedule.start = selectedEvent?.start as number
+            this.oldSchedule.end = selectedEvent?.end as number
             this.isReady = true
         } catch (error) {
             console.error(error)
@@ -163,9 +166,6 @@ export default Vue.extend({
             }
 
             this.newSchedule = this.oldSchedule
-
-            // console.log(this.newSchedule)
-
             const res = await trackerSchedule.updateSchedule(this.axios, this.newSchedule)
             if (res) {
                 // console.log(res)

@@ -183,6 +183,7 @@ import Prize from '@/utils/types/Prize'
 import Schedule from '@/utils/types/Schedule'
 import ExternalSchedule from '@/utils/types/ExternalSchedule'
 import Event from '@/utils/types/Event'
+import moment from 'moment-timezone'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -260,13 +261,13 @@ export default Vue.extend({
             const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
             this.oldEvent = res[0]
 
-            let start = new Date(this.oldEvent.start)
-            let end = new Date(this.oldEvent.end)
+            let start = moment.tz(this.oldEvent.start, this.oldEvent.TZ.name)
+            let end = moment.tz(this.oldEvent.end, this.oldEvent.TZ.name)
 
-            this.dates.start = start.toLocaleDateString('fr-CA')
-            this.dates.startTime = start.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: false })
-            this.dates.end = end.toLocaleDateString('fr-CA')
-            this.dates.endTime = end.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: false })
+            this.dates.start = start.format("YYYY-MM-DD")
+            this.dates.startTime = moment.tz(this.oldEvent.start, this.oldEvent.TZ.name).format("hh:mm")
+            this.dates.end = end.format("YYYY-MM-DD")
+            this.dates.endTime = moment.tz(this.oldEvent.end, this.oldEvent.TZ.name).format("hh:mm")
 
         } catch (error) {
             console.error(error)
@@ -293,6 +294,8 @@ export default Vue.extend({
 
             this.newEvent = this.oldEvent
 
+            // console.log(moment.tz(this.oldEvent.start, this.oldEvent.TZ.name).toLocaleString())
+            // console.log(startDate, endDate)
             const res = await trackerEvent.updateEvent(this.axios, this.newEvent)
             if (res) {
                 this.$router.push('/manage/tracker')

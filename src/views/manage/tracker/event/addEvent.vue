@@ -156,6 +156,7 @@ import Prize from '@/utils/types/Prize'
 import ExternalSchedule from '@/utils/types/ExternalSchedule'
 import { tz } from 'moment'
 import Event from '@/utils/types/Event'
+import moment from 'moment-timezone'
 
 export default Vue.extend({
   name: 'manage-tracker',
@@ -209,10 +210,14 @@ export default Vue.extend({
   methods: {
     async addEvent() {
 
+
       let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
       this.newEvent.start = startDate.getTime()
       let endDate = new Date(`${this.dates.end}, ${this.dates.endTime}`)
       this.newEvent.end = endDate.getTime()
+
+      // const a = moment.tz(this.newEvent.start, this.newEvent.TZ.name)
+      // console.log(a.unix())
 
       const res = await trackerEvent.postEvent(this.axios, this.newEvent)
       if (res) {
