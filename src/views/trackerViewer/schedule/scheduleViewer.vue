@@ -139,20 +139,15 @@ export default Vue.extend({
         getRunnerString(item: Run) {
             return getRunnerString(item)
         },
+        // setTitles(testArr: ScheduleRow[], creating: boolean) {
         setTitles(testArr: any, creating: boolean) {
             if (creating) {
                 testArr.splice(0, 0, { dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
             }
 
-            let firstDate = new Date(testArr[1].row.start)
             for (let j = 2; j < testArr.length; j++) {
                 const item = testArr[j]
-                const newDate = new Date(item.row.start)
-
-                // console.log(firstDate.getDate(), newDate.getDate())
-                if (firstDate.getDate() !== newDate.getDate()) {
-                    firstDate = newDate
-                    item.newDay = true
+                if (item.newDay) {
                     testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
                     j++
                 }
