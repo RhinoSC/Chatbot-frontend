@@ -100,8 +100,6 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/manage/tracker/prizes')
-    
     try {
       const resEvents = await trackerEvent.getEvents(this.axios)
       this.events = resEvents

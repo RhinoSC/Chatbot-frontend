@@ -118,7 +118,6 @@ export default Vue.extend({
         }
     },
     async created() {
-        if (this.$route.params.id) this.$router.push('/manage/tracker/schedules')
         
         try {
             const res = await trackerSchedule.getOneSchedule(this.axios, this.$route.params.id)

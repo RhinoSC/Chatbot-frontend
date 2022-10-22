@@ -177,7 +177,6 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/manage/tracker/donations')
 
     try {
       const res: Event[] = await trackerEvent.getEvents(this.axios)

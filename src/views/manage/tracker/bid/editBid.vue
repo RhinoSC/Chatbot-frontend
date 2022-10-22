@@ -162,7 +162,6 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/manage/tracker/bids')
 
     try {
       const res = await trackerBid.getOneBid(this.axios, this.$route.params.id)

@@ -176,7 +176,6 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/manage/tracker/runs')
 
     try {
       const resEvent = await trackerEvent.getEvents(this.axios)

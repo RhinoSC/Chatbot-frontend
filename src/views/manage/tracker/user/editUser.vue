@@ -80,7 +80,6 @@ export default Vue.extend({
     }
   },
   async created() {
-    if (this.$route.params.id) this.$router.push('/manage/tracker/users')
     try {
       const res = await trackerUser.getOneUser(this.axios, this.$route.params.id)
       this.oldUser = res[0]
