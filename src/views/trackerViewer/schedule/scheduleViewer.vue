@@ -133,10 +133,6 @@ export default Vue.extend({
         // console.log(this.scheduleRows)
         this.isReady = true
     },
-    mounted() {
-        // console.log('hola')
-        console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
-    },
     methods: {
         isRowDay(item: any) {
             if (item.dayRow) {
