@@ -103,7 +103,7 @@ export default Vue.extend({
         addUser() {
             this.teamSelectedInfo.players.push(this.userSelected as User)
             this.userSelected = {}
-            // this.$emit('saveTeams', this.teams)
+            this.$emit('saveTeams', this.teams)
         },
         removeUser(player: User) {
             let index = this.teamSelectedInfo.players.findIndex((user) => user._id == player._id)

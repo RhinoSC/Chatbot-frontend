@@ -220,7 +220,6 @@ export default Vue.extend({
         this.newRun.scheduleId = this.selectedSchedule._id
       const res = await trackerRun.updateRunWithBidsAndTeams(this.axios, this.newRun)
       if (res) {
-        // console.log(res)
         this.$router.push('/manage/tracker/runs')
       }
     },
