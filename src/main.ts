@@ -34,7 +34,7 @@ Vue.use(Auth0Plugin, {
 });
 
 Vue.use(VueAxios, axios.create({
-  baseURL: `http://${process.env.VUE_APP_BACKEND_URL}:${process.env.VUE_APP_BACKEND_PORT}/`,
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}/`,
   headers: { 'Content-Type': 'application/json' },
   // this.axios.interceptors.request.use(req => {
   //     req.headers['Authorization'] = `Bearer ${accessToken}`
