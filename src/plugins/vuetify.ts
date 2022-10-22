@@ -16,7 +16,7 @@ export default new Vuetify({
 
                 primary: '#BB86FC', // mdi
                 secondary: '#03DAC5', // mdi
-                accent: '#03DAC6',
+                accent: '#3700B3',
                 error: '#CF6679',
 
                 // error: '#f44336',

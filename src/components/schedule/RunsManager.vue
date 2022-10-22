@@ -84,7 +84,8 @@
                                     draggable=".item-draggable" handle=".drag-btn">
                                     <template v-for="(item, i) in scheduleRows">
                                         <template v-if="isRowDay(item)">
-                                            <tr :key="i" style="background-color: #2196f3;" class="item-day-tr">
+                                            <tr :key="i" style="background-color: var(--v-secondary-darken1);"
+                                                class="item-day-tr">
                                                 <td colspan="5" style="color: white; text-align:center;">
                                                     {{item.dayText}}</td>
                                                 <!-- <td class="d-flex justify-center align-center" style="color: white;">
