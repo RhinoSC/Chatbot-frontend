@@ -39,18 +39,21 @@ export default Vue.extend({
     }
   },
   updated() {
-    // console.log(this.$auth.isAuthenticated)
     if (this.$auth.isAuthenticated) {
       const roles = ["Admin"]
+
+      if (this.$auth.user['sre9/roles'].length === 0) this.$router.push('/tracker')
 
       const multipleExist = this.$auth.user['sre9/roles'].every((value) => {
         return roles.includes(value);
       });
 
-      if (multipleExist)
+      if (multipleExist) {
         this.$router.push('/manage/tracker')
-      else
+      }
+      else {
         this.$router.push('/tracker')
+      }
     }
   }
 })
