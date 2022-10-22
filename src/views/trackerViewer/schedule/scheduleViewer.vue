@@ -6,9 +6,12 @@
             </v-row>
             <v-row>
                 <v-card class="flex-grow-1">
-                    <v-card-title primary-title>
+                    <v-card-title primary-title class="d-flex justify-center">
                         Schedule overview
                     </v-card-title>
+                    <v-card-subtitle>
+                        All times are in your timezone ({{Intl.DateTimeFormat().resolvedOptions().timeZone}})
+                    </v-card-subtitle>
                     <v-card-text>
                         <v-simple-table>
                             <template v-slot:default>
@@ -37,7 +40,8 @@
                                                     colspan="4">
                                                     {{item.dayText}}
                                                 </td> -->
-                                                <td colspan="4" style="color: white; font-weight: bold; text-align:center;">
+                                                <td colspan="4"
+                                                    style="color: white; font-weight: bold; text-align:center;">
                                                     {{item.dayText}}</td>
                                             </tr>
                                         </template>
@@ -45,7 +49,8 @@
                                             <tr :key="i">
                                                 <td>
                                                     <span>
-                                                        {{ item.time }}
+                                                        <!-- {{item.time}} -->
+                                                        {{ convertTimeToTimezone(item.row.start) }}
                                                     </span>
                                                 </td>
                                                 <td>
@@ -84,6 +89,7 @@ import ScheduleRow from '@/utils/types/ScheduleRow'
 import { getRunnerString } from '@/utils/stringFuncs'
 import Run from '@/utils/types/Run'
 import Schedule from '@/utils/types/Schedule'
+import moment from 'moment-timezone'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -115,7 +121,7 @@ export default Vue.extend({
                 this.startTimeMS = date.getTime()
                 this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
                 let a = this.tempSchedule.rows
-                a = this.setTitles(a, true)
+                a = this.setTitles(a, true, Intl.DateTimeFormat().resolvedOptions().timeZone)
 
                 // console.log(a)
                 this.scheduleRows = a
@@ -129,6 +135,7 @@ export default Vue.extend({
     },
     mounted() {
         // console.log('hola')
+        console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
     },
     methods: {
         isRowDay(item: any) {
@@ -141,20 +148,32 @@ export default Vue.extend({
             return getRunnerString(item)
         },
         // setTitles(testArr: ScheduleRow[], creating: boolean) {
-        setTitles(testArr: any, creating: boolean) {
+        setTitles(testArr: any, creating: boolean, TZName: string) {
             if (creating) {
                 testArr.splice(0, 0, { dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
             }
 
+            let firstDate = moment.tz(testArr[1].row.start, TZName)
+
             for (let j = 2; j < testArr.length; j++) {
                 const item = testArr[j]
-                if (item.newDay) {
+                const newDate = moment.tz(item.row.start, TZName)
+
+                // console.log(firstDate.dayOfYear(), newDate.dayOfYear())
+                if (firstDate.dayOfYear() !== newDate.dayOfYear()) {
+                    item.newDay = true
+                    firstDate = newDate
                     testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })
                     j++
                 }
             }
+
             return testArr
         },
+        convertTimeToTimezone(time: number) {
+            const a = moment.tz(time, Intl.DateTimeFormat().resolvedOptions().timeZone)
+            return a.format("hh:mm a")
+        }
     }
 })
 </script>
