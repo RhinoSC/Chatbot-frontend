@@ -46,7 +46,8 @@
                 </v-list>
                 <template v-slot:append>
                     <div class="pa-2">
-                        <v-switch v-model="$vuetify.theme.dark" inset label="Dark theme" persistent-hint></v-switch>
+                        <v-switch :value="$vuetify.theme.dark" @change="toggleTheme()" inset label="Dark theme">
+                        </v-switch>
                     </div>
                 </template>
             </v-navigation-drawer>
@@ -88,8 +89,21 @@ export default Vue.extend({
             this.$auth.logout({
                 returnTo: window.location.origin
             });
+        },
+        toggleTheme() {
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+            localStorage.setItem('dark-theme', this.$vuetify.theme.dark)
         }
     },
+    mounted() {
+        const theme = localStorage.getItem('dark-theme')
+
+        if (theme === 'true') {
+            this.$vuetify.theme.dark = true
+        } else {
+            this.$vuetify.theme.dark = false
+        }
+    }
 });
 </script>
   

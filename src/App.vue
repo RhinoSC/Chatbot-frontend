@@ -20,6 +20,14 @@ export default Vue.extend({
   }),
   created() {
     document.title = 'SRE9'
+
+    const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (darkThemeMq.matches) {
+      const theme = localStorage.getItem('dark-theme')
+      if (!theme) {
+        localStorage.setItem('dark-theme', true)
+      }
+    }
   }
   // async created() {
   //   if (this.$auth.isAuthenticated) {

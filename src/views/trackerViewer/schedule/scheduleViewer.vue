@@ -31,7 +31,8 @@
                                 <tbody>
                                     <template v-for="(item, i) in scheduleRows">
                                         <template v-if="isRowDay(item)">
-                                            <tr :key="i" style="background-color: #2196f3;" class="item-day-tr">
+                                            <tr :key="i" style="background-color: var(--v-secondary-base);"
+                                                class="item-day-tr">
                                                 <!-- <td class="d-flex justify-center align-center" style="color: white;"
                                                     colspan="4">
                                                     {{item.dayText}}
