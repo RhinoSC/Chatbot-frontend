@@ -180,7 +180,7 @@ export default Vue.extend({
             ],
             amountRules: [
                 v => /(\d{1}(\.|,)\d{2})|(\d)/.test(v) || 'E.G: try 3.70 or try 4',
-                v => v >= this.event.isCharityData.minDonation || `Has to be greater than ${this.event.isCharityData.minDonation}`,
+                v => Number(v) >= Number(this.event.isCharityData.minDonation) || `Has to be greater than ${this.event.isCharityData.minDonation}`,
                 v => !!v || 'Amount is required',
             ],
             requiredRules: [
