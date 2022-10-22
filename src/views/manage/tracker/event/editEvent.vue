@@ -42,7 +42,8 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field v-model="dates.start" label="Start date"
                                             prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"
-                                            @click="getMinDate(false)"></v-text-field>
+                                            @click="getMinDate(false)">
+                                        </v-text-field>
                                     </template>
                                     <v-date-picker v-model="dates.start" no-title scrollable :min="minDate">
                                         <v-spacer></v-spacer>
@@ -258,8 +259,17 @@ export default Vue.extend({
         try {
             const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
             this.oldEvent = res[0]
+
+            let start = new Date(this.oldEvent.start)
+            let end = new Date(this.oldEvent.end)
+
+            this.dates.start = start.toLocaleDateString('fr-CA')
+            this.dates.startTime = start.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: false })
+            this.dates.end = end.toLocaleDateString('fr-CA')
+            this.dates.endTime = end.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: false })
+
         } catch (error) {
-            this.$router.push('/manage/tracker/events')
+            console.error(error)
         }
     },
     mounted() {
@@ -270,7 +280,6 @@ export default Vue.extend({
             if (this.oldEvent._id) {
                 const res = await trackerEvent.deleteEvent(this.axios, this.oldEvent._id)
                 if (res) {
-                    // console.log(res)
                     this.$router.push('/manage/tracker/events')
                 }
             }
@@ -279,15 +288,13 @@ export default Vue.extend({
 
             let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
             this.oldEvent.start = startDate.getTime()
-            let endDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
+            let endDate = new Date(`${this.dates.end}, ${this.dates.endTime}`)
             this.oldEvent.end = endDate.getTime()
 
             this.newEvent = this.oldEvent
 
-            // console.log(this.newEvent.isCharityData.totalDonated)
             const res = await trackerEvent.updateEvent(this.axios, this.newEvent)
             if (res) {
-                // console.log(res)
                 this.$router.push('/manage/tracker')
             }
         },
@@ -298,7 +305,15 @@ export default Vue.extend({
             let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             let yyyy = today.getFullYear();
             this.minDate = `${yyyy}-${mm}-${dd}`;
-        }
+        },
+        formatDate(date: any) {
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
+        },
+        parseDate(date: any) {
+            const [month, day, year] = date.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
     },
 })
 </script>

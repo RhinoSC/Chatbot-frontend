@@ -211,13 +211,11 @@ export default Vue.extend({
 
       let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
       this.newEvent.start = startDate.getTime()
-      let endDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
+      let endDate = new Date(`${this.dates.end}, ${this.dates.endTime}`)
       this.newEvent.end = endDate.getTime()
 
-      // console.log(this.newEvent)
       const res = await trackerEvent.postEvent(this.axios, this.newEvent)
       if (res) {
-        // console.log(res)
         this.$router.push('/manage/tracker/events')
       }
     },
