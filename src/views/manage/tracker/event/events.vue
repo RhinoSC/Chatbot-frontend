@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'events/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="event in events" :key="event._id" link :to="`events/edit/${event._id}`">
                     <v-list-item-content>
                         {{ event.name }}

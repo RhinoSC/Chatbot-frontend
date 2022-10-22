@@ -6,10 +6,10 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'runs/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="run in runs" :key="run._id" link :to="`runs/edit/${run._id}`">
                     <v-list-item-content>
-                        {{ run.name }} - {{ run.scheduleId }}
+                        {{ run.name }} - {{ run.category }}
                     </v-list-item-content>
                 </v-list-item>
             </v-list>

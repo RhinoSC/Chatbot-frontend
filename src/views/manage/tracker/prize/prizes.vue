@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'prizes/add'">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="prize in prizes" :key="prize._id" link :to="`prizes/edit/${prize._id}`">
                     <v-list-item-content>
                         {{ prize.name }}

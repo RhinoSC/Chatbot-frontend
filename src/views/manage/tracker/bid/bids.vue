@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn link color="success" :to="'bids/add'" :disabled="true">Add</v-btn>
             </v-row>
-            <v-list>
+            <v-list class="mt-5">
                 <v-list-item v-for="bid in bids" :key="bid._id" link :to="`bids/edit/${bid._id}`">
                     <v-list-item-content>
                         {{ bid.name }}
