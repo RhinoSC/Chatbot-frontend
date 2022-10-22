@@ -86,7 +86,8 @@
                                         <template v-if="isRowDay(item)">
                                             <tr :key="i" style="background-color: var(--v-secondary-darken1);"
                                                 class="item-day-tr">
-                                                <td colspan="5" style="color: white; font-weight: bold; text-align:center;">
+                                                <td colspan="5"
+                                                    style="color: white; font-weight: bold; text-align:center;">
                                                     {{item.dayText}}</td>
                                                 <!-- <td class="d-flex justify-center align-center" style="color: white;">
                                                     {{item.dayText}}
@@ -235,10 +236,11 @@ export default Vue.extend({
             if (this.scheduleRows.length === 0) {
                 this.setFirstRow(run, true)
             } else {
-                const oldStartDate = new Date(this.actualTimeMS - this.scheduleRows[this.scheduleRows.length - 1].row.estimate)
+                const runTime = this.scheduleRows[this.scheduleRows.length - 1].row.estimate - this.scheduleRows[this.scheduleRows.length - 1].row.setup
+                const oldStartDate = new Date(this.actualTimeMS - runTime)
                 const oldEndDate = new Date(this.actualTimeMS)
 
-                this.actualTimeMS += run.row.estimate
+                this.actualTimeMS += run.row.estimate + run.row.setup
 
 
                 run.row.start = oldEndDate.getTime()
@@ -312,7 +314,7 @@ export default Vue.extend({
             this.scheduleRows = testArr
         },
         setFirstRow(item: any, firstTime: boolean) {
-            this.actualTimeMS = this.startTimeMS + item.row.estimate
+            this.actualTimeMS = this.startTimeMS + item.row.estimate + item.row.setup
 
             item.row.start = this.startDate.getTime()
             item.time = this.startDate.toLocaleString('en-US', { hour12: false, timeStyle: 'short' })
@@ -331,7 +333,7 @@ export default Vue.extend({
             const oldStartDate = new Date(this.actualTimeMS - itemBefore.row.estimate)
             const oldEndDate = new Date(this.actualTimeMS)
 
-            this.actualTimeMS += item.row.estimate
+            this.actualTimeMS += item.row.estimate + item.row.setup
 
             item.row.start = oldEndDate.getTime()
             item.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
