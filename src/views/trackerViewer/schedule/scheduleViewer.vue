@@ -155,8 +155,10 @@ export default Vue.extend({
                 const item = testArr[j]
                 const newDate = moment.tz(item.row.start, TZName)
 
-                // console.log(firstDate.dayOfYear(), newDate.dayOfYear())
+                // console.log(firstDate.dayOfYear(), newDate.dayOfYear(), firstDate.dayOfYear() !== newDate.dayOfYear())
+                // console.log(firstDate.toLocaleString(), newDate.toLocaleString(), firstDate.dayOfYear() !== newDate.dayOfYear())
                 if (firstDate.dayOfYear() !== newDate.dayOfYear()) {
+                    // console.log(item.row.name)
                     item.newDay = true
                     firstDate = newDate
                     testArr.splice(j, 0, { dayRow: true, start: item.row.start, dayText: item.dayText })

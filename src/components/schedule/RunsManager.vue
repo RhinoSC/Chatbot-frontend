@@ -147,6 +147,7 @@ import draggable from 'vuedraggable'
 import ScheduleRow from '@/utils/types/ScheduleRow'
 import Schedule from '@/utils/types/Schedule'
 import { getRunnerString } from '@/utils/stringFuncs'
+import moment from 'moment-timezone'
 
 export default Vue.extend({
     name: 'run-manager-component',
@@ -187,12 +188,14 @@ export default Vue.extend({
         this.startTimeMS = date.getTime()
         this.startTime = date.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })
 
-        console.log(date)
-
-        // console.log('child', this.tempSchedule)
         this.availableRows = this.tempSchedule.availableRuns
         if (this.tempSchedule.rows.length > 0) {
             this.tempSchedule.rows.forEach((row: ScheduleRow) => {
+                // let a = moment.tz(row.row.start, 'America/Bogota')
+                // console.log(a.year())
+                // if (a.year() === 1969) {
+                //     console.log(a.toLocaleString(), row.row.name)
+                // }
                 this.addRun(row.row, true)
             });
         }
@@ -272,6 +275,7 @@ export default Vue.extend({
             }
             testArr.splice(0, 0, { index: 0, dayRow: true, start: this.startTime, dayText: this.startDate.toLocaleDateString('en-US', { dateStyle: 'medium' }) })
 
+            // console.log(event.moved.newIndex, event.moved.oldIndex, event.moved.newIndex < event.moved.oldIndex)
             if (event.moved.newIndex < event.moved.oldIndex) {
                 let i = 1
                 event.moved.newIndex === 1 ? i = event.moved.newIndex : i = event.moved.newIndex - titleCount
@@ -335,7 +339,7 @@ export default Vue.extend({
             }
         },
         setNextFirstRows(itemBefore: any, item: any) {
-            const oldStartDate = new Date(this.actualTimeMS - itemBefore.row.estimate)
+            const oldStartDate = new Date(this.actualTimeMS - (itemBefore.row.estimate + itemBefore.row.setup))
             const oldEndDate = new Date(this.actualTimeMS)
 
             this.actualTimeMS += item.row.estimate + item.row.setup
@@ -352,7 +356,7 @@ export default Vue.extend({
         },
         setNextRows(itemBefore: any, item: any) {
             const oldStartDate = new Date(itemBefore.row.start)
-            const oldEndDate = new Date(itemBefore.row.start + itemBefore.row.estimate)
+            const oldEndDate = new Date(itemBefore.row.start + itemBefore.row.estimate + itemBefore.row.setup)
 
             item.row.start = oldEndDate.getTime()
             item.time = oldEndDate.toLocaleTimeString('en-US', { hour12: false, timeStyle: 'short' })

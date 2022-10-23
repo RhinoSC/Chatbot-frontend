@@ -131,7 +131,6 @@ export default Vue.extend({
     async deletePrize() {
       const res = await trackerPrize.deletePrize(this.axios, this.oldPrize._id)
       if (res) {
-        // console.log(res)
         this.$router.push('/manage/tracker/prizes')
       }
     },
@@ -141,7 +140,6 @@ export default Vue.extend({
 
       const res = await trackerPrize.updatePrize(this.axios, this.newPrize)
       if (res) {
-        // console.log(res)
         this.$router.push('/manage/tracker/prizes')
       }
     },
