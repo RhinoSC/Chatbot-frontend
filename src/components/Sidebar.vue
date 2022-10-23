@@ -21,7 +21,15 @@
 
                 <v-divider></v-divider>
                 <v-list nav dense>
-                    <template v-if="!$route.meta.public">
+                    <template v-if="$route.meta.public && role">
+                        <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
+                            <v-list-item-icon>
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        </v-list-item>
+                    </template>
+                    <template v-else-if="!$route.meta.public">
                         <v-list-item v-for="(item, index) in items" :key="index" link :to="item.path">
                             <v-list-item-icon>
                                 <v-icon>{{ item.icon }}</v-icon>
@@ -61,8 +69,14 @@ import { ref } from 'vue'
 import Vue from "vue";
 export default Vue.extend({
     name: "Side-bar",
+    props: {
+        public: {
+            type: Boolean,
+        }
+    },
     data() {
         return {
+            role: false,
             expanded: false,
             items: [
                 // { icon: 'mdi-view-dashboard-edit', name: 'Dashboard', path: '/dashboard' },
@@ -93,6 +107,27 @@ export default Vue.extend({
         toggleTheme() {
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
             localStorage.setItem('dark-theme', this.$vuetify.theme.dark)
+        },
+        checkRole() {
+            const authenticated = JSON.parse(localStorage.getItem('@@auth0spajs@@::yQnxMWWQGwvNg2UgV5ZWlW0vW1ZOnuwr::https://sre9api.com::openid profile email'))
+
+            if (!authenticated) return
+            if (this.public === undefined) return
+
+            if (authenticated) {
+                if (authenticated.body.decodedToken.user['sre9/roles'].length === 0) {
+                    this.role = false
+                    return
+                }
+                const roles = ["Admin"]
+                const multipleExist = authenticated.body.decodedToken.user['sre9/roles'].every((value) => {
+                    return roles.includes(value);
+                })
+
+                if (multipleExist) {
+                    this.role = true
+                }
+            }
         }
     },
     mounted() {
@@ -103,6 +138,9 @@ export default Vue.extend({
         } else {
             this.$vuetify.theme.dark = false
         }
+    },
+    updated() {
+        this.checkRole()
     }
 });
 </script>

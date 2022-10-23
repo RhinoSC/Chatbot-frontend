@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Sidebar class="sidebar-component" v-if="!$route.meta?.hideNavbar"></Sidebar>
+    <Sidebar class="sidebar-component" v-if="!$route.meta?.hideNavbar" :public="$route.meta?.public"></Sidebar>
     <v-main style="padding: 0;" :class="!$route.meta?.hideNavbar ? 'ml-16' : ''">
       <router-view />
     </v-main>

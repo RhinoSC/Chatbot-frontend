@@ -26,12 +26,12 @@ export default Vue.extend({
       events: [] as Event[]
     }
   },
-  async created() {
-    const res = await trackerEvent.getEvents(this.axios)
-    // console.log('llegue')
-    // console.log(res)
-    this.events = res
-  },
+  // async created() {
+  //   const res = await trackerEvent.getEvents(this.axios)
+  //   // console.log('llegue')
+  //   // console.log(res)
+  //   this.events = res
+  // },
   mounted() {
     // console.log('hola')
   }

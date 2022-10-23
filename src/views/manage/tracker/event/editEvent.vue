@@ -261,13 +261,15 @@ export default Vue.extend({
             const res = await trackerEvent.getOneEvent(this.axios, this.$route.params.id)
             this.oldEvent = res[0]
 
-            let start = moment.tz(this.oldEvent.start, this.oldEvent.TZ.name)
-            let end = moment.tz(this.oldEvent.end, this.oldEvent.TZ.name)
+            // let start = moment.tz(this.oldEvent.start, this.oldEvent.TZ.name)
+            // let end = moment.tz(this.oldEvent.end, this.oldEvent.TZ.name)
+            let start = moment(this.oldEvent.start)
+            let end = moment(this.oldEvent.end)
 
             this.dates.start = start.format("YYYY-MM-DD")
-            this.dates.startTime = moment.tz(this.oldEvent.start, this.oldEvent.TZ.name).format("hh:mm")
+            this.dates.startTime = start.format("hh:mm")
             this.dates.end = end.format("YYYY-MM-DD")
-            this.dates.endTime = moment.tz(this.oldEvent.end, this.oldEvent.TZ.name).format("hh:mm")
+            this.dates.endTime = end.format("hh:mm")
 
         } catch (error) {
             console.error(error)
@@ -287,15 +289,15 @@ export default Vue.extend({
         },
         async editEvent() {
 
+
+            // let startDate = moment.tz(`${this.dates.start} ${this.dates.startTime}`, this.oldEvent.TZ.name)
             let startDate = new Date(`${this.dates.start}, ${this.dates.startTime}`)
-            this.oldEvent.start = startDate.getTime()
+            this.oldEvent.start = startDate.valueOf()
             let endDate = new Date(`${this.dates.end}, ${this.dates.endTime}`)
-            this.oldEvent.end = endDate.getTime()
+            this.oldEvent.end = endDate.valueOf()
 
             this.newEvent = this.oldEvent
 
-            // console.log(moment.tz(this.oldEvent.start, this.oldEvent.TZ.name).toLocaleString())
-            // console.log(startDate, endDate)
             const res = await trackerEvent.updateEvent(this.axios, this.newEvent)
             if (res) {
                 this.$router.push('/manage/tracker')
