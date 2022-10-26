@@ -244,6 +244,10 @@ export default Vue.extend({
     },
     populateBids($event: Bid[]) {
       this.oldRun.bids = $event
+      this.oldRun.bids.forEach(bid => {
+        bid.runId = this.oldRun._id
+        bid.eventId = this.event._id ? this.event._id : ""
+      })
     },
     clearBids($event: boolean) {
       this.oldRun.bids = []
