@@ -49,19 +49,19 @@
                 <v-row class="mt-8" v-if="savedBid">
                   <v-card>
                     <v-card-title class="text-h5">
-                      {{updatedRun?.row.bids[selectedBidIdx].game}}
+                      {{ updatedRun?.row.bids[selectedBidIdx].game }}
                     </v-card-title>
 
                     <v-card-subtitle>
-                      {{updatedRun?.row.bids[selectedBidIdx].name}}
+                      {{ updatedRun?.row.bids[selectedBidIdx].name }}
                     </v-card-subtitle>
                     <v-card-subtitle class="mt-n5">
-                      {{updatedRun?.row.bids[selectedBidIdx].description}}
+                      {{ updatedRun?.row.bids[selectedBidIdx].description }}
                     </v-card-subtitle>
                     <v-card-text>
                       <template v-if="updatedRun?.row.bids[selectedBidIdx].type === 0">
                         Option selected:
-                        {{updatedRun.row.bids[selectedBidIdx].bids[selectedBidOption].name}}
+                        {{ updatedRun.row.bids[selectedBidIdx].bids[selectedBidOption].name }}
                       </template>
                     </v-card-text>
                     <v-card-actions>
@@ -211,8 +211,9 @@ export default Vue.extend({
     amountRules() {
       if (this.event.isCharityData) {
         return [
+          (v: any) => /(\d{1}(\.|,)\d{2})|(\d)/.test(v) || 'E.G: try 3.70 or try 4',
+          (v: any) => Number(v) >= Number(this.event.isCharityData.minDonation) || `Has to be greater than ${this.event.isCharityData.minDonation}`,
           (v: any) => !!v || 'Amount is required',
-          (v: number) => v >= this.event.isCharityData.minDonation || `Has to be greater than ${this.event.isCharityData.minDonation}`
         ]
       }
       return [(v: any) => !!v || 'Amount is required']

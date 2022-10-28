@@ -53,7 +53,7 @@
                                                     <v-col class="mt-n7" v-if="bid.type === 0">
                                                         <span class="text-caption">Select your option: </span>
                                                     </v-col>
-                                                    <v-col class="mt-n5" v-else-if="bid.type === 1">
+                                                    <v-col class="mt-n5" v-else-if="bid.type === 1 || bid.type === 2" >
                                                         <span>
                                                             Current: {{currencyFormat(bid.current)}} /
                                                         </span>
