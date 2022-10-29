@@ -11,20 +11,20 @@
                                     <v-expansion-panel v-for="(run, i) in filteredRows" :key="i">
                                         <template v-if="verifyRunWithActiveBids(run)">
                                             <v-expansion-panel-header>
-                                                {{run.row.name}}
+                                                {{ run.row.name }}
                                             </v-expansion-panel-header>
                                             <v-expansion-panel-content>
                                                 <v-row>
                                                     <v-col>
-                                                        <span>Runners: </span>{{getRunnerString(run.row)}}
+                                                        <span>Runners: </span>{{ getRunnerString(run.row) }}
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col>
-                                                        <span>Category: </span>{{run.row.category}}
+                                                        <span>Category: </span>{{ run.row.category }}
                                                     </v-col>
                                                     <v-col>
-                                                        <span>Estimate: {{run.row.estimateS}}</span>
+                                                        <span>Estimate: {{ run.row.estimateS }}</span>
                                                     </v-col>
                                                 </v-row>
                                             </v-expansion-panel-content>
@@ -34,11 +34,13 @@
                             </v-col>
                             <v-col class="overflow-y-auto" style="max-height: 400px;">
                                 <h3>Bids</h3>
+                                <v-btn color="success" class="mt-5" @click="saveBid()" :disabled="validateBtn()">Save
+                                    bid</v-btn>
                                 <v-expansion-panels v-model="selectedBidIdx">
                                     <v-expansion-panel v-for="(bid, i) in selectedRun.bids" :key="i">
                                         <template v-if="bid.openBid">
                                             <v-expansion-panel-header>
-                                                {{bid.name}}
+                                                {{ bid.name }}
                                                 <v-spacer></v-spacer>
                                                 <template v-if="selectedBidIdx === i">
                                                     <v-icon color="success">mdi-check-circle</v-icon>
@@ -48,17 +50,17 @@
                                                 <v-row>
                                                     <v-col cols="12">
                                                         <span>Description: </span>
-                                                        <span class="text-subtitle-2">{{bid.description}}</span>
+                                                        <span class="text-subtitle-2">{{ bid.description }}</span>
                                                     </v-col>
                                                     <v-col class="mt-n7" v-if="bid.type === 0">
                                                         <span class="text-caption">Select your option: </span>
                                                     </v-col>
-                                                    <v-col class="mt-n5" v-else-if="bid.type === 1 || bid.type === 2" >
+                                                    <v-col class="mt-n5" v-else-if="bid.type === 1 || bid.type === 2">
                                                         <span>
-                                                            Current: {{currencyFormat(bid.current)}} /
+                                                            Current: {{ currencyFormat(bid.current) }} /
                                                         </span>
                                                         <span>
-                                                            Goal: {{currencyFormat(bid.goal)}}
+                                                            Goal: {{ currencyFormat(bid.goal) }}
                                                         </span>
                                                     </v-col>
                                                 </v-row>
@@ -71,10 +73,10 @@
                                                                     :key="j">
                                                                     <v-list-item-content>
                                                                         <v-list-item-title>
-                                                                            {{bidOption.name}}
+                                                                            {{ bidOption.name }}
                                                                         </v-list-item-title>
                                                                         <v-list-item-subtitle>
-                                                                            {{currencyFormat(bidOption.current)}}
+                                                                            {{ currencyFormat(bidOption.current) }}
                                                                         </v-list-item-subtitle>
                                                                     </v-list-item-content>
                                                                     <v-spacer></v-spacer>
@@ -83,7 +85,7 @@
                                                                             mdi-check-circle</v-icon>
                                                                     </template>
                                                                     <template
-                                                                        v-if="createdNewBidOption && bid.newBids && j == bid.bids.length-1">
+                                                                        v-if="createdNewBidOption && bid.newBids && j == bid.bids.length - 1">
                                                                         <v-list-item-icon>
                                                                             <v-icon color="error"
                                                                                 @click="deleteNewBidOption()">
@@ -113,8 +115,6 @@
                                         </template>
                                     </v-expansion-panel>
                                 </v-expansion-panels>
-                                <v-btn color="success" class="mt-5" @click="saveBid()" :disabled="validateBtn()">Save
-                                    bid</v-btn>
                             </v-col>
                         </v-row>
                     </v-card-text>
