@@ -21,7 +21,7 @@
                 <tbody>
                     <tr v-for="(donation, i) in donations" :key="i" @click="donationSummerize(donation)">
                         <td>{{ donation.name }}</td>
-                        <td>{{getDateFromMS(lookingDonation.time)}}</td>
+                        <td>{{ getDateFromMS(donation.time) }}</td>
                         <td>{{ currencyFormat(donation.amount) }}</td>
                         <td>{{ donation.description !== "" ? 'Yes' : 'No' }}</td>
                     </tr>
@@ -31,14 +31,14 @@
         <v-dialog v-model="lookDialog" width="500">
             <v-card class="mx-auto">
                 <v-card-text>
-                    <div>{{lookingDonation.name}}</div>
+                    <div>{{ lookingDonation.name }}</div>
                     <p class="text-h5 text--primary">
-                        {{getDateFromMS(lookingDonation.time)}}
+                        {{ getDateFromMS(lookingDonation.time) }}
                     </p>
                     <v-divider></v-divider>
                     <div>
                         <p>
-                            {{lookingDonation.description}}
+                            {{ lookingDonation.description }}
                         </p>
                     </div>
                 </v-card-text>
