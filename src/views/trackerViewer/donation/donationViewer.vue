@@ -79,7 +79,11 @@ export default Vue.extend({
 
             if (this.event.schedule) {
                 this.tempSchedule = this.event.schedule
-                this.donations = this.event.donations
+                this.donations = this.event.donations.sort((a: Donation, b: Donation) => {
+                    const dateA = new Date(a.time)
+                    const dateB = new Date(b.time)
+                    return dateB.getMilliseconds() - dateA.getMilliseconds()
+                })
                 // console.log(this.donations)
                 this.isReady = true
             }
