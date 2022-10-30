@@ -54,6 +54,7 @@ import Event from '@/utils/types/Event'
 import Donation from '@/utils/types/Donation'
 import { currencyFormat } from '@/utils/stringFuncs'
 import Schedule from '@/utils/types/Schedule'
+import moment from 'moment-timezone'
 
 export default Vue.extend({
     name: 'manage-tracker',
@@ -80,14 +81,21 @@ export default Vue.extend({
             if (this.event.schedule) {
                 this.tempSchedule = this.event.schedule
                 this.donations = this.event.donations.sort((a: Donation, b: Donation) => {
-                    const dateA = new Date(a.time)
-                    const dateB = new Date(b.time)
-                    return dateB.getMilliseconds() - dateA.getMilliseconds()
+                    const testA = moment(a.time)
+                    const testB = moment(b.time)
+                    let value = 0;
+                    if (testA.isAfter(testB)) {
+                        value = -1
+                    } else {
+                        value = 1
+                    }
+                    return value
                 })
-                // console.log(this.donations)
                 this.isReady = true
             }
         }
+
+
 
         // if (bidRes) {
         //     this.bids = bidRes
