@@ -3,7 +3,7 @@
         <v-card>
             <v-navigation-drawer permanent expand-on-hover app @transitionend="hideBtn()">
                 <v-list>
-                    <v-list-item link to="/home">
+                    <v-list-item>
                         <v-list-item-content>
                             <v-card>
                                 <v-img alt="SRE logo" src="../assets/logo_plano.png"
