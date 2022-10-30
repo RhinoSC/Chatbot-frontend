@@ -217,6 +217,7 @@ export default Vue.extend({
       this.newRun = this.oldRun
       this.newRun.setup = stringTimeToMS(this.setupAsString)
       this.newRun.estimate = stringTimeToMS(this.newRun.estimateS)
+      console.log(this.newRun.bids)
       if (this.selectedSchedule._id)
         this.newRun.scheduleId = this.selectedSchedule._id
       const res = await trackerRun.updateRunWithBidsAndTeams(this.axios, this.newRun)

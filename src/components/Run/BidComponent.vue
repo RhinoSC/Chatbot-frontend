@@ -100,19 +100,19 @@
                 <v-col v-for="(optionBid, ind) in addedBid.bids" :key="ind">
                   <v-row>
                     <v-list-item-subtitle>
-                      <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}: {{currencyFormat(optionBid.current)}}
+                      <v-icon>mdi-arrow-right</v-icon> {{ optionBid.name }}: {{ currencyFormat(optionBid.current) }}
                     </v-list-item-subtitle>
                   </v-row>
                 </v-col>
               </v-col>
               <v-col v-else>
-                Current: {{currencyFormat(addedBid.current)}} / {{currencyFormat(addedBid.goal)}}
+                Current: {{ currencyFormat(addedBid.current) }} / {{ currencyFormat(addedBid.goal) }}
               </v-col>
             </v-list-item-content>
             <!-- <v-btn color="info" @click="modifyBidState(addedBid)">{{computeBidState(addedBid)}}</v-btn> -->
             <v-btn color="info" class="mr-1" small @click="openEditDialog(addedBid)">Edit</v-btn>
             <v-btn :color="computeBidState(addedBid) === 'Enable' ? 'success' : 'warning'"
-              @click="modifyBidState(addedBid)" small>{{computeBidState(addedBid)}}</v-btn>
+              @click="modifyBidState(addedBid)" small>{{ computeBidState(addedBid) }}</v-btn>
             <v-spacer></v-spacer>
             <v-list-item-icon>
               <v-icon @click="confirmRemoveBid(addedBid)">mdi-close-circle</v-icon>
@@ -368,6 +368,13 @@ export default Vue.extend({
       // console.log('hola')
       const idx = this.addedBids.findIndex(bid => bid._id === this.tryEditBid._id)
       if (idx !== -1) {
+        if (this.tryEditBid.type === 0) {
+          this.tryEditBid.bids.forEach((bid) => {
+            bid.current = Number(bid.current)
+          })
+        }
+        this.tryEditBid.current = Number(this.tryEditBid.current)
+        this.tryEditBid.goal = Number(this.tryEditBid.goal)
         this.addedBids[idx] = this.tryEditBid
       }
       this.editDialog = false
