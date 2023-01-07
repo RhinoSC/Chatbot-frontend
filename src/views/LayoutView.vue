@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div class="layout-main">
     <img class="bg" src="/assets/layout.png" alt="" />
     <h1 class="comentaristas-title">comentaristas</h1>
     <div id="logos">
@@ -14,7 +14,7 @@
       <div class="bar">
         <div class="bienvenida">
           <h1 class="bienvenida-texto">
-            Retransmisión en español <span>Games Done Quick 2021</span>
+            Retransmisión en español <span>Games Done Quick 2023</span>
           </h1>
         </div>
         <div class="redes">
@@ -33,11 +33,14 @@
               {{ actualGame }}
             </h1>
             <h2 class="next-runner">
-              <font-awesome-icon class="icons" icon="running" />
+              <v-icon class="icons">mdi-run-fast</v-icon>
+              <!-- <font-awesome-icon class="icons" icon="running" /> -->
               <span>{{ actualRunner }}</span>
             </h2>
             <h3 class="next-time">
-              <font-awesome-icon class="icons" icon="clock" /><span>{{
+              <!-- <font-awesome-icon class="icons" icon="clock" /> -->
+              <v-icon class="icons">mdi-clock-outline</v-icon>
+              <span>{{
                 actualTime
               }}</span>
             </h3>
@@ -48,7 +51,7 @@
     <!-- <button id="btn" style="margin: 500px" @click="changeHoraro()">
       hoiaofiajf
     </button> -->
-  </main>
+  </div>
 </template>
 
 <script>
@@ -338,7 +341,7 @@ export default {
   },
   mounted: async function () {
     this.alternateLogos();
-    let response = await API.getHoraro();
+    let response = await API.getHoraro(this.axios);
     this.items = response.data.items;
     this.max = this.items.length;
     this.columns = response.data.columns;
@@ -355,26 +358,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  font-family: "haboro", "Courier New", Courier, monospace;
+}
+
 .sidebar-expanded {
   display: none;
 }
 
+.layout-main {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  // font-family: "haboro", "Courier New", Courier, monospace;
+  color: white;
+}
+
 @font-face {
   font-family: "pixel";
-  src: url("/assets/Notalot60.ttf");
+  src: url("./../assets/Notalot60.ttf");
 }
 
 @font-face {
   font-family: "haboro";
-  src: url("/assets/haboro.ttf");
-}
-
-main {
-  margin: 0;
-  box-sizing: border-box;
-  padding: 0;
-  font-family: "haboro", "Courier New", Courier, monospace;
-  color: white;
+  src: url("./../assets/haboro.ttf");
 }
 
 .bg {
@@ -490,13 +499,14 @@ main {
       grid-template-rows: 50px 0.7fr;
       // grid-template-rows: 1fr 0.7fr;
       // grid-template-columns: 1fr 0.3fr;
-      grid-template-columns: 565px 113px;
+      grid-template-columns: 560px 118px;
       align-items: center;
 
       .icons {
         color: #00ffff;
         //   color: #dadd43;
         margin-right: 5px;
+        // font-size: 15px;
       }
 
       &-title {

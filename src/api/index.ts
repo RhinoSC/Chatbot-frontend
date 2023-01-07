@@ -34,6 +34,8 @@ export default {
   },
   deleteCommand(API: AxiosInstance, id: any) {
     return API.post(`api/commands/${id}`)
-
+  },
+  getHoraro(API: AxiosInstance) {
+    return API.get(`api/horaro/all`)
   }
 }

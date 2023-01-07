@@ -17,6 +17,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 // Import the plugin here
 import { Auth0Plugin } from './auth';
 import { RawLocation } from 'vue-router'
+import VueSocketIO from 'vue-socket.io'
 
 // Install the authentication plugin here
 Vue.use(Auth0Plugin, {
@@ -41,6 +42,17 @@ Vue.use(VueAxios, axios.create({
   //     req.headers['Authorization'] = `Bearer ${accessToken}`
   //     return req;
   // });
+}))
+
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:3000',
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  },
+  // options: { path: "/my-app/" } //Optional options
 }))
 
 
