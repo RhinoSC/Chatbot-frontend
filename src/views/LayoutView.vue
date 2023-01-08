@@ -378,6 +378,12 @@ export default {
   // font-family: "haboro", "Courier New", Courier, monospace;
   color: white;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.layout-main::-webkit-scrollbar {
+  display: none;
+  /* for Chrome, Safari, and Opera */
 }
 
 @font-face {
