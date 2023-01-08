@@ -367,6 +367,9 @@ export default {
 }
 
 .layout-main {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
   position: absolute;
   z-index: 1;
   margin: 0;
@@ -406,6 +409,7 @@ export default {
   position: absolute;
   top: 1005px;
   left: 16px;
+  overflow: hidden;
 
   #sre {
     position: absolute;
