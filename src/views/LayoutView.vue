@@ -377,6 +377,7 @@ export default {
   padding: 0;
   // font-family: "haboro", "Courier New", Courier, monospace;
   color: white;
+  scrollbar-width: none;
 }
 
 @font-face {
