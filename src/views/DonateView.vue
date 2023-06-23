@@ -54,7 +54,7 @@
                                         <v-row>
                                             <v-col cols="4">
                                                 <v-text-field name="amount"
-                                                    :label="'Amount to donate '+`in (${event.isCharityData.paypalData.currency})`"
+                                                    :label="'Amount to donate ' + `in (${event.isCharityData.paypalData.currency})`"
                                                     id="amount" v-model="newDonation.amount" type="number"
                                                     :rules="amountRules">
                                                 </v-text-field>
@@ -78,20 +78,22 @@
                                         <v-row class="mt-8" v-if="savedBid">
                                             <v-card>
                                                 <v-card-title class="text-h5">
-                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].game}}
+                                                    {{ this.updatedRun.row.bids[this.selectedBidIdx].game }}
                                                 </v-card-title>
 
                                                 <v-card-subtitle>
-                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].name}}
+                                                    {{ this.updatedRun.row.bids[this.selectedBidIdx].name }}
                                                 </v-card-subtitle>
                                                 <v-card-subtitle class="mt-n5">
-                                                    {{this.updatedRun.row.bids[this.selectedBidIdx].description}}
+                                                    {{ this.updatedRun.row.bids[this.selectedBidIdx].description }}
                                                 </v-card-subtitle>
                                                 <v-card-text>
                                                     <template
                                                         v-if="this.updatedRun.row.bids[this.selectedBidIdx].type === 0">
                                                         Option selected:
-                                                        {{this.updatedRun.row.bids[this.selectedBidIdx].bids[this.selectedBidOption].name}}
+                                                        {{
+                                                            this.updatedRun.row.bids[this.selectedBidIdx].bids[this.selectedBidOption].name
+                                                        }}
                                                     </template>
                                                 </v-card-text>
                                                 <v-card-actions>
@@ -218,6 +220,7 @@ export default Vue.extend({
 
             if (this.event) {
                 this.newDonation.eventId = this.event._id
+                console.log(this.event.isCharityData)
                 this.isReady = true
             }
         } catch (error) {
@@ -245,7 +248,8 @@ export default Vue.extend({
                 currency_code: this.event.isCharityData.paypalData.currency,
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
-                business: this.event.isCharityData.paypalData.token,
+                // business: this.event.isCharityData.paypalData.token,
+                hosted_button_id: this.event.isCharityData.paypalData.token,
                 item_name: `${this.event.isCharityData.paypalData.itemName}`,
                 image_url: `${this.event.isCharityData.paypalData.logoUrl}`,
                 image: {
