@@ -248,8 +248,8 @@ export default Vue.extend({
                 currency_code: this.event.isCharityData.paypalData.currency,
                 amount: this.newDonation.amount,
                 env: process.env.VUE_APP_ENV === 'prod' ? 'production' : 'sandbox',
-                // business: this.event.isCharityData.paypalData.token,
-                hosted_button_id: this.event.isCharityData.paypalData.token,
+                business: this.event.isCharityData.paypalData.token,
+                // hosted_button_id: this.event.isCharityData.paypalData.token,
                 item_name: `${this.event.isCharityData.paypalData.itemName}`,
                 image_url: `${this.event.isCharityData.paypalData.logoUrl}`,
                 image: {
