@@ -4,7 +4,7 @@
     <h1 class="comentaristas-title">comentaristas</h1>
     <div id="logos">
       <div id="gdq">
-        <img src="/assets/sgdqlogo.png" />
+        <img src="/assets/gdqlogo.png" />
       </div>
       <div id="sre">
         <img src="/assets/logo_plano.png" alt="sre_logo" />
@@ -14,7 +14,7 @@
       <div class="bar">
         <div class="bienvenida">
           <h1 class="bienvenida-texto">
-            Retransmisión en español <span>Summer Games Done Quick 2023</span>
+            Retransmisión en español <span>Awesome Games Done Quick 2024</span>
           </h1>
         </div>
         <div class="redes">
@@ -463,7 +463,8 @@ export default {
 
       span {
         font-style: italic;
-        color: #ff9a00;
+        // color: #ff9a00;
+        color: #00fbfb;
       }
     }
   }
